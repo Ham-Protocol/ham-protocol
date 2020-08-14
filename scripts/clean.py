@@ -4,12 +4,12 @@ networkId = "1"
 networkId2 = "1001"
 from os import listdir
 from os.path import isfile, join
-mypath = "/Users/brockelmore/YAM/build/contracts"
+mypath = "/Users/brockelmore/HAM/build/contracts"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 onlyfiles
 
 for file in onlyfiles:
-    with open("/Users/brockelmore/YAM/build/contracts/"+file, "r") as f:
+    with open("/Users/brockelmore/HAM/build/contracts/"+file, "r") as f:
         if "json" in file:
             try:
                 cleaned = {}
@@ -28,7 +28,7 @@ for file in onlyfiles:
                     cleaned["networks"][networkId2]["address"] = a["networks"][networkId2]["address"],
                     cleaned["networks"][networkId2]["address"] = cleaned["networks"][networkId2]["address"][0]
                     cleaned["networks"][networkId2]["transactionHash"] = a["networks"][networkId2]["transactionHash"]
-                with open("/Users/brockelmore/YAM/clean_build/contracts/"+file, "w+") as c:
+                with open("/Users/brockelmore/HAM/clean_build/contracts/"+file, "w+") as c:
                     c.write(json.dumps(cleaned))
             except Exception as e:
                 print(e)
