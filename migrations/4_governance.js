@@ -3,13 +3,13 @@
 
 // Token
 // deployed first
-const YAMImplementation = artifacts.require("YAMDelegate");
-const YAMProxy = artifacts.require("YAMDelegator");
+const HAMImplementation = artifacts.require("YAMDelegate");
+const HAMProxy = artifacts.require("YAMDelegator");
 
 // Rs
 // deployed second
-const YAMReserves = artifacts.require("YAMReserves");
-const YAMRebaser = artifacts.require("YAMRebaser");
+const HAMReserves = artifacts.require("YAMReserves");
+const HAMRebaser = artifacts.require("YAMRebaser");
 
 // Governance
 // deployed third
@@ -39,6 +39,6 @@ async function deployGovernance(deployer, network) {
   await deployer.deploy(Timelock);
   await deployer.deploy(Gov,
       Timelock.address,
-      YAMProxy.address
+      HAMProxy.address
   );
 }

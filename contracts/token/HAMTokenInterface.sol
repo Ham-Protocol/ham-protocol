@@ -1,9 +1,9 @@
 pragma solidity 0.5.17;
 
-import "./YAMTokenStorage.sol";
-import "./YAMGovernanceStorage.sol";
+import "./HAMTokenStorage.sol";
+import "./HAMGovernanceStorage.sol";
 
-contract YAMTokenInterface is YAMTokenStorage, YAMGovernanceStorage {
+contract HAMTokenInterface is YAMTokenStorage, YAMGovernanceStorage {
 
     /// @notice An event thats emitted when an account changes its delegate
     event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate);
