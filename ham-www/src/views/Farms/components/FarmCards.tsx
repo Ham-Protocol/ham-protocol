@@ -74,7 +74,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
       getStartTime()
     }
   }, [farm, getStartTime])
-
+  
   const poolActive = startTime * 1000 - Date.now() <= 0
 
   return (

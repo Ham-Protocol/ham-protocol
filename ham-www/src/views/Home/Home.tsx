@@ -38,15 +38,15 @@ const Home: React.FC = () => {
     if (ham) {
       fetchStats()
     }
-  }, [fetchStats, ham])
+  }, [ham])
 
   return (
     <Page>
-      <PageHeader icon="⚠️" subtitle="Remove liquidity from the HAM / YCRV Uniswap pool" title="Warning" />
+      <PageHeader icon="🥓" subtitle="Never fear, the bacon is here! Enjoy the harvest!" title="Friendly reminder" />
       <div style={{
         margin: '-24px auto 48px'
       }}>
-        <StyledLink href="https://medium.com/@hamfinance/how-to-exit-the-eternal-lands-pool-and-withdraw-your-ham-823d57c95f3a">How to withdraw from Uniswap</StyledLink>
+              <StyledLink href="https://discord.gg/tgxPEQx">How to contribute to the Bacon Blockchain</StyledLink>
       </div>
       <Spacer />
       <div>

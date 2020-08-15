@@ -152,7 +152,7 @@ const Vote: React.FC<VoteProps> = () => {
         </StyledCheckpoints>
         <Spacer />
         {!delegated ? (
-          <Button text="Delegate to save HAM" onClick={handleVoteClick} />
+          <Button text="Delegate to help HAM" onClick={handleVoteClick} />
         ) : (
           <div>
             <StyledDelegatedCount>Delegating: {Number(delegatedBalance.multipliedBy(scalingFactor).toFixed(0)).toLocaleString()} HAM</StyledDelegatedCount>
@@ -175,8 +175,8 @@ const Vote: React.FC<VoteProps> = () => {
           paddingTop: 24,
           opacity: 0.6,
         }}>
-          <p>NOTE: You must harvest your HAMs BEFORE 7am UTC Thursday 8/13 - very soon.</p>
-          <p>Hold them in your wallet until 10PM UTC Sunday 8/16 for your delegation to save HAM</p>
+                  {/*<p>NOTE: You must harvest your HAMs BEFORE 7am UTC Thursday 8/13 - very soon.</p>
+          <p>Hold them in your wallet until 10PM UTC Sunday 8/16 for your delegation to save HAM</p>*/}
         </div>
           <div style={{
             display: 'flex',
@@ -184,7 +184,7 @@ const Vote: React.FC<VoteProps> = () => {
             justifyContent: 'center',
             marginTop: 32,
           }}>
-          <StyledLink target="__blank" href="https://twitter.com/HamFinance/status/1293660938906869760">More Info</StyledLink>
+          {/*<StyledLink target="__blank" href="https://twitter.com/HamFinance/status/1293660938906869760">More Info</StyledLink>*/}
         </div>
       </CardContent>
     </Card>
