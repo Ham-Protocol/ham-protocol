@@ -3,7 +3,7 @@ pragma solidity 0.5.17;
 /* import "./HAMTokenInterface.sol"; */
 import "./HAMGovernance.sol";
 
-contract HAMToken is YAMGovernanceToken {
+contract HAMToken is HAMGovernanceToken {
     // Modifiers
     modifier onlyGov() {
         require(msg.sender == gov);
@@ -81,7 +81,7 @@ contract HAMToken is YAMGovernanceToken {
       totalSupply = totalSupply.add(amount);
 
       // get underlying value
-      uint256 hamValue = amount.mul(internalDecimals).div(yamsScalingFactor);
+      uint256 hamValue = amount.mul(internalDecimals).div(hamsScalingFactor);
 
       // increase initSupply
       initSupply = initSupply.add(hamValue);
@@ -90,7 +90,7 @@ contract HAMToken is YAMGovernanceToken {
       require(hamsScalingFactor <= _maxScalingFactor(), "max scaling factor too low");
 
       // add balance
-      _hamBalances[to] = _yamBalances[to].add(yamValue);
+      _hamBalances[to] = _hamBalances[to].add(hamValue);
 
       // add delegates to the minter
       _moveDelegates(address(0), _delegates[to], hamValue);
@@ -116,13 +116,13 @@ contract HAMToken is YAMGovernanceToken {
         // minimum transfer value == hamsScalingFactor / 1e24;
 
         // get amount in underlying
-        uint256 hamValue = value.mul(internalDecimals).div(yamsScalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
 
         // sub from balance of sender
-        _hamBalances[msg.sender] = _yamBalances[msg.sender].sub(yamValue);
+        _hamBalances[msg.sender] = _hamBalances[msg.sender].sub(hamValue);
 
         // add to balance of receiver
-        _hamBalances[to] = _yamBalances[to].add(yamValue);
+        _hamBalances[to] = _hamBalances[to].add(hamValue);
         emit Transfer(msg.sender, to, value);
 
         _moveDelegates(_delegates[msg.sender], _delegates[to], hamValue);
@@ -144,11 +144,11 @@ contract HAMToken is YAMGovernanceToken {
         _allowedFragments[from][msg.sender] = _allowedFragments[from][msg.sender].sub(value);
 
         // get value in hams
-        uint256 hamValue = value.mul(internalDecimals).div(yamsScalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
 
         // sub from from
-        _hamBalances[from] = _yamBalances[from].sub(yamValue);
-        _hamBalances[to] = _yamBalances[to].add(yamValue);
+        _hamBalances[from] = _hamBalances[from].sub(hamValue);
+        _hamBalances[to] = _hamBalances[to].add(hamValue);
         emit Transfer(from, to, value);
 
         _moveDelegates(_delegates[from], _delegates[to], hamValue);
@@ -164,7 +164,7 @@ contract HAMToken is YAMGovernanceToken {
       view
       returns (uint256)
     {
-      return _hamBalances[who].mul(yamsScalingFactor).div(internalDecimals);
+      return _hamBalances[who].mul(hamsScalingFactor).div(internalDecimals);
     }
 
     /** @notice Currently returns the internal storage amount
@@ -320,14 +320,14 @@ contract HAMToken is YAMGovernanceToken {
         returns (uint256)
     {
         if (indexDelta == 0) {
-          emit Rebase(epoch, hamsScalingFactor, yamsScalingFactor);
+          emit Rebase(epoch, hamsScalingFactor, hamsScalingFactor);
           return totalSupply;
         }
 
         uint256 prevHamsScalingFactor = hamsScalingFactor;
 
         if (!positive) {
-           hamsScalingFactor = yamsScalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
+           hamsScalingFactor = hamsScalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
         } else {
             uint256 newScalingFactor = hamsScalingFactor.mul(BASE.add(indexDelta)).div(BASE);
             if (newScalingFactor < _maxScalingFactor()) {
@@ -343,7 +343,7 @@ contract HAMToken is YAMGovernanceToken {
     }
 }
 
-contract HAM is YAMToken {
+contract HAM is HAMToken {
     /**
      * @notice Initialize the new money market
      * @param name_ ERC-20 name of this token

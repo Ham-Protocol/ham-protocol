@@ -52,7 +52,7 @@ contract HAMRebaser {
     /**
      * @notice Sets the reserve contract
      */
-    event TreasuryIncreased(uint256 reservesAdded, uint256 hamsSold, uint256 yamsFromReserves, uint256 yamsToReserves);
+    event TreasuryIncreased(uint256 reservesAdded, uint256 hamsSold, uint256 hamsFromReserves, uint256 hamsToReserves);
 
 
     /**
@@ -172,7 +172,7 @@ contract HAMRebaser {
           // Reserve token is not mutable. Must deploy a new rebaser to update it
           reserveToken = reserveToken_;
 
-          hamAddress = yamAddress_;
+          hamAddress = hamAddress_;
 
           // target 10% slippage
           // 5.4%
@@ -330,10 +330,10 @@ contract HAMRebaser {
         // Apply the Dampening factor.
         indexDelta = indexDelta.div(rebaseLag);
 
-        HAMTokenInterface ham = YAMTokenInterface(yamAddress);
+        HAMTokenInterface ham = HAMTokenInterface(hamAddress);
 
         if (positive) {
-            require(ham.yamsScalingFactor().mul(uint256(10**18).add(indexDelta)).div(10**18) < yam.maxScalingFactor(), "new scaling factor will be too big");
+            require(ham.hamsScalingFactor().mul(uint256(10**18).add(indexDelta)).div(10**18) < ham.maxScalingFactor(), "new scaling factor will be too big");
         }
 
 
@@ -349,7 +349,7 @@ contract HAMRebaser {
 
         // rebase
         uint256 supplyAfterRebase = ham.rebase(epoch, indexDelta, positive);
-        assert(ham.yamsScalingFactor() <= yam.maxScalingFactor());
+        assert(ham.hamsScalingFactor() <= ham.maxScalingFactor());
 
         // perform actions after rebase
         afterRebase(mintAmount, offPegPerc);
@@ -370,7 +370,7 @@ contract HAMRebaser {
         require(sender == address(this), "bad origin");
         (UniVars memory uniVars) = abi.decode(data, (UniVars));
 
-        HAMTokenInterface ham = YAMTokenInterface(yamAddress);
+        HAMTokenInterface ham = HAMTokenInterface(hamAddress);
 
         if (uniVars.amountFromReserves > 0) {
             // transfer from reserves and mint to uniswap
@@ -378,11 +378,11 @@ contract HAMRebaser {
             if (uniVars.amountFromReserves < uniVars.hamsToUni) {
                 // if the amount from reserves > hamsToUni, we have fully paid for the yCRV tokens
                 // thus this number would be 0 so no need to mint
-                ham.mint(uniswap_pair, uniVars.yamsToUni.sub(uniVars.amountFromReserves));
+                ham.mint(uniswap_pair, uniVars.hamsToUni.sub(uniVars.amountFromReserves));
             }
         } else {
             // mint to uniswap
-            ham.mint(uniswap_pair, uniVars.yamsToUni);
+            ham.mint(uniswap_pair, uniVars.hamsToUni);
         }
 
         // mint unsold to mintAmount
@@ -408,7 +408,7 @@ contract HAMRebaser {
     {
         UniswapPair pair = UniswapPair(uniswap_pair);
 
-        HAMTokenInterface ham = YAMTokenInterface(yamAddress);
+        HAMTokenInterface ham = HAMTokenInterface(hamAddress);
 
         // get reserves
         (uint256 token0Reserves, uint256 token1Reserves, ) = pair.getReserves();
@@ -420,7 +420,7 @@ contract HAMRebaser {
         uint256 tokens_to_max_slippage = uniswapMaxSlippage(token0Reserves, token1Reserves, offPegPerc);
 
         UniVars memory uniVars = UniVars({
-          hamsToUni: tokens_to_max_slippage, // how many yams uniswap needs
+          hamsToUni: tokens_to_max_slippage, // how many hams uniswap needs
           amountFromReserves: excess, // how much of hamsToUni comes from reserves
           mintToReserves: 0 // how much hams protocol mints to reserves
         });

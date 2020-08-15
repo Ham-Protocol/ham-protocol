@@ -153,7 +153,7 @@ contract GovernorAlpha {
 
     constructor(address timelock_, address ham_) public {
         timelock = TimelockInterface(timelock_);
-        ham = HAMInterface(yam_);
+        ham = HAMInterface(ham_);
         guardian = msg.sender;
     }
 

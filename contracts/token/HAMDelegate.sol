@@ -9,7 +9,7 @@ contract HAMDelegationStorage {
     address public implementation;
 }
 
-contract HAMDelegatorInterface is YAMDelegationStorage {
+contract HAMDelegatorInterface is HAMDelegationStorage {
     /**
      * @notice Emitted when implementation is changed
      */
@@ -24,7 +24,7 @@ contract HAMDelegatorInterface is YAMDelegationStorage {
     function _setImplementation(address implementation_, bool allowResign, bytes memory becomeImplementationData) public;
 }
 
-contract HAMDelegateInterface is YAMDelegationStorage {
+contract HAMDelegateInterface is HAMDelegationStorage {
     /**
      * @notice Called by the delegator on a delegate to initialize it for duty
      * @dev Should revert if any issues arise which make it unfit for delegation
@@ -39,7 +39,7 @@ contract HAMDelegateInterface is YAMDelegationStorage {
 }
 
 
-contract HAMDelegate is YAM, YAMDelegateInterface {
+contract HAMDelegate is HAM, HAMDelegateInterface {
     /**
      * @notice Construct an empty delegate
      */

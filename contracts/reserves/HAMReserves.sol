@@ -47,7 +47,7 @@ contract HAMReserves {
         public
     {
         reserveToken = reserveToken_;
-        hamAddress = yamAddress_;
+        hamAddress = hamAddress_;
         gov = msg.sender;
     }
 

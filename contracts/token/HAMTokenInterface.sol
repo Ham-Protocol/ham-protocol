@@ -3,7 +3,7 @@ pragma solidity 0.5.17;
 import "./HAMTokenStorage.sol";
 import "./HAMGovernanceStorage.sol";
 
-contract HAMTokenInterface is YAMTokenStorage, YAMGovernanceStorage {
+contract HAMTokenInterface is HAMTokenStorage, HAMGovernanceStorage {
 
     /// @notice An event thats emitted when an account changes its delegate
     event DelegateChanged(address indexed delegator, address indexed fromDelegate, address indexed toDelegate);

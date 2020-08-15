@@ -3,7 +3,7 @@ pragma solidity 0.5.17;
 import "./HAMTokenInterface.sol";
 import "./HAMDelegate.sol";
 
-contract HAMDelegator is YAMTokenInterface, YAMDelegatorInterface {
+contract HAMDelegator is HAMTokenInterface, HAMDelegatorInterface {
     /**
      * @notice Construct a new HAM
      * @param name_ ERC-20 name of this token

@@ -718,7 +718,7 @@ contract HAMIncentivizer is LPTokenWrapper, IRewardDistributionRecipient {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            uint256 scalingFactor = HAM(address(ham)).yamsScalingFactor();
+            uint256 scalingFactor = HAM(address(ham)).hamsScalingFactor();
             uint256 trueReward = reward.mul(scalingFactor).div(10**18);
             ham.safeTransfer(msg.sender, trueReward);
             emit RewardPaid(msg.sender, trueReward);
@@ -728,7 +728,7 @@ contract HAMIncentivizer is LPTokenWrapper, IRewardDistributionRecipient {
     modifier checkhalve() {
         if (block.timestamp >= periodFinish) {
             initreward = initreward.mul(50).div(100);
-            uint256 scalingFactor = HAM(address(ham)).yamsScalingFactor();
+            uint256 scalingFactor = HAM(address(ham)).hamsScalingFactor();
             uint256 newRewards = initreward.mul(scalingFactor).div(10**18);
             ham.mint(address(this), newRewards);
 
@@ -785,7 +785,7 @@ contract HAMIncentivizer is LPTokenWrapper, IRewardDistributionRecipient {
         // cant take staked asset
         require(_token != uni_lp, "uni_lp");
         // cant take reward asset
-        require(_token != ham, "yam");
+        require(_token != ham, "ham");
 
         // transfer to
         _token.safeTransfer(to, amount);
