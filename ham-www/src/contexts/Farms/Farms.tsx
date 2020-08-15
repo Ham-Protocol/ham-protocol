@@ -26,7 +26,7 @@ const ICON_FOR_POOL: { [key: string]: string } = {
   lend_pool: '🥩',
   snx_pool: '🍖',
   ycrv_pool: '🍔',
-  dai_pool: ''
+  dai_pool: '🐖'
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
