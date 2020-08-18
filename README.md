@@ -59,7 +59,7 @@ In a rebase, the order of operations are:
 
 
 ## Governance
-Governance is entirely dictated by HAM holders from the start. Upon deployment, ownership of all HAM protocol contracts was reliquished to the timelocked Governance contract or removed entirely. At the very least, this can be seen as a reference implementation for a truly decentralized protocol.
+Governance is entirely dictated by HAM holders from the start. Upon deployment, ownership of all HAM protocol contracts was relinquished to the timelocked Governance contract or removed entirely. At the very least, this can be seen as a reference implementation for a truly decentralized protocol.
 
 # Development
 ### Building
