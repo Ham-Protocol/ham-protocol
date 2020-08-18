@@ -32,7 +32,7 @@ export class Account {
 
   async getSNXWalletBalance() {
     this.walletInfo["SNX"] = await this.contracts.snx.methods.balanceOf(this.accountInfo).call();
-    return this.walletInfo["SNX"] //replaced from UNIAmpl like in other files
+    return this.walletInfo["SNX"] //Replaced from UNIAmpl like in other files.
   }
 
   async getWETHWalletBalance() {
