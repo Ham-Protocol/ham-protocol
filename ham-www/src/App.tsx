@@ -16,7 +16,6 @@ import TransactionProvider from './contexts/Transactions'
 
 import useModal from './hooks/useModal'
 
-import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
 
@@ -32,9 +31,6 @@ const App: React.FC = () => {
           </Route>
           <Route path="/farms">
             <Farms />
-          </Route>
-          <Route path="/faq">
-            <FAQ />
           </Route>
         </Switch>
       </Router>

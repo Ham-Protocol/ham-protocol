@@ -5,11 +5,11 @@ import { Contract } from "web3-eth-contract"
 
 import { stake } from '../hamUtils'
 
-const useStake = (poolContract: Contract, tokenName: string) => {
+const useStake = (poolContract: Contract) => {
   const { account } = useWallet()
 
   const handleStake = useCallback(async (amount: string) => {
-    const txHash = await stake(poolContract, amount, account, tokenName)
+    const txHash = await stake(poolContract, amount, account)
     console.log(txHash)
   }, [account, poolContract])
 

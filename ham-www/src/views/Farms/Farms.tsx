@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
 
-import farmer from '../../assets/img/farmer.png'
+import butcher from '../../assets/img/butcher.png'
 
 import Button from '../../components/Button'
 import Page from '../../components/Page'
@@ -26,7 +26,7 @@ const Farms: React.FC = () => {
         <>
           <Route exact path={path}>
             <PageHeader
-              icon={<img src={farmer} height="96" />}
+              icon={<img src={butcher} height="96" />}
               subtitle="Earn HAM tokens by providing liquidity."
               title="Select a farm."
             />
