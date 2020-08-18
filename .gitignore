@@ -5,3 +5,4 @@ wrangler.toml
 /clean_build
 **/package-lock.json
 package-lock.json
+ham-www/src/views/Home/Home.tsx

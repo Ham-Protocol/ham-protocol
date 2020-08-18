@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { useWallet } from 'use-wallet'
-
 import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
@@ -11,22 +9,18 @@ import useHam from '../../hooks/useHam'
 
 import Rebase from './components/Rebase'
 import Stats from './components/Stats'
-import Vote from './components/Vote'
 
 import { OverviewData } from './types'
 import { getStats } from './utils'
 
 const Home: React.FC = () => {
 
-  const { account } = useWallet()
-
   const ham = useHam()
   const [{
-    circSupply,
     curPrice,
     nextRebase,
+    scalingFactor,
     targetPrice,
-    totalSupply,
   }, setStats] = useState<OverviewData>({})
 
   const fetchStats = useCallback(async () => {
@@ -38,7 +32,7 @@ const Home: React.FC = () => {
     if (ham) {
       fetchStats()
     }
-  }, [ham])
+  }, [fetchStats, ham])
 
   return (
     <Page>
@@ -54,10 +48,9 @@ const Home: React.FC = () => {
           <Rebase nextRebase={nextRebase} />
           <StyledSpacer />
           <Stats
-            circSupply={circSupply}
             curPrice={curPrice}
+            scalingFactor={scalingFactor}
             targetPrice={targetPrice}
-            totalSupply={totalSupply}
           />
         </StyledOverview>
       </div>

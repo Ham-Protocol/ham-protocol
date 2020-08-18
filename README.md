@@ -50,7 +50,7 @@ Following the launch of the second pool, rebasing can begin its activation phase
 In a rebase, the order of operations are:
 <br />
 •	ensure in rebase window<br/>
-•	calculate how far off price is from the peg<br/>
+•	calculate how far off-price is from the peg<br/>
 •	dampen the rebase by the rebaseLag<br/>
 •	if positive calculate protocol mint amount<br/>
 •	change scaling factor, (in/de)flating the supply<br/>
@@ -100,7 +100,7 @@ $ jest governance
 
 
 #### Attributions
-Much of this code base is modified from existing works, including:
+Much of this codebase is modified from existing works, including:
 
 [Compound](https://compound.finance) - Jumping off point for token code and governance
 

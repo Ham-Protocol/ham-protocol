@@ -19,7 +19,6 @@
     "noEmit": true,
     "jsx": "react",
     "strictNullChecks": false
-    
   },
   "include": [
     "src"
