@@ -6,6 +6,7 @@ import {
   getCirculatingSupply as gCS,
   getNextRebaseTimestamp as gNRT,
   getTotalSupply as gTS,
+  getScalingFactor,
 } from '../../hamUtils'
 
 const getCurrentPrice = async (ham: typeof Ham): Promise<number> => {
@@ -38,12 +39,14 @@ export const getStats = async (ham: typeof Ham) => {
   const curPrice = await getCurrentPrice(ham)
   const circSupply = '' // await getCirculatingSupply(ham)
   const nextRebase = await getNextRebaseTimestamp(ham)
+  const scalingFactor = Number((await getScalingFactor(ham)).toFixed(2))
   const targetPrice = await getTargetPrice(ham)
   const totalSupply = await getTotalSupply(ham)
   return {
     circSupply,
     curPrice,
     nextRebase,
+    scalingFactor,
     targetPrice,
     totalSupply
   }

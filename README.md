@@ -21,11 +21,7 @@ The token itself is largely based on COMP and Ampleforth which have undergone au
 
 The rebaser may also have bugs - but has been tested in multiple scenarios. It is restricted to Externally Owned Accounts (EOAs) calling the rebase function for added security. SafeMath is used everywhere.
 
-<<<<<<< HEAD
-If you feel uncomfortable with these disclousures, don't stake or hold HAM. If the community votes to fund an audit, or the community is gifted an audit, there is no assumption that the original devs will be around to implement fixes, and is entirely at their discretion.
-=======
 If you feel uncomfortable with these disclosures, don't stake or hold HAM. If the community votes to fund an audit, or the community is gifted an audit, there is no assumption that the original devs will be around to implement fixes, and is entirely at their discretion.
->>>>>>> 027b628... correct typos
 
 ## The Token
 The core HAM token uses yCRV as the reserve currency, which is roughly a $1 peg. Each supply expansion (referred to as an inflating rebase), a portion of tokens is minted and used to build up the treasury. This treasury is then in complete ownership of HAM holders via governance.
