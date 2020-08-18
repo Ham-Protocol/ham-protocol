@@ -36,9 +36,9 @@ describe("Distribution", () => {
   let weth_account = "0xf9e11762d522ea29dd78178c9baf83b7b093aacc";
   let lend_account = "0x3b08aa814bea604917418a9f0907e7fc430e742c";
   let link_account = "0xbe6977e08d4479c0a6777539ae0e8fa27be4e9d6";
-  let dai_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //dai replacing mkr 
+  let dai_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //Dai replacing mkr. 
   let snx_account = "0xb696d629cd0a00560151a434f6b4478ad6c228d7";
-  let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606"; //I need to know if these addresses are real accounts being used or if they are generated for the test, dai is using mkrs old address as it's own (please delete this comment once solved)
+  let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606"; //I need to know if these addresses are real accounts being used or if they are generated for the test, dai is using mkrs old address as it's own (please delete this comment once solved).
   beforeAll(async () => {
     const accounts = await ham.web3.eth.getAccounts();
     ham.addAccount(accounts[0]);
@@ -53,7 +53,7 @@ describe("Distribution", () => {
   });
 
 
-//all ampl classes used in pool failures and incentivizer pool has been replaced by the snx equivalent, also there are time when "uni_ampl" is used, this has been replaced but their placements are indicated by comments "UNIAmpl" or "uni-ampl"
+//All ampl classes used in pool failures and incentivizer pool has been replaced by the snx equivalent, also there are time when "uni_ampl" is used, this has been replaced but their placements are indicated by comments "UNIAmpl" or "uni-ampl".
   describe("pool failures", () => {
     test("cant join pool 1s early", async () => {
       await ham.testing.resetEVM("0x2");
@@ -269,7 +269,7 @@ describe("Distribution", () => {
         if (waittime > 0) {
           await ham.testing.increaseTime(waittime);
         } else {
-          console.log("late entry, pool 2", waittime) //"pool 2" is used here, the original file used ampl here instead of snx, so it must be made sure that the pool number does not need to be changed (delete comment once solved)
+          console.log("late entry, pool 2", waittime) //"pool 2" is used here, the original file used ampl here instead of snx, so it must be made sure that the pool number does not need to be changed (delete comment once solved).
         }
 
         await ham.contracts.ycrv_pool.methods.stake(bal).send({from: user, gas: 400000});
