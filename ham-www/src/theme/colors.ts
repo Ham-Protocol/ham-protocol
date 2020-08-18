@@ -10,7 +10,7 @@ export const red = {
   500: '#D1004B',
 }
 
-export const grey = { //note to Cucur, delte after reading: I have kept this as grey for testing seeing as I keep alternating between the two modes
+export const grey = {
   100: '#fedde7', //Brightness above buttons.
   200: '#fdcddc', //Button color.
   300: '#fcb4ca', //Shadow beneath buttons.
