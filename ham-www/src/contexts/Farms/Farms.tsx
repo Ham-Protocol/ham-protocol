@@ -57,7 +57,7 @@ const Farms: React.FC = ({ children }) => {
       if (tokenKey === 'eth') {
         tokenKey = 'weth'
       } else if (tokenKey === 'ampl') {
-        tokenKey = 'ampl_eth_uni_lp' //kept this just in case
+        tokenKey = 'ampl_eth_uni_lp' //I have kept this just in case.
       } else if (tokenKey === 'ycrv') {
         tokenKey = 'ycrv_ham_uni_lp'
       }
