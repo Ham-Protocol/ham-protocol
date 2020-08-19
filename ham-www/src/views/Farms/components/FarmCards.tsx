@@ -1,22 +1,27 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Countdown, { CountdownRenderProps} from 'react-countdown'
+import { useWallet } from 'use-wallet'
+import numeral from 'numeral'
 
 import Button from '../../../components/Button'
 import Card from '../../../components/Card'
 import CardContent from '../../../components/CardContent'
 import CardIcon from '../../../components/CardIcon'
 import Loader from '../../../components/Loader'
+import Spacer from '../../../components/Spacer'
 
 import useFarms from '../../../hooks/useFarms'
+import useHam from '../../../hooks/useHam'
 
 import { Farm } from '../../../contexts/Farms'
 
-import { getPoolStartTime } from '../../../hamUtils'
+import { bnToDec } from '../../../utils'
+import { getEarned, getPoolStartTime } from '../../../hamUtils'
 
 const FarmCards: React.FC = () => {
   const [farms] = useFarms()
-
+  const { account } = useWallet()
   const rows = farms.reduce<Farm[][]>((farmRows, farm) => {
     const newFarmRows = [...farmRows]
     if (newFarmRows[newFarmRows.length - 1].length === 3) {
@@ -53,6 +58,12 @@ interface FarmCardProps {
 
 const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   const [startTime, setStartTime] = useState(0)
+  const [harvestable, setHarvestable] = useState(0)
+
+  const { contract } = farm
+  const { account } = useWallet()
+  const ham = useHam()
+  console.log("===ham",ham, "===account", account)
 
   const getStartTime = useCallback(async () => {
     const startTime = await getPoolStartTime(farm.contract)
@@ -75,8 +86,17 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
     }
   }, [farm, getStartTime])
 
+  useEffect(() => {
+    async function fetchEarned () {
+      const earned = await getEarned(ham, contract, account)
+      setHarvestable(bnToDec(earned))
+    }
+    if (ham && account) {
+      fetchEarned()
+    }
+  }, [ham, contract, account, setHarvestable])
+  
   const poolActive = startTime * 1000 - Date.now() <= 0
-
   return (
     <StyledCardWrapper>
       {farm.id === 'ycrv_ham_uni_lp' && (
@@ -91,6 +111,10 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
               <StyledDetail>Deposit {farm.depositToken.toUpperCase()}</StyledDetail>
               <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
             </StyledDetails>
+            <Spacer />
+            <StyledHarvestable>
+              {harvestable ? `${numeral(harvestable).format('0.00a')} HAMs ready to harvest.` : undefined}
+            </StyledHarvestable>
             <Button
               disabled={!poolActive}
               text={poolActive ? 'Select' : undefined}
@@ -178,13 +202,19 @@ const StyledSpacer = styled.div`
 `
 
 const StyledDetails = styled.div`
-  margin-bottom: ${props => props.theme.spacing[6]}px;
   margin-top: ${props => props.theme.spacing[2]}px;
   text-align: center;
 `
 
 const StyledDetail = styled.div`
   color: ${props => props.theme.color[500]};
+`
+
+const StyledHarvestable = styled.div`
+  color: ${props => props.theme.color['fillBar']};
+  font-size: 16px;
+  height: 48px;
+  text-align: center;
 `
 
 export default FarmCards
