@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
 } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 
 import DisclaimerModal from './components/DisclaimerModal'
@@ -20,38 +20,41 @@ import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
 
-import theme from './theme'
+import ThemeMap, { Themes } from './theme'
 
-const App: React.FC = () => {
-  return (
-    <Providers>
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-          <Route path="/farms">
-            <Farms />
-          </Route>
-          <Route path="/faq">
-            <FAQ />
-          </Route>
-        </Switch>
-      </Router>
-      <Disclaimer />
-    </Providers>
-  )
-}
+import Page from './components/Page'
 
-const Providers: React.FC = ({ children }) => {
+const App: React.FC = ({ children }) => {
+  
+  const [theme, setTheme] = useState(Themes.LIGHT_MODE)
+
+  const toggleTheme = () => {
+    setTheme(theme === Themes.DARK_MODE ? Themes.LIGHT_MODE : Themes.DARK_MODE)
+  }
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={ThemeMap[theme]}>
       <UseWalletProvider chainId={1}>
         <HamProvider>
           <TransactionProvider>
             <ModalsProvider>
               <FarmsProvider>
-                {children}
+                <Router>
+                  <Page toggleTheme={toggleTheme} theme={theme}>
+                    <Switch>
+                      <Route path="/" exact>
+                        <Home />
+                      </Route>
+                      <Route path="/farms">
+                        <Farms />
+                      </Route>
+                      <Route path="/faq">
+                        <FAQ />
+                      </Route>
+                    </Switch>
+                  </Page>
+                </Router>
+                <Disclaimer />
               </FarmsProvider>
             </ModalsProvider>
           </TransactionProvider>
@@ -60,6 +63,17 @@ const Providers: React.FC = ({ children }) => {
     </ThemeProvider>
   )
 }
+
+
+
+const StyledPage = styled.div``
+
+const StyledMain = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - ${props => props.theme.topBarSize * 2}px);
+`
 
 const Disclaimer: React.FC = () => {
 

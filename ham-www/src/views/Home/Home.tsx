@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
 
@@ -35,7 +34,7 @@ const Home: React.FC = () => {
   }, [fetchStats, ham])
 
   return (
-    <Page>
+    <>
       <PageHeader icon="🥓" subtitle="Never fear, the bacon is here! Enjoy the harvest!" title="Friendly reminder" />
       <div style={{
         margin: '-24px auto 48px'
@@ -54,7 +53,7 @@ const Home: React.FC = () => {
           />
         </StyledOverview>
       </div>
-    </Page>
+    </>
   )
 }
 

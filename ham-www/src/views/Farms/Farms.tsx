@@ -9,7 +9,6 @@ import { useWallet } from 'use-wallet'
 import butcher from '../../assets/img/butcher.png'
 
 import Button from '../../components/Button'
-import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 
 import Farm from '../Farm'
@@ -21,7 +20,6 @@ const Farms: React.FC = () => {
   const { account, connect } = useWallet()
   return (
     <Switch>
-      <Page>
       {!!account ? (
         <>
           <Route exact path={path}>
@@ -49,7 +47,6 @@ const Farms: React.FC = () => {
           />
         </div>
       )}
-      </Page>
     </Switch>
   )
 }

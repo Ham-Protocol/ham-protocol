@@ -7,8 +7,14 @@ import Logo from '../Logo'
 import AccountButton from './components/AccountButton'
 import Nav from './components/Nav'
 import TxButton from './components/TxButton'
+import ThemeToggle from './components/ThemeToggle'
 
-const TopBar: React.FC = () => {
+interface TopBarProps {
+  toggleTheme: () => void
+  theme: string
+}
+
+const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
   return (
     <StyledTopBar>
       <Container size="lg">
@@ -23,6 +29,7 @@ const TopBar: React.FC = () => {
             justifyContent: 'flex-end'
           }}>
             <AccountButton />
+            <ThemeToggle toggleTheme={toggleTheme} theme={theme}/>
           </div>
         </StyledTopBarInner>
       </Container>

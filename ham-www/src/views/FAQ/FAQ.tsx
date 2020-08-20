@@ -4,12 +4,11 @@ import styled from 'styled-components'
 import Card from '../../components/Card'
 import CardContent from '../../components/CardContent'
 import Container from '../../components/Container'
-import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 
 const FAQ: React.FC = () => {
   return (
-    <Page>
+    <>
       <PageHeader icon="❓" title="About Ham" />
       <Container>
         <Card>
@@ -17,7 +16,7 @@ const FAQ: React.FC = () => {
           </CardContent>
         </Card>
       </Container>
-    </Page>
+    </>
   )
 }
 
