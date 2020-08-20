@@ -7,7 +7,7 @@ import {
 import { useWallet } from 'use-wallet'
 import WalletProviderModal from '../../components/TopBar/components/WalletProviderModal'
 
-import farmer from '../../assets/img/farmer.png'
+import butcher from '../../assets/img/butcher.png'
 
 import useModal from '../../hooks/useModal'
 import Button from '../../components/Button'
@@ -27,7 +27,7 @@ const Farms: React.FC = () => {
         <>
           <Route exact path={path}>
             <PageHeader
-              icon={<img src={farmer} height="96" />}
+              icon={<img src={butcher} height="96" />}
               subtitle="Earn HAM tokens by providing liquidity."
               title="Select a farm."
             />

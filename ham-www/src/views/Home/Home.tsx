@@ -37,7 +37,12 @@ const Home: React.FC = () => {
 
   return (
     <Page>
-      <PageHeader icon="🥩" subtitle="It's a great day to harvest some hams" title="Welcome" />
+      <PageHeader icon="🥓" subtitle="Never fear, the bacon is here! Enjoy the harvest!" title="Friendly reminder" />
+      <div style={{
+        margin: '-24px auto 48px'
+      }}>
+              <StyledLink href="https://discord.gg/tgxPEQx">How to contribute to the Bacon Blockchain</StyledLink>
+      </div>
       <Spacer />
       <div>
         <StyledOverview>
@@ -67,6 +72,12 @@ const StyledOverview = styled.div`
 const StyledSpacer = styled.div`
   height: ${props => props.theme.spacing[4]}px;
   width: ${props => props.theme.spacing[4]}px;
+`
+
+const StyledLink = styled.a`
+  font-weight: 700l
+  text-decoration: none;
+  color: ${props => props.theme.color.primary.main};
 `
 
 export default Home

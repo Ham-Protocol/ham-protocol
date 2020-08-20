@@ -1,6 +1,5 @@
 export const white = '#FFF'
-export const black = '#000'
-
+export const black = '#000000'
 export const green = {
   500: '#00D110',
 }
@@ -12,11 +11,21 @@ export const red = {
 }
 
 export const grey = {
-  100: '#f7f2f4',
-  200: '#F0E7EA',
-  300: '#e2cfd5',
-  400: '#AA8592',
-  500: '#80495D',
-  600: '#5B2639', 
-  800: '#2D121B',
+  100: '#fedde7', //Brightness above buttons.
+  200: '#fdcddc', //Button color.
+  300: '#fcb4ca', //Shadow beneath buttons.
+  400: '#AA8592', //Link color and text color.
+  500: '#80495D', //Cursor on links color.
+  600: '#5B2639', //Title color.
+  800: '#2D121B', 
+}
+
+export const darkmode = {
+  100: '#041b39', //Brightness above buttons.
+  200: '#04172f', //Button color.
+  300: '#23272a', //Shadow beneath buttons.
+  400: '#FFFFFF', //Link color and text color.
+  500: '#21211f', //Cursor on links.
+  600: '#FFFFFF', //Title color.
+  800: '#FFFFFF', 
 }

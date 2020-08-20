@@ -10,39 +10,33 @@ import Context from './context'
 import { Farm } from './types'
 
 const NAME_FOR_POOL: { [key: string]: string } = {
-  yfi_pool: 'YFI Farm',
-  eth_pool: 'Weth Homestead',
-  ampl_pool: 'Ample Soils',
-  ycrv_pool: 'Eternal Lands',
-  comp_pool: 'Compounding Hills',
-  link_pool: 'Marine Gardens',
-  lend_pool: 'Aave Agriculture',
-  snx_pool: 'Spartan Grounds',
-  mkr_pool: 'Maker Range',
+  yfi_pool: 'Waifu rough cuts',
+  eth_pool: 'Bacon Wrapped Eth',
+  ycrv_pool: 'The HAMburgery',
+  link_pool: 'Sausage Links',
+  lend_pool: 'Lend Larder',
+  snx_pool: 'Spartan Smokery',
+  dai_pool: 'Dai Durocs'
 }
 
 const ICON_FOR_POOL: { [key: string]: string } = {
-  yfi_pool: '🐋',
-  eth_pool: '🌎',
-  ampl_pool: '🌷',
-  comp_pool: '💸',
-  link_pool: '🔗',
-  lend_pool: '🏕️',
-  snx_pool: '⚔️',
-  mkr_pool: '🐮',
-  ycrv_pool: '🌈',
+  yfi_pool: '🐽',
+  eth_pool: '🥓',
+  link_pool: '🌭',
+  lend_pool: '🥩',
+  snx_pool: '🍖',
+  ycrv_pool: '🍔',
+  dai_pool: '🐖'
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
   yfi_pool: 0,
   eth_pool: 1,
-  ampl_pool: 2,
-  comp_pool: 3,
-  ycrv_pool: 4,
-  link_pool: 5,
-  lend_pool: 6,
-  snx_pool: 7,
-  mkr_pool: 8,
+  snx_pool: 2, //changed to snx to fit the rest of the code (cf: distribution and deployment tests)
+  ycrv_pool: 3,
+  link_pool: 4,
+  lend_pool: 5,
+  dai_pool: 6,//swapped mkr for dai
 }
 
 const Farms: React.FC = ({ children }) => {
@@ -63,7 +57,7 @@ const Farms: React.FC = ({ children }) => {
       if (tokenKey === 'eth') {
         tokenKey = 'weth'
       } else if (tokenKey === 'ampl') {
-        tokenKey = 'ampl_eth_uni_lp'
+        tokenKey = 'ampl_eth_uni_lp' //I have kept this just in case.
       } else if (tokenKey === 'ycrv') {
         tokenKey = 'ycrv_ham_uni_lp'
       }

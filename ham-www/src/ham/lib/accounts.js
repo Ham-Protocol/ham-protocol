@@ -30,9 +30,9 @@ export class Account {
     return this.walletInfo["YFI"]
   }
 
-  async getUNIAmplWalletBalance() {
-    this.walletInfo["UNIAmpl"] = await this.contracts.UNIAmpl.methods.balanceOf(this.accountInfo).call();
-    return this.walletInfo["UNIAmpl"]
+  async getSNXWalletBalance() {
+    this.walletInfo["SNX"] = await this.contracts.snx.methods.balanceOf(this.accountInfo).call();
+    return this.walletInfo["SNX"] //Replaced from UNIAmpl like in other files.
   }
 
   async getWETHWalletBalance() {

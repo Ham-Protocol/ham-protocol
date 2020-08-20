@@ -23,9 +23,9 @@ const DisclaimerModal: React.FC<DisclaimerModal> = ({ onConfirm, onDismiss }) =>
     if (step === 'disclaimer') {
       return (
         <div>
-          <p>Audits: None.</p>
-          <p>While the initial creators of the Ham protocol have made reasonable efforts to attempt to ensure the security of the contracts, including forking much of the codebase from existing well-audited projects and soliciting review from friends, nothing approaching the rigor of a formal audit has been conducted at this time.</p>
-          <p>We STRONGLY urge caution to anyone who chooses to engage with these contracts.</p>
+          <p>Audits: Soon.</p>
+          <p>Hello and welcome to an early concept version of the Ham farming website. We thank you for your participation in building this wonderful project and we hope that you have been enjoying working with us so far.</p>
+          <p>Please go ahead and take a look at the pages in their current state, if you have any suggestions to make feel free to press the working discord link on the webpage and come chat with us.</p>
         </div>
       )
     } else {
@@ -54,8 +54,8 @@ const DisclaimerModal: React.FC<DisclaimerModal> = ({ onConfirm, onDismiss }) =>
 
   return (
     <Modal>
-      <ModalTitle text={`Warning`} />
-      <CardIcon>⚠️</CardIcon>
+      <ModalTitle text={`Building Together`} />
+      <CardIcon>🤝</CardIcon>
       {modalContent}
       <ModalActions>
         {button}
