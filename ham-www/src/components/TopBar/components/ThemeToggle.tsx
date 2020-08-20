@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import styled from 'styled-components'
+import React, { useContext, useState } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 
 import { Themes } from '../../../theme'
 
@@ -10,9 +10,24 @@ interface ThemeToggleProps {
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
   const isLight = theme === Themes.LIGHT_MODE
+  const { color, spacing } = useContext(ThemeContext)
+
+  let buttonColor: string = color.primary.main
+  let boxShadow: string = `4px 4px 8px ${color.grey[300]}, -8px -8px 16px ${color.grey[100]}FF;`
+  let buttonSize: number = 36
+  let buttonPadding: number = spacing[3]
+  let fontSize: number = 20
 
   return (
-    <StyledThemeToggle lightTheme={isLight} theme={theme} onClick={toggleTheme}>
+    <StyledThemeToggle
+      lightTheme={isLight}
+      theme={theme}
+      onClick={toggleTheme}
+      boxShadow={boxShadow}
+      color={buttonColor}
+      fontSize={fontSize}
+      padding={buttonPadding}
+      size={buttonSize}>
       <span>🌞</span>
       <span>🌙</span>
     </StyledThemeToggle>
@@ -20,28 +35,37 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
 }
 
 interface StyledThemeToggleProps {
-  lightTheme: boolean
-  theme: string
+  lightTheme: boolean,
+  theme: string,
+  boxShadow: string,
+  color: string,
+  disabled?: boolean,
+  fontSize: number,
+  padding: number,
+  size: number
 }
 
 const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
   background: ${({ theme }) => theme.gradient};
-  border: 2px solid ${({ theme }) => theme.toggleBorder};
-  border-radius: 30px;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: ${props => props.boxShadow};
+  color: ${props => !props.disabled ? props.color : `${props.color}55`};
   cursor: pointer;
   display: flex;
-  font-size: 0.5rem;
-  justify-content: space-between;
-  margin: 0 auto;
+  font-size: ${props => props.fontSize}px;
+  font-weight: 700;
+  height: ${props => props.size}px;
+  justify-content: center;
+  margin-right: 25px;
+  outline: none;
   overflow: hidden;
-  padding: 0.5rem;
-  position: relative;
-  width: 8rem;
-  height: 4rem;
+  padding-right: ${props => props.padding}px;
+  pointer-events: ${props => !props.disabled ? undefined : 'none'};
 
   span {
     height: auto;
-    width: 2.5rem;
+    width: 1.25rem;
     transition: all 0.3s linear;
     
     // sun icon

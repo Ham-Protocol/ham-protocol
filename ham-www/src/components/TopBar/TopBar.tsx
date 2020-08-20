@@ -28,8 +28,8 @@ const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
             display: 'flex',
             justifyContent: 'flex-end'
           }}>
-            <AccountButton />
             <ThemeToggle toggleTheme={toggleTheme} theme={theme}/>
+            <AccountButton />
           </div>
         </StyledTopBarInner>
       </Container>
