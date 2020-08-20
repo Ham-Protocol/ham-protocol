@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import Page from '../../components/Page'
+import { useWallet } from 'use-wallet'
+
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
 
@@ -49,7 +50,7 @@ const Home: React.FC = () => {
           />
         </StyledOverview>
       </div>
-    </Page>
+    </>
   )
 }
 

@@ -19,6 +19,7 @@ import useModal from './hooks/useModal'
 import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
+import Page from './components/Page'
 
 import theme from './theme'
 
@@ -26,17 +27,16 @@ const App: React.FC = () => {
   return (
     <Providers>
       <Router>
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-          <Route path="/farms">
-            <Farms />
-          </Route>
-          <Route path="/faq">
-            <FAQ />
-          </Route>
-        </Switch>
+        <Page>
+          <Switch>
+            <Route path="/" exact>
+              <Home />
+            </Route>
+            <Route path="/farms">
+              <Farms />
+            </Route>
+          </Switch>
+        </Page>
       </Router>
       <Disclaimer />
     </Providers>
@@ -46,7 +46,16 @@ const App: React.FC = () => {
 const Providers: React.FC = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
-      <UseWalletProvider chainId={1}>
+      <UseWalletProvider 
+        chainId={1}   
+        connectors={{
+          walletconnect: { rpcUrl: 'https://mainnet.eth.aragon.network/' },
+          walletlink: {
+            url: 'https://test.com',
+            appName: 'Ham Finance',
+            appLogoUrl: 'https://hami.fy',
+          },
+        }}>
         <HamProvider>
           <TransactionProvider>
             <ModalsProvider>
