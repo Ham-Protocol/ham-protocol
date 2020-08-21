@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
 
 import { Themes } from '../../../theme'
@@ -10,13 +10,14 @@ interface ThemeToggleProps {
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
   const isLight = theme === Themes.LIGHT_MODE
-  const { color, spacing } = useContext(ThemeContext)
+  const { color, spacing, gradient } = useContext(ThemeContext)
 
-  let buttonColor: string = color.primary.main
-  let boxShadow: string = `4px 4px 8px ${color.grey[300]}, -8px -8px 16px ${color.grey[100]}FF;`
+  let buttonColor: string = color[500]
+  let boxShadow: string = `4px 4px 8px ${color[300]}, -8px -8px 16px ${color[100]}FF;`
   let buttonSize: number = 36
   let buttonPadding: number = spacing[3]
   let fontSize: number = 20
+  let toggleGradient: string = gradient
 
   return (
     <StyledThemeToggle
@@ -26,6 +27,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
       boxShadow={boxShadow}
       color={buttonColor}
       fontSize={fontSize}
+      toggleGradient={toggleGradient}
       padding={buttonPadding}
       size={buttonSize}>
       <span>🌞</span>
@@ -39,18 +41,18 @@ interface StyledThemeToggleProps {
   theme: string,
   boxShadow: string,
   color: string,
-  disabled?: boolean,
   fontSize: number,
+  toggleGradient: string,
   padding: number,
   size: number
 }
 
 const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
-  background: ${({ theme }) => theme.gradient};
+  background: ${props => props.toggleGradient};
   border: 0;
   border-radius: 12px;
   box-shadow: ${props => props.boxShadow};
-  color: ${props => !props.disabled ? props.color : `${props.color}55`};
+  color: ${props => props.color};
   cursor: pointer;
   display: flex;
   font-size: ${props => props.fontSize}px;
@@ -61,7 +63,6 @@ const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
   outline: none;
   overflow: hidden;
   padding-right: ${props => props.padding}px;
-  pointer-events: ${props => !props.disabled ? undefined : 'none'};
 
   span {
     height: auto;
