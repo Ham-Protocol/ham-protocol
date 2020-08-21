@@ -1,4 +1,4 @@
-import { black, green, red, white, grey } from './colors'
+import { black, green, red, white, pink, dark } from './colors'
 
 export enum Themes {
   DARK_MODE = 'darkmode',
@@ -7,18 +7,7 @@ export enum Themes {
 
 const theme = {
   borderRadius: 12,
-  color: {
-    black,
-    grey,
-    primary: {
-      light: red[200],
-      main: red[500],
-    },
-    secondary: {
-      main: green[500],
-    },
-    white,
-  },
+  color: pink,
   siteWidth: 1200,
   spacing: {
     1: 4,
@@ -29,40 +18,21 @@ const theme = {
     6: 48,
     7: 64,
   },
-  topBarSize: 72
+  topBarSize: 72,
+  gradient: 'linear-gradient(#39598A, #79D7ED)'
 }
 
 export const lightmode = {
   ...theme,
-  color: {
-    black,
-    grey,
-    primary: {
-      light: red[200],
-      main: red[500],
-    },
-    secondary: {
-      main: green[500],
-    },
-    white,
-  },
+  color: pink,
+  gradient: 'linear-gradient(#39598A, #79D7ED)'
 }
 
 export const darkmode = {
   ...theme,
-  color: {
-    black,
-    grey,
-    primary: {
-      light: grey[200],
-      main: grey[500],
-    },
-    secondary: {
-      main: green[500],
-    },
-    white,
-  },
+  color: dark,
+  gradient: 'linear-gradient(#091236, #1E215D)',
 }
 
-const themeMap = { darkmode, lightmode }
-export default themeMap
+const ThemeMap = { darkmode, lightmode }
+export default ThemeMap

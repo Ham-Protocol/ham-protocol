@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useContext } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 
 import Container from '../Container'
 import Logo from '../Logo'
@@ -15,6 +15,7 @@ interface TopBarProps {
 }
 
 const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
+  const { color } = useContext(ThemeContext)
   return (
     <StyledTopBar>
       <Container size="lg">
@@ -37,14 +38,15 @@ const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
   )
 }
 
-const StyledTopBar = styled.div``
+const StyledTopBar = styled.div`
+  background: ${props => props.theme.color['bg']};
+`
 
 const StyledTopBarInner = styled.div`
   align-items: center;
   display: flex;
   height: ${props => props.theme.topBarSize}px;
   justify-content: space-between;
-  max-width: ${props => props.theme.siteWidth}px;
   width: 100%;
 `
 

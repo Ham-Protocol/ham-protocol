@@ -10,8 +10,8 @@ import Context from './context'
 import { Farm } from './types'
 
 const NAME_FOR_POOL: { [key: string]: string } = {
-  yfi_pool: 'Waifu rough cuts',
-  eth_pool: 'Bacon Wrapped Eth',
+  yfi_pool: 'Waifu Rough Cuts',
+  eth_pool: 'Bacon Wrapped ETH',
   ycrv_pool: 'The HAMburgery',
   link_pool: 'Sausage Links',
   lend_pool: 'Lend Larder',
