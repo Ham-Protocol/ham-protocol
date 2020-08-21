@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
 
@@ -12,8 +13,12 @@ import Stats from './components/Stats'
 import { OverviewData } from './types'
 import { getStats } from './utils'
 
-const Home: React.FC = () => {
+interface HomeProps {
+  toggleTheme: () => void
+  theme: string
+}
 
+const Home: React.FC<HomeProps> = ({ theme, toggleTheme }) => {
   const ham = useHam()
   const [{
     curPrice,
@@ -34,7 +39,7 @@ const Home: React.FC = () => {
   }, [fetchStats, ham])
 
   return (
-    <>
+    <Page toggleTheme={toggleTheme} theme={theme}>
       <PageHeader icon="🥓" subtitle="Never fear, the bacon is here! Enjoy the harvest!" title="Friendly reminder" />
       <div style={{
         margin: '-24px auto 48px'
@@ -53,7 +58,7 @@ const Home: React.FC = () => {
           />
         </StyledOverview>
       </div>
-    </>
+    </Page>
   )
 }
 

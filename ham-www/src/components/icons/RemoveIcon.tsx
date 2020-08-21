@@ -9,7 +9,7 @@ const RemoveIcon: React.FC<IconProps> = ({ color }) => {
     <Icon>
       <svg
         viewBox="0 0 24 24"
-        fill={color ? color : null}
+        fill={color ? color : themeColor[400]}
         width="18px"
         height="18px"
       >

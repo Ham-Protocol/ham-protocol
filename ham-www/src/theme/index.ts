@@ -5,7 +5,16 @@ export enum Themes {
   LIGHT_MODE = 'lightmode'
 }
 
-const theme = {
+export interface Theme {
+  borderRadius: number
+  color: object
+  siteWidth: number
+  spacing: object
+  topBarSize: number
+  gradient: string
+}
+
+const theme: Theme = {
   borderRadius: 12,
   color: pink,
   siteWidth: 1200,
@@ -22,17 +31,17 @@ const theme = {
   gradient: 'linear-gradient(#39598A, #79D7ED)'
 }
 
-export const lightmode = {
+export const lightmode: Theme = {
   ...theme,
   color: pink,
-  gradient: 'linear-gradient(#39598A, #79D7ED)'
+  gradient: 'linear-gradient(#99A9DA, #fedde7)'
 }
 
-export const darkmode = {
+export const darkmode: Theme = {
   ...theme,
   color: dark,
   gradient: 'linear-gradient(#091236, #1E215D)',
 }
 
-const ThemeMap = { darkmode, lightmode }
+const ThemeMap = { 'darkmode': darkmode, 'lightmode': lightmode }
 export default ThemeMap

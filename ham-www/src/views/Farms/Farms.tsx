@@ -9,17 +9,26 @@ import { useWallet } from 'use-wallet'
 import butcher from '../../assets/img/butcher.png'
 
 import Button from '../../components/Button'
+
+import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 
 import Farm from '../Farm'
 
 import FarmCards from './components/FarmCards'
 
-const Farms: React.FC = () => {
+
+interface FarmsProps {
+  toggleTheme: () => void
+  theme: string
+}
+
+const Farms: React.FC<FarmsProps> = ({ theme, toggleTheme }) => {
   const { path } = useRouteMatch()
   const { account, connect } = useWallet()
   return (
     <Switch>
+      <Page toggleTheme={toggleTheme} theme={theme}>
       {!!account ? (
         <>
           <Route exact path={path}>
@@ -47,9 +56,9 @@ const Farms: React.FC = () => {
           />
         </div>
       )}
+      </Page>
     </Switch>
   )
 }
-
 
 export default Farms

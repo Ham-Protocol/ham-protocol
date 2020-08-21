@@ -22,37 +22,40 @@ import Home from './views/Home'
 
 import ThemeMap, { Themes } from './theme'
 
-import Page from './components/Page'
-
 const App: React.FC = ({ children }) => {
   
-  const [theme, setTheme] = useState(Themes.LIGHT_MODE)
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || Themes.LIGHT_MODE)
 
   const toggleTheme = () => {
-    setTheme(theme === Themes.DARK_MODE ? Themes.LIGHT_MODE : Themes.DARK_MODE)
+    if (theme === Themes.DARK_MODE) {
+      setTheme(Themes.LIGHT_MODE)
+      localStorage.setItem('theme', Themes.LIGHT_MODE)
+    }
+    else {
+      setTheme(Themes.DARK_MODE)
+      localStorage.setItem('theme', Themes.DARK_MODE)
+    }
   }
 
   return (
-    <ThemeProvider theme={ThemeMap[theme]}>
+    <ThemeProvider theme={(ThemeMap as any)[theme]}>
       <UseWalletProvider chainId={1}>
         <HamProvider>
           <TransactionProvider>
             <ModalsProvider>
               <FarmsProvider>
                 <Router>
-                  <Page toggleTheme={toggleTheme} theme={theme}>
-                    <Switch>
-                      <Route path="/" exact>
-                        <Home />
-                      </Route>
-                      <Route path="/farms">
-                        <Farms />
-                      </Route>
-                      <Route path="/faq">
-                        <FAQ />
-                      </Route>
-                    </Switch>
-                  </Page>
+                  <Switch>
+                    <Route path="/" exact>
+                      <Home toggleTheme={toggleTheme} theme={theme}/>
+                    </Route>
+                    <Route path="/farms">
+                      <Farms toggleTheme={toggleTheme} theme={theme}/>
+                    </Route>
+                    <Route path="/faq">
+                      <FAQ toggleTheme={toggleTheme} theme={theme}/>
+                    </Route>
+                  </Switch>
                 </Router>
                 <Disclaimer />
               </FarmsProvider>
@@ -63,8 +66,6 @@ const App: React.FC = ({ children }) => {
     </ThemeProvider>
   )
 }
-
-
 
 const StyledPage = styled.div``
 
