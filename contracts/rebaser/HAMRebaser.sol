@@ -325,6 +325,9 @@ contract HAMRebaser {
         // calculates % change to supply
         (uint256 offPegPerc, bool positive) = computeOffPegPerc(exchangeRate);
 
+        // only allow positive rebases
+        require(positive);
+
         uint256 indexDelta = offPegPerc;
 
         // Apply the Dampening factor.
