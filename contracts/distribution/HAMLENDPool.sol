@@ -592,29 +592,30 @@ contract IRewardDistributionRecipient is Ownable {
 pragma solidity ^0.5.0;
 
 
+
 interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
 
 
-
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
-
-    IERC20 public lend = IERC20(0x80fB784B7eD66730e8b1DBd9820aFD29931aab03);
-
+    ///@dev from here below will likely need large reworks - distribution modules get messy
+    IERC20 public lend = IERC20(0x80fB784B7eD66730e8b1DBd9820aFD29931aab03); ///@notice 0x0x80fB784B7eD66730e8b1DBd9820aFD29931aab03 LEND addr.  
+    ///@dev state variable naming _schema
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
 
     function totalSupply() public view returns (uint256) {
-        return _totalSupply;
+        return _totalSupply; 
     }
 
     function balanceOf(address account) public view returns (uint256) {
         return _balances[account];
     }
-
+    ///@dev backtest staking claiming 0, backtest more safemaths, attempt gas cut with better var management below if possible
+    ///@notice staking function ensuring total supply math and balance xfer precedes the actual xfer(msg.sender, addr.ths);
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
@@ -629,10 +630,21 @@ contract LPTokenWrapper {
 }
 
 contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
+    ///@dev here below is our problem for distro modules - need time function changeover, redefine the inflationary arithmetic 
+    ///@notice 0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16 is currently the YAM addr; need to changeover before deployment to proper addr
     IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
-    uint256 public constant DURATION = 625000; // ~7 1/4 days
-
-    uint256 public starttime = 1597172400; // 2020-08-11 19:00:00 (UTC UTC +00:00)
+    
+    
+    ///@dev the below state variables of DURATION and starttime need to be recalculated if not entirely removed to make room for better
+    /*
+    *inflationary/deflationary function along a timeframe that is yet specified
+    *consider using logarithmic inflation and setting start time as t=0, log(t)fxn=output
+    *also consider possibly keeping week long and relying on rebases
+    *finally, consider keeping a week and voting on additional staking/pool mining incentives
+    */
+    uint256 public constant DURATION = 625000; ///@notice pool duration defined as ~7 1/4 days
+    uint256 public starttime = 1597172400; ///@notice pool start time for block at: 2020-08-11 19:00:00 (UTC UTC +00:00)
+    ///@dev periodfinish = 0; usage for starttime + duration - endblock = periodFinish of 0
     uint256 public periodFinish = 0;
     uint256 public rewardRate = 0;
     uint256 public lastUpdateTime;
@@ -645,11 +657,12 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
 
-    modifier checkStart() {
+    modifier checkStart(){
         require(block.timestamp >= starttime,"not start");
         _;
     }
-
+    ///@notice update rewards modifier
+    ///@dev consider require(account != addr.0); for _; modifier functionality
     modifier updateReward(address account) {
         rewardPerTokenStored = rewardPerToken();
         lastUpdateTime = lastTimeRewardApplicable();
@@ -663,7 +676,7 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
     function lastTimeRewardApplicable() public view returns (uint256) {
         return Math.min(block.timestamp, periodFinish);
     }
-
+    ///@dev below needs complete rework for gas, readability, and distro fxnlty
     function rewardPerToken() public view returns (uint256) {
         if (totalSupply() == 0) {
             return rewardPerTokenStored;
@@ -677,7 +690,7 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
                     .div(totalSupply())
             );
     }
-
+    ///@dev here below becomes uncomfortably unreadable and completely commentless
     function earned(address account) public view returns (uint256) {
         return
             balanceOf(account)
@@ -686,7 +699,8 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
                 .add(rewards[account]);
     }
 
-    // stake visibility is public as overriding LPTokenWrapper's stake() function
+    ///@notice stake visibility is public as overriding LPTokenWrapper's stake() function
+    ///@dev probe for gas cutbacks, math issues
     function stake(uint256 amount) public updateReward(msg.sender) checkStart {
         require(amount > 0, "Cannot stake 0");
         super.stake(amount);
@@ -698,12 +712,13 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
         super.withdraw(amount);
         emit Withdrawn(msg.sender, amount);
     }
-
+    ///@dev with withdraw(balOf(msg.sender)) for exit, why use a Withdrawn event on the above functions
+    ///@dev test gaswaste
     function exit() external {
         withdraw(balanceOf(msg.sender));
         getReward();
     }
-
+    ///@dev note if statement - consider flat requirement procession 
     function getReward() public updateReward(msg.sender) checkStart {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
@@ -714,7 +729,8 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
             emit RewardPaid(msg.sender, trueReward);
         }
     }
-
+    ///@dev here lies our if(){}else(){} nest to dissect - reward rate definitionand updateReward
+    ///@dev consider rewriting and grandfathering variables but redoing the entire rewardrate calc
     function notifyRewardAmount(uint256 reward)
         external
         onlyRewardDistribution
