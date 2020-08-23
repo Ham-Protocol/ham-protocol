@@ -31,7 +31,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   border-radius: 28px;
   box-shadow: 6px 6px 12px ${props => props.theme.color[300]},
     -12px -12px 24px ${props => props.theme.color[100]}aa;
-  color: ${props => !props.disabled ? props.theme.color.primary.main : props.theme.color[400]};
+  color: ${props => !props.disabled ? props.theme.color[500] : props.theme.color[400]};
   cursor: pointer;
   display: flex;
   font-weight: 700;

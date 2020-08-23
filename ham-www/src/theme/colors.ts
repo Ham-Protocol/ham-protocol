@@ -18,7 +18,8 @@ export const pink = {
   500:  '#80495D', //Cursor on links color.
   600:  '#5B2639', //Title color.
   800:  '#2D121B', 
-  'bg': '#f0e7ea'
+  'bg': '#f0e7ea',
+  'fillBar': '#00D110'
 }
 
 export const dark = {
@@ -29,5 +30,6 @@ export const dark = {
   500:  '#dddddd', //Cursor on links.
   600:  '#dddddd', //Title color.
   800:  '#dddddd', 
-  'bg': '#111122'
+  'bg': '#111122',
+  'fillBar': '#00D110'
 }

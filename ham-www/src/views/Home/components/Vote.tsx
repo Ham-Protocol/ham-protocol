@@ -206,7 +206,7 @@ const StyledUndelegateCountdown = styled.div`
 const StyledThankYou = styled.div`
   font-size: 24px;
   font-weight: 700;
-  color: ${props => props.theme.color.secondary.main};
+  color: ${props => props.theme.color['fillBar']};
   text-align: center;
   padding: 0 48px;
 `
@@ -218,7 +218,7 @@ const StyledDenominator = styled.div`
 `
 
 const StyledCountdown = styled.div`
-  color: ${props => props.theme.color.primary.main};
+  color: ${props => props.theme.color[500]};
   font-size: 32px;
   font-weight: 700;
 `
@@ -263,12 +263,12 @@ const StyledCheckpoint = styled.div<StyledCheckpointProps>`
   left: ${props => props.left}%;
   z-index: 1;
   top: ${props => props.reverse ? 20 : 0}px;
-  color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color[600]};
+  color: ${props => props.acheived ? props.theme.color['fillBar'] : props.theme.color[600]};
   &:after {
     content: "";
     position: absolute;
     width: 1px;
-    background-color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color[400]};
+    background-color: ${props => props.acheived ? props.theme.color['fillBar'] : props.theme.color[400]};
     height: 28px;
     left: 0;
     top: ${props => props.reverse ? -32 : 40}px;
@@ -299,7 +299,7 @@ interface StyledMeterInnerProps {
 }
 const StyledMeterInner = styled.div<StyledMeterInnerProps>`
   height: 100%;
-  background-color: ${props => props.theme.color.secondary.main};
+  background-color: ${props => props.theme.color['fillBar']};
   border-radius: 12px;
   width: ${props => props.width}%;
 `
