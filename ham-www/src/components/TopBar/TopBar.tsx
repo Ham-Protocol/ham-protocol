@@ -40,6 +40,7 @@ const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
 
 const StyledTopBar = styled.div`
   background: ${props => props.theme.color['bg']};
+  transition: all 0.2s linear;
 `
 
 const StyledTopBarInner = styled.div`

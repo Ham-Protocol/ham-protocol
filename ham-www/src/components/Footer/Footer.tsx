@@ -26,6 +26,7 @@ const StyledFooterInner = styled.div`
   justify-content: center;
   height: ${props => props.theme.topBarSize}px;
   width: 100%;
+  transition: all 0.2s linear;
 `
 
 export default Footer

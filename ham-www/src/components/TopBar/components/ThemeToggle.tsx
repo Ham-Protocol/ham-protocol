@@ -3,6 +3,9 @@ import styled, { ThemeContext } from 'styled-components'
 
 import { Themes } from '../../../theme'
 
+import { ReactComponent as StokedPiglet } from '../../../assets/svg/StokedPiglet.svg'
+import { ReactComponent as SleepyPiglet } from '../../../assets/svg/SleepyPiglet.svg'
+
 interface ThemeToggleProps {
   toggleTheme: () => void
   theme: string
@@ -15,7 +18,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
   let buttonColor: string = color[500]
   let boxShadow: string = `4px 4px 8px ${color[300]}, -8px -8px 16px ${color[100]}FF;`
   let buttonSize: number = 36
-  let buttonPadding: number = spacing[3]
+  let buttonPadding: number = 5
   let fontSize: number = 20
   let toggleGradient: string = gradient
 
@@ -30,8 +33,8 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
       toggleGradient={toggleGradient}
       padding={buttonPadding}
       size={buttonSize}>
-      <span>🌞</span>
-      <span>🌙</span>
+      <StokedPiglet />
+      <SleepyPiglet />
     </StyledThemeToggle>
   )
 }
@@ -63,10 +66,12 @@ const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
   outline: none;
   overflow: hidden;
   padding-right: ${props => props.padding}px;
+  transition: all 0.3s linear;
 
-  span {
+  svg {
     height: auto;
-    width: 1.25rem;
+    padding: 2px 2px 2px 2px;
+    width: 2rem;
     transition: all 0.3s linear;
     
     // sun icon
