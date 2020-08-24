@@ -663,19 +663,19 @@ contract HAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
         return
             rewardPerTokenStored.add(
                 lastTimeRewardApplicable()
-                .sub(lastUpdateTime)
-                .mul(rewardRate)
-                .mul(1e18)
-                .div(totalSupply())
-        );
+                    .sub(lastUpdateTime)
+                    .mul(rewardRate)
+                    .mul(1e18)
+                    .div(totalSupply())
+            );
     }
 
     function earned(address account) public view returns (uint256) {
         return
             balanceOf(account)
-            .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
-            .div(1e18)
-            .add(rewards[account]);
+                .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
+                .div(1e18)
+                .add(rewards[account]);
     }
 
     // stake visibility is public as overriding LPTokenWrapper's stake() function
