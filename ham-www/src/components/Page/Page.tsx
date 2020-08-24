@@ -1,22 +1,32 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useContext } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 
 import Footer from '../Footer'
 import TopBar from '../TopBar'
 
-const Page: React.FC = ({ children }) => (
+interface PageProps {
+  toggleTheme: () => void
+  theme: string
+  children: React.ReactNode | Element[]
+}
+
+const Page: React.FC<PageProps> = ({ theme, toggleTheme, children }) => {
+  const { color } = useContext(ThemeContext)
+  return (
   <StyledPage>
-    <TopBar />
+    <TopBar toggleTheme={toggleTheme} theme={theme} />
     <StyledMain>
       {children}
     </StyledMain>
     <Footer />
   </StyledPage>
-)
+  )
+}
 
 const StyledPage = styled.div``
 
 const StyledMain = styled.div`
+  background: ${props => props.theme.color['bg']};
   align-items: center;
   display: flex;
   flex-direction: column;

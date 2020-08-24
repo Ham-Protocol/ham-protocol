@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React, { useContext } from 'react'
+import styled, { ThemeContext } from 'styled-components'
 
 import Container from '../Container'
 import Logo from '../Logo'
@@ -7,8 +7,15 @@ import Logo from '../Logo'
 import AccountButton from './components/AccountButton'
 import Nav from './components/Nav'
 import TxButton from './components/TxButton'
+import ThemeToggle from './components/ThemeToggle'
 
-const TopBar: React.FC = () => {
+interface TopBarProps {
+  toggleTheme: () => void
+  theme: string
+}
+
+const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
+  const { color } = useContext(ThemeContext)
   return (
     <StyledTopBar>
       <Container size="lg">
@@ -22,6 +29,7 @@ const TopBar: React.FC = () => {
             display: 'flex',
             justifyContent: 'flex-end'
           }}>
+            <ThemeToggle toggleTheme={toggleTheme} theme={theme}/>
             <AccountButton />
           </div>
         </StyledTopBarInner>
@@ -30,14 +38,15 @@ const TopBar: React.FC = () => {
   )
 }
 
-const StyledTopBar = styled.div``
+const StyledTopBar = styled.div`
+  background: ${props => props.theme.color['bg']};
+`
 
 const StyledTopBarInner = styled.div`
   align-items: center;
   display: flex;
   height: ${props => props.theme.topBarSize}px;
   justify-content: space-between;
-  max-width: ${props => props.theme.siteWidth}px;
   width: 100%;
 `
 

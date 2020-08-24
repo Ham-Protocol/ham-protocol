@@ -11,7 +11,7 @@ const Loader: React.FC<LoaderProps> = ({ text }) => {
   return (
     <StyledLoader>
       <CardIcon>
-      <StyledHam>🍠</StyledHam>
+      <StyledHam>🍖</StyledHam>
       </CardIcon>
       {!!text && <StyledText>{text}</StyledText>}
     </StyledLoader>
@@ -41,7 +41,7 @@ const StyledHam = styled.div`
 `
 
 const StyledText = styled.div`
-  color: ${props => props.theme.color.grey[400]};
+  color: ${props => props.theme.color[400]};
 `
 
 export default Loader

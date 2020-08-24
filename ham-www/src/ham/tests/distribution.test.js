@@ -34,13 +34,11 @@ describe("Distribution", () => {
   let user2;
   let ycrv_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606";
   let weth_account = "0xf9e11762d522ea29dd78178c9baf83b7b093aacc";
-  let uni_ampl_account = "0x8c545be506a335e24145edd6e01d2754296ff018";
-  let comp_account = "0xc89b6f0146642688bb254bf93c28fccf1e182c81";
   let lend_account = "0x3b08aa814bea604917418a9f0907e7fc430e742c";
   let link_account = "0xbe6977e08d4479c0a6777539ae0e8fa27be4e9d6";
-  let mkr_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed";
-  let snx_account = "0xb696d629cd0a00560151a434f6b4478ad6c228d7"
-  let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606";
+  let dai_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //Dai replacing mkr. 
+  let snx_account = "0xb696d629cd0a00560151a434f6b4478ad6c228d7";
+  let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606"; //I need to know if these addresses are real accounts being used or if they are generated for the test, dai is using mkrs old address as it's own (please delete this comment once solved).
   beforeAll(async () => {
     const accounts = await ham.web3.eth.getAccounts();
     ham.addAccount(accounts[0]);
@@ -54,6 +52,8 @@ describe("Distribution", () => {
     await ham.testing.resetEVM("0x2");
   });
 
+
+//All ampl classes used in pool failures and incentivizer pool has been replaced by the snx equivalent, also there are time when "uni_ampl" is used, this has been replaced but their placements are indicated by comments "UNIAmpl" or "uni-ampl".
   describe("pool failures", () => {
     test("cant join pool 1s early", async () => {
       await ham.testing.resetEVM("0x2");
@@ -78,15 +78,15 @@ describe("Distribution", () => {
 
       a = await ham.web3.eth.getBlock('latest');
 
-      starttime = await ham.contracts.ampl_pool.methods.starttime().call();
+      starttime = await ham.contracts.snx_pool.methods.starttime().call();
 
       expect(ham.toBigN(a["timestamp"]).toNumber()).toBeLessThan(ham.toBigN(starttime).toNumber());
 
       //console.log("starttime", a["timestamp"], starttime);
 
-      await ham.contracts.UNIAmpl.methods.approve(ham.contracts.ampl_pool.options.address, -1).send({from: user});
+      await ham.contracts.UNIAmpl.methods.approve(ham.contracts.snx_pool.options.address, -1).send({from: user});
 
-      await ham.testing.expectThrow(ham.contracts.ampl_pool.methods.stake(
+      await ham.testing.expectThrow(ham.contracts.snx_pool.methods.stake(
         "5016536322915819"
       ).send({
         from: user,
@@ -105,8 +105,8 @@ describe("Distribution", () => {
       await ham.contracts.weth.methods.transfer(user, ham.toBigN(2000).times(ham.toBigN(10**18)).toString()).send({
         from: weth_account
       });
-      await ham.contracts.UNIAmpl.methods.transfer(user, "5000000000000000").send({
-        from: uni_ampl_account
+      await ham.contracts.snx.methods.transfer(user, "5000000000000000").send({ //UNIAmpl
+        from: snx_account //uni_ampl
       });
 
       let starttime = await ham.contracts.eth_pool.methods.starttime().call();
@@ -125,16 +125,16 @@ describe("Distribution", () => {
         gas: 300000
       });
 
-      await ham.contracts.UNIAmpl.methods.approve(ham.contracts.ampl_pool.options.address, -1).send({from: user});
+      await ham.contracts.snx.methods.approve(ham.contracts.snx_pool.options.address, -1).send({from: user}); //UNIAmpl
 
-      await ham.contracts.ampl_pool.methods.stake(
+      await ham.contracts.snx_pool.methods.stake(
         "5000000000000000"
       ).send({
         from: user,
         gas: 300000
       });
 
-      await ham.testing.expectThrow(ham.contracts.ampl_pool.methods.withdraw(
+      await ham.testing.expectThrow(ham.contracts.snx_pool.methods.withdraw(
         "5016536322915820"
       ).send({
         from: user,
@@ -269,27 +269,27 @@ describe("Distribution", () => {
         if (waittime > 0) {
           await ham.testing.increaseTime(waittime);
         } else {
-          console.log("late entry, pool 2", waittime)
+          console.log("late entry, pool 2", waittime) //"pool 2" is used here, the original file used ampl here instead of snx, so it must be made sure that the pool number does not need to be changed (delete comment once solved).
         }
 
         await ham.contracts.ycrv_pool.methods.stake(bal).send({from: user, gas: 400000});
 
 
-        earned = await ham.contracts.ampl_pool.methods.earned(user).call();
+        earned = await ham.contracts.snx_pool.methods.earned(user).call();
 
-        rr = await ham.contracts.ampl_pool.methods.rewardRate().call();
+        rr = await ham.contracts.snx_pool.methods.rewardRate().call();
 
-        rpt = await ham.contracts.ampl_pool.methods.rewardPerToken().call();
+        rpt = await ham.contracts.snx_pool.methods.rewardPerToken().call();
 
         console.log(earned, rr, rpt);
 
         await ham.testing.increaseTime(625000 + 1000);
 
-        earned = await ham.contracts.ampl_pool.methods.earned(user).call();
+        earned = await ham.contracts.snx_pool.methods.earned(user).call();
 
-        rr = await ham.contracts.ampl_pool.methods.rewardRate().call();
+        rr = await ham.contracts.snx_pool.methods.rewardRate().call();
 
-        rpt = await ham.contracts.ampl_pool.methods.rewardPerToken().call();
+        rpt = await ham.contracts.snx_pool.methods.rewardPerToken().call();
 
         console.log(earned, rr, rpt);
 
@@ -299,84 +299,7 @@ describe("Distribution", () => {
 
 
         expect(ham.toBigN(ham_bal).toNumber()).toBeGreaterThan(0)
-        console.log("ham bal after staking in pool 2", ham_bal);
-    });
-  });
-
-  describe("ampl", () => {
-    test("rewards from pool 1s ampl", async () => {
-        await ham.testing.resetEVM("0x2");
-
-        await ham.contracts.UNIAmpl.methods.transfer(user, "5000000000000000").send({
-          from: uni_ampl_account
-        });
-        let a = await ham.web3.eth.getBlock('latest');
-
-        let starttime = await ham.contracts.eth_pool.methods.starttime().call();
-
-        let waittime = starttime - a["timestamp"];
-        if (waittime > 0) {
-          await ham.testing.increaseTime(waittime);
-        } else {
-          //console.log("missed entry");
-        }
-
-        await ham.contracts.UNIAmpl.methods.approve(ham.contracts.ampl_pool.options.address, -1).send({from: user});
-
-        await ham.contracts.ampl_pool.methods.stake(
-          "5000000000000000"
-        ).send({
-          from: user,
-          gas: 300000
-        });
-
-        let earned = await ham.contracts.ampl_pool.methods.earned(user).call();
-
-        let rr = await ham.contracts.ampl_pool.methods.rewardRate().call();
-
-        let rpt = await ham.contracts.ampl_pool.methods.rewardPerToken().call();
-        //console.log(earned, rr, rpt);
-        await ham.testing.increaseTime(625000 + 100);
-        // await ham.testing.mineBlock();
-
-        earned = await ham.contracts.ampl_pool.methods.earned(user).call();
-
-        rpt = await ham.contracts.ampl_pool.methods.rewardPerToken().call();
-
-        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
-
-        //console.log(earned, ysf, rpt);
-
-
-        let ham_bal = await ham.contracts.ham.methods.balanceOf(user).call()
-
-        let j = await ham.contracts.ampl_pool.methods.exit().send({
-          from: user,
-          gas: 300000
-        });
-
-        //console.log(j.events)
-
-        // let k = await ham.contracts.eth_pool.methods.exit().send({
-        //   from: user,
-        //   gas: 300000
-        // });
-        //
-        // //console.log(k.events)
-
-        // weth_bal = await ham.contracts.weth.methods.balanceOf(user).call()
-
-        // expect(weth_bal).toBe(ham.toBigN(2000).times(ham.toBigN(10**18)).toString())
-
-        let ampl_bal = await ham.contracts.UNIAmpl.methods.balanceOf(user).call()
-
-        expect(ampl_bal).toBe("5000000000000000")
-
-
-        let ham_bal2 = await ham.contracts.ham.methods.balanceOf(user).call()
-
-        let two_fity = ham.toBigN(250).times(ham.toBigN(10**3)).times(ham.toBigN(10**18))
-        expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
+        console.log("ham bal after staking in pool 2", ham_bal); 
     });
   });
 
@@ -1020,72 +943,6 @@ describe("Distribution", () => {
     });
   });
 
-  describe("comp", () => {
-    test("rewards from pool 1s comp", async () => {
-        await ham.testing.resetEVM("0x2");
-        await ham.contracts.comp.methods.transfer(user, "50000000000000000000000").send({
-          from: comp_account
-        });
-
-        let a = await ham.web3.eth.getBlock('latest');
-
-        let starttime = await ham.contracts.yycrv_pool.methods.starttime().call();
-
-        let waittime = starttime - a["timestamp"];
-        if (waittime > 0) {
-          await ham.testing.increaseTime(waittime);
-        } else {
-          console.log("late entry", waittime)
-        }
-
-        await ham.contracts.comp.methods.approve(ham.contracts.yycrv_pool.options.address, -1).send({from: user});
-
-        await ham.contracts.yycrv_pool.methods.stake(
-          "50000000000000000000000"
-        ).send({
-          from: user,
-          gas: 300000
-        });
-
-        let earned = await ham.contracts.yycrv_pool.methods.earned(user).call();
-
-        let rr = await ham.contracts.yycrv_pool.methods.rewardRate().call();
-
-        let rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
-        //console.log(earned, rr, rpt);
-        await ham.testing.increaseTime(625000 + 100);
-        // await ham.testing.mineBlock();
-
-        earned = await ham.contracts.yycrv_pool.methods.earned(user).call();
-
-        rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
-
-        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
-
-        //console.log(earned, ysf, rpt);
-
-
-        let ham_bal = await ham.contracts.ham.methods.balanceOf(user).call()
-
-        let j = await ham.contracts.yycrv_pool.methods.exit().send({
-          from: user,
-          gas: 300000
-        });
-
-        //console.log(j.events)
-
-        let weth_bal = await ham.contracts.comp.methods.balanceOf(user).call()
-
-        expect(weth_bal).toBe("50000000000000000000000")
-
-
-        let ham_bal2 = await ham.contracts.ham.methods.balanceOf(user).call()
-
-        let two_fity = ham.toBigN(250).times(ham.toBigN(10**3)).times(ham.toBigN(10**18))
-        expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
-    });
-  });
-
   describe("lend", () => {
     test("rewards from pool 1s lend", async () => {
         await ham.testing.resetEVM("0x2");
@@ -1223,19 +1080,19 @@ describe("Distribution", () => {
     });
   });
 
-  describe("mkr", () => {
+  describe("dai", () => {
     test("rewards from pool 1s mkr", async () => {
         await ham.testing.resetEVM("0x2");
-        await ham.web3.eth.sendTransaction({from: user2, to: mkr_account, value : ham.toBigN(100000*10**18).toString()});
-        let eth_bal = await ham.web3.eth.getBalance(mkr_account);
+        await ham.web3.eth.sendTransaction({from: user2, to: dai_account, value : ham.toBigN(100000*10**18).toString()});
+        let eth_bal = await ham.web3.eth.getBalance(dai_account);
 
-        await ham.contracts.mkr.methods.transfer(user, "10000000000000000000000").send({
-          from: mkr_account
+        await ham.contracts.dai.methods.transfer(user, "10000000000000000000000").send({
+          from: dai_account
         });
 
         let a = await ham.web3.eth.getBlock('latest');
 
-        let starttime = await ham.contracts.mkr_pool.methods.starttime().call();
+        let starttime = await ham.contracts.dai_pool.methods.starttime().call();
 
         let waittime = starttime - a["timestamp"];
         if (waittime > 0) {
@@ -1244,27 +1101,27 @@ describe("Distribution", () => {
           console.log("late entry", waittime)
         }
 
-        await ham.contracts.mkr.methods.approve(ham.contracts.mkr_pool.options.address, -1).send({from: user});
+        await ham.contracts.dai.methods.approve(ham.contracts.dai_pool.options.address, -1).send({from: user});
 
-        await ham.contracts.mkr_pool.methods.stake(
+        await ham.contracts.dai_pool.methods.stake(
           "10000000000000000000000"
         ).send({
           from: user,
           gas: 300000
         });
 
-        let earned = await ham.contracts.mkr_pool.methods.earned(user).call();
+        let earned = await ham.contracts.dai_pool.methods.earned(user).call();
 
-        let rr = await ham.contracts.mkr_pool.methods.rewardRate().call();
+        let rr = await ham.contracts.dai_pool.methods.rewardRate().call();
 
-        let rpt = await ham.contracts.mkr_pool.methods.rewardPerToken().call();
+        let rpt = await ham.contracts.dai_pool.methods.rewardPerToken().call();
         //console.log(earned, rr, rpt);
         await ham.testing.increaseTime(625000 + 100);
         // await ham.testing.mineBlock();
 
-        earned = await ham.contracts.mkr_pool.methods.earned(user).call();
+        earned = await ham.contracts.dai_pool.methods.earned(user).call();
 
-        rpt = await ham.contracts.mkr_pool.methods.rewardPerToken().call();
+        rpt = await ham.contracts.dai_pool.methods.rewardPerToken().call();
 
         let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
@@ -1273,14 +1130,14 @@ describe("Distribution", () => {
 
         let ham_bal = await ham.contracts.ham.methods.balanceOf(user).call()
 
-        let j = await ham.contracts.mkr_pool.methods.exit().send({
+        let j = await ham.contracts.dai_pool.methods.exit().send({
           from: user,
           gas: 300000
         });
 
         //console.log(j.events)
 
-        let weth_bal = await ham.contracts.mkr.methods.balanceOf(user).call()
+        let weth_bal = await ham.contracts.dai.methods.balanceOf(user).call()
 
         expect(weth_bal).toBe("10000000000000000000000")
 
@@ -1290,7 +1147,7 @@ describe("Distribution", () => {
         let two_fity = ham.toBigN(250).times(ham.toBigN(10**3)).times(ham.toBigN(10**18))
         expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
     });
-  });
+  }); //dai replacing mkr
 
   describe("snx", () => {
     test("rewards from pool 1s snx", async () => {

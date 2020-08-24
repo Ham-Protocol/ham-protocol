@@ -152,7 +152,7 @@ const Vote: React.FC<VoteProps> = () => {
         </StyledCheckpoints>
         <Spacer />
         {!delegated ? (
-          <Button text="Delegate to save HAM" onClick={handleVoteClick} />
+          <Button text="Delegate to help HAM" onClick={handleVoteClick} />
         ) : (
           <div>
             <StyledDelegatedCount>Delegating: {Number(delegatedBalance.multipliedBy(scalingFactor).toFixed(0)).toLocaleString()} HAM</StyledDelegatedCount>
@@ -175,8 +175,8 @@ const Vote: React.FC<VoteProps> = () => {
           paddingTop: 24,
           opacity: 0.6,
         }}>
-          <p>NOTE: You must harvest your HAMs BEFORE 7am UTC Thursday 8/13 - very soon.</p>
-          <p>Hold them in your wallet until 10PM UTC Sunday 8/16 for your delegation to save HAM</p>
+                  {/*<p>NOTE: You must harvest your HAMs BEFORE 7am UTC Thursday 8/13 - very soon.</p>
+          <p>Hold them in your wallet until 10PM UTC Sunday 8/16 for your delegation to save HAM</p>*/}
         </div>
           <div style={{
             display: 'flex',
@@ -184,7 +184,7 @@ const Vote: React.FC<VoteProps> = () => {
             justifyContent: 'center',
             marginTop: 32,
           }}>
-          <StyledLink target="__blank" href="https://twitter.com/HamFinance/status/1293660938906869760">More Info</StyledLink>
+          {/*<StyledLink target="__blank" href="https://twitter.com/HamFinance/status/1293660938906869760">More Info</StyledLink>*/}
         </div>
       </CardContent>
     </Card>
@@ -194,7 +194,7 @@ const Vote: React.FC<VoteProps> = () => {
 const StyledDelegatedCount = styled.div`
   text-align: center;
   font-size: 24px;
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color[600]};
   font-weight: 700;
   margin: 0 auto;
 `
@@ -214,7 +214,7 @@ const StyledThankYou = styled.div`
 const StyledDenominator = styled.div`
   margin-left: 8px;
   font-size: 18px;
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color[600]};
 `
 
 const StyledCountdown = styled.div`
@@ -263,12 +263,12 @@ const StyledCheckpoint = styled.div<StyledCheckpointProps>`
   left: ${props => props.left}%;
   z-index: 1;
   top: ${props => props.reverse ? 20 : 0}px;
-  color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color.grey[600]};
+  color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color[600]};
   &:after {
     content: "";
     position: absolute;
     width: 1px;
-    background-color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color.grey[400]};
+    background-color: ${props => props.acheived ? props.theme.color.secondary.main : props.theme.color[400]};
     height: 28px;
     left: 0;
     top: ${props => props.reverse ? -32 : 40}px;
@@ -290,7 +290,7 @@ const StyledMeter = styled.div`
   height: 12px;
   border-radius: 16px;
   width: 100%;
-  background-color: ${props => props.theme.color.grey[300]};
+  background-color: ${props => props.theme.color[300]};
   padding: 2px;
 `
 
@@ -305,7 +305,7 @@ const StyledMeterInner = styled.div<StyledMeterInnerProps>`
 `
 
 const StyledLink = styled.a`
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color[600]};
   text-decoration: none;
   font-weight: 700;
 `

@@ -486,6 +486,9 @@ library Address {
 
 pragma solidity ^0.5.0;
 
+
+
+
 /**
  * @title SafeERC20
  * @dev Wrappers around ERC20 operations that throw on failure (when the token
@@ -560,8 +563,6 @@ library SafeERC20 {
 
 pragma solidity ^0.5.0;
 
-
-
 contract IRewardDistributionRecipient is Ownable {
     address public rewardDistribution;
 
@@ -573,8 +574,8 @@ contract IRewardDistributionRecipient is Ownable {
     }
 
     function setRewardDistribution(address _rewardDistribution)
-        external
-        onlyOwner
+    external
+    onlyOwner
     {
         rewardDistribution = _rewardDistribution;
     }
@@ -589,13 +590,11 @@ interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
 
-
-
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public yyCRV = IERC20(0x5dbcF33D8c2E976c6b560249878e6F1491Bca25c );
+    IERC20 public comp = IERC20(0xc00e94Cb662C3520282E6f5717214004A7f26888);
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -611,17 +610,17 @@ contract LPTokenWrapper {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        yyCRV.safeTransferFrom(msg.sender, address(this), amount);
+        comp.safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        yyCRV.safeTransfer(msg.sender, amount);
+        comp.safeTransfer(msg.sender, amount);
     }
 }
 
-contract HAMYYCRVPool is LPTokenWrapper, IRewardDistributionRecipient {
+contract HAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
     IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
     uint256 public constant DURATION = 625000; // ~7 1/4 days
 
@@ -662,21 +661,21 @@ contract HAMYYCRVPool is LPTokenWrapper, IRewardDistributionRecipient {
             return rewardPerTokenStored;
         }
         return
-            rewardPerTokenStored.add(
-                lastTimeRewardApplicable()
-                    .sub(lastUpdateTime)
-                    .mul(rewardRate)
-                    .mul(1e18)
-                    .div(totalSupply())
-            );
+        rewardPerTokenStored.add(
+            lastTimeRewardApplicable()
+            .sub(lastUpdateTime)
+            .mul(rewardRate)
+            .mul(1e18)
+            .div(totalSupply())
+        );
     }
 
     function earned(address account) public view returns (uint256) {
         return
-            balanceOf(account)
-                .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
-                .div(1e18)
-                .add(rewards[account]);
+        balanceOf(account)
+        .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
+        .div(1e18)
+        .add(rewards[account]);
     }
 
     // stake visibility is public as overriding LPTokenWrapper's stake() function
@@ -709,26 +708,26 @@ contract HAMYYCRVPool is LPTokenWrapper, IRewardDistributionRecipient {
     }
 
     function notifyRewardAmount(uint256 reward)
-        external
-        onlyRewardDistribution
-        updateReward(address(0))
+    external
+    onlyRewardDistribution
+    updateReward(address(0))
     {
         if (block.timestamp > starttime) {
-          if (block.timestamp >= periodFinish) {
-              rewardRate = reward.div(DURATION);
-          } else {
-              uint256 remaining = periodFinish.sub(block.timestamp);
-              uint256 leftover = remaining.mul(rewardRate);
-              rewardRate = reward.add(leftover).div(DURATION);
-          }
-          lastUpdateTime = block.timestamp;
-          periodFinish = block.timestamp.add(DURATION);
-          emit RewardAdded(reward);
+            if (block.timestamp >= periodFinish) {
+                rewardRate = reward.div(DURATION);
+            } else {
+                uint256 remaining = periodFinish.sub(block.timestamp);
+                uint256 leftover = remaining.mul(rewardRate);
+                rewardRate = reward.add(leftover).div(DURATION);
+            }
+            lastUpdateTime = block.timestamp;
+            periodFinish = block.timestamp.add(DURATION);
+            emit RewardAdded(reward);
         } else {
-          rewardRate = reward.div(DURATION);
-          lastUpdateTime = starttime;
-          periodFinish = starttime.add(DURATION);
-          emit RewardAdded(reward);
+            rewardRate = reward.div(DURATION);
+            lastUpdateTime = starttime;
+            periodFinish = starttime.add(DURATION);
+            emit RewardAdded(reward);
         }
     }
 }

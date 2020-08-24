@@ -1,8 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import { useWallet } from 'use-wallet'
-
 import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 import Spacer from '../../components/Spacer'
@@ -11,22 +9,22 @@ import useHam from '../../hooks/useHam'
 
 import Rebase from './components/Rebase'
 import Stats from './components/Stats'
-import Vote from './components/Vote'
 
 import { OverviewData } from './types'
 import { getStats } from './utils'
 
-const Home: React.FC = () => {
+interface HomeProps {
+  toggleTheme: () => void
+  theme: string
+}
 
-  const { account } = useWallet()
-
+const Home: React.FC<HomeProps> = ({ theme, toggleTheme }) => {
   const ham = useHam()
   const [{
-    circSupply,
     curPrice,
     nextRebase,
+    scalingFactor,
     targetPrice,
-    totalSupply,
   }, setStats] = useState<OverviewData>({})
 
   const fetchStats = useCallback(async () => {
@@ -41,12 +39,12 @@ const Home: React.FC = () => {
   }, [fetchStats, ham])
 
   return (
-    <Page>
-      <PageHeader icon="⚠️" subtitle="Remove liquidity from the HAM / YCRV Uniswap pool" title="Warning" />
+    <Page toggleTheme={toggleTheme} theme={theme}>
+      <PageHeader icon="🥓" subtitle="Never fear, the bacon is here! Enjoy the harvest!" title="Friendly reminder" />
       <div style={{
         margin: '-24px auto 48px'
       }}>
-        <StyledLink href="https://medium.com/@hamfinance/how-to-exit-the-eternal-lands-pool-and-withdraw-your-ham-823d57c95f3a">How to withdraw from Uniswap</StyledLink>
+              <StyledLink href="https://discord.gg/tgxPEQx">How to contribute to the Bacon Blockchain</StyledLink>
       </div>
       <Spacer />
       <div>
@@ -54,10 +52,9 @@ const Home: React.FC = () => {
           <Rebase nextRebase={nextRebase} />
           <StyledSpacer />
           <Stats
-            circSupply={circSupply}
             curPrice={curPrice}
+            scalingFactor={scalingFactor}
             targetPrice={targetPrice}
-            totalSupply={totalSupply}
           />
         </StyledOverview>
       </div>
@@ -83,7 +80,7 @@ const StyledSpacer = styled.div`
 const StyledLink = styled.a`
   font-weight: 700l
   text-decoration: none;
-  color: ${props => props.theme.color.primary.main};
+  color: ${props => props.theme.color[500]};
 `
 
 export default Home

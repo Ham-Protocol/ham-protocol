@@ -19,7 +19,7 @@ const ModalActions: React.FC = ({ children }) => {
 
 const StyledModalActions = styled.div`
   align-items: center;
-  background-color: ${props => props.theme.color.grey[100]}00;
+  background-color: ${props => props.theme.color[100]}00;
   display: flex;
   height: 96px;
   margin: ${props => props.theme.spacing[4]}px ${props => -props.theme.spacing[4]}px ${props => -props.theme.spacing[4]}px;

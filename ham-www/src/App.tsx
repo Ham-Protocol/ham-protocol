@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
 } from 'react-router-dom'
-import { ThemeProvider } from 'styled-components'
+import styled, { ThemeProvider } from 'styled-components'
 import { UseWalletProvider } from 'use-wallet'
 
 import DisclaimerModal from './components/DisclaimerModal'
@@ -16,38 +16,48 @@ import TransactionProvider from './contexts/Transactions'
 
 import useModal from './hooks/useModal'
 
+import FAQ from './views/FAQ'
 import Farms from './views/Farms'
 import Home from './views/Home'
 
-import theme from './theme'
+import ThemeMap, { Themes } from './theme'
 
-const App: React.FC = () => {
-  return (
-    <Providers>
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            <Home />
-          </Route>
-          <Route path="/farms">
-            <Farms />
-          </Route>
-        </Switch>
-      </Router>
-      <Disclaimer />
-    </Providers>
-  )
-}
+const App: React.FC = ({ children }) => {
+  
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || Themes.LIGHT_MODE)
 
-const Providers: React.FC = ({ children }) => {
+  const toggleTheme = () => {
+    if (theme === Themes.DARK_MODE) {
+      setTheme(Themes.LIGHT_MODE)
+      localStorage.setItem('theme', Themes.LIGHT_MODE)
+    }
+    else {
+      setTheme(Themes.DARK_MODE)
+      localStorage.setItem('theme', Themes.DARK_MODE)
+    }
+  }
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={(ThemeMap as any)[theme]}>
       <UseWalletProvider chainId={1}>
         <HamProvider>
           <TransactionProvider>
             <ModalsProvider>
               <FarmsProvider>
-                {children}
+                <Router>
+                  <Switch>
+                    <Route path="/" exact>
+                      <Home toggleTheme={toggleTheme} theme={theme}/>
+                    </Route>
+                    <Route path="/farms">
+                      <Farms toggleTheme={toggleTheme} theme={theme}/>
+                    </Route>
+                    <Route path="/faq">
+                      <FAQ toggleTheme={toggleTheme} theme={theme}/>
+                    </Route>
+                  </Switch>
+                </Router>
+                <Disclaimer />
               </FarmsProvider>
             </ModalsProvider>
           </TransactionProvider>
@@ -56,6 +66,15 @@ const Providers: React.FC = ({ children }) => {
     </ThemeProvider>
   )
 }
+
+const StyledPage = styled.div``
+
+const StyledMain = styled.div`
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - ${props => props.theme.topBarSize * 2}px);
+`
 
 const Disclaimer: React.FC = () => {
 

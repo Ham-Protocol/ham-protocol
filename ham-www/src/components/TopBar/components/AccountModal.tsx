@@ -29,7 +29,7 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
       <ModalTitle text="My Account" />
 
       <StyledBalanceWrapper>
-        <CardIcon>🍠</CardIcon>
+        <CardIcon>🍖</CardIcon>
         <StyledBalance>
           <StyledValue>{displayBalance}</StyledValue>
           <Label text="HAM Balance" />
@@ -66,7 +66,7 @@ const StyledSpacer = styled.div`
 `
 
 const StyledValue = styled.div`
-  color: ${props => props.theme.color.grey[600]};
+  color: ${props => props.theme.color[600]};
   font-size: 36px;
   font-weight: 700;
 `

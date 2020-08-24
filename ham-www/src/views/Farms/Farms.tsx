@@ -6,9 +6,10 @@ import {
 } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
 
-import farmer from '../../assets/img/farmer.png'
+import butcher from '../../assets/img/butcher.png'
 
 import Button from '../../components/Button'
+
 import Page from '../../components/Page'
 import PageHeader from '../../components/PageHeader'
 
@@ -16,17 +17,23 @@ import Farm from '../Farm'
 
 import FarmCards from './components/FarmCards'
 
-const Farms: React.FC = () => {
+
+interface FarmsProps {
+  toggleTheme: () => void
+  theme: string
+}
+
+const Farms: React.FC<FarmsProps> = ({ theme, toggleTheme }) => {
   const { path } = useRouteMatch()
   const { account, connect } = useWallet()
   return (
     <Switch>
-      <Page>
+      <Page toggleTheme={toggleTheme} theme={theme}>
       {!!account ? (
         <>
           <Route exact path={path}>
             <PageHeader
-              icon={<img src={farmer} height="96" />}
+              icon={<img src={butcher} height="96" />}
               subtitle="Earn HAM tokens by providing liquidity."
               title="Select a farm."
             />
@@ -53,6 +60,5 @@ const Farms: React.FC = () => {
     </Switch>
   )
 }
-
 
 export default Farms
