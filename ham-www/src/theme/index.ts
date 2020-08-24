@@ -34,7 +34,7 @@ const theme: Theme = {
 export const lightmode: Theme = {
   ...theme,
   color: pink,
-  gradient: 'linear-gradient(#99A9DA, #fedde7)'
+  gradient: 'linear-gradient(#fffee0, #fedde7)'
 }
 
 export const darkmode: Theme = {
