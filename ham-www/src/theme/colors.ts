@@ -20,7 +20,7 @@ export const pink = {
   800:  '#2D121B',
   'hover':  '#fddce6', // On hover.
   'card':  '#fdcddc', // Card color.
-  'bg': '#fefefe',
+  'bg': '#ffffff',
   'fillBar': '#00D110'
 }
 
