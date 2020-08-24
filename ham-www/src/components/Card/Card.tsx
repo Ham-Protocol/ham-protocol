@@ -8,13 +8,13 @@ const Card: React.FC = ({ children }) => (
 )
 
 const StyledCard = styled.div`
-  background: ${props => props.theme.color[200]};
-  border: 1px solid ${props => props.theme.color[300]}ff;
-  border-radius: 12px;
+  background: ${props => props.theme.color[`card`]};
+  border-radius: 16px;
   box-shadow: inset 1px 1px 0px ${props => props.theme.color[100]};
   display: flex;
   flex: 1;
   flex-direction: column;
+  transition: all 0.25s linear;
 `
 
 export default Card

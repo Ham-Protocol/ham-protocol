@@ -104,7 +104,6 @@ const StyledButton = styled.button<StyledButtonProps>`
   background-color: ${props => props.theme.color[200]};
   border: 0;
   border-radius: 12px;
-  box-shadow: ${props => props.boxShadow};
   color: ${props => !props.disabled ? props.color : `${props.color}55`};
   cursor: pointer;
   display: flex;
@@ -118,8 +117,9 @@ const StyledButton = styled.button<StyledButtonProps>`
   pointer-events: ${props => !props.disabled ? undefined : 'none'};
   width: 100%;
   &:hover {
-    background-color: ${props => props.theme.color[100]};
+    background-color: ${props => props.theme.color['hover']};
   }
+  transition: all 0.25s linear;
 `
 
 const StyledLink = styled(Link)`
