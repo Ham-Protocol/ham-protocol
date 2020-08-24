@@ -54,7 +54,6 @@ const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
   background: ${props => props.toggleGradient};
   border: 0;
   border-radius: 12px;
-  box-shadow: ${props => props.boxShadow};
   color: ${props => props.color};
   cursor: pointer;
   display: flex;
@@ -66,20 +65,20 @@ const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
   outline: none;
   overflow: hidden;
   padding-right: ${props => props.padding}px;
-  transition: all 0.3s linear;
+  transition: all 0.25s linear;
 
   svg {
     height: auto;
     padding: 2px 2px 2px 2px;
     width: 2rem;
-    transition: all 0.3s linear;
+    transition: all 0.25s linear;
     
-    // sun icon
+    // Sun icon.
     &:first-child {
       transform: ${({ lightTheme }) => lightTheme ? 'translateY(0)' : 'translateY(100px)'};
     }
     
-    // moon icon
+    // Moon icon.
     &:nth-child(2) {
       transform: ${({ lightTheme }) => lightTheme ? 'translateY(-100px)' : 'translateY(0)'};
     }

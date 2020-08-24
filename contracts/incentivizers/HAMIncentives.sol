@@ -1,15 +1,3 @@
-/**
- *Submitted for verification at Etherscan.io on 2020-07-27
-*/
-
-/**
- *Submitted for verification at Etherscan.io on 2020-07-26
-*/
-
-/**
- *Submitted for verification at Etherscan.io on 2020-07-17
-*/
-
 /*
    ____            __   __        __   _
   / __/__ __ ___  / /_ / /  ___  / /_ (_)__ __
@@ -499,9 +487,6 @@ library Address {
 
 pragma solidity ^0.5.0;
 
-
-
-
 /**
  * @title SafeERC20
  * @dev Wrappers around ERC20 operations that throw on failure (when the token
@@ -576,8 +561,6 @@ library SafeERC20 {
 
 pragma solidity ^0.5.0;
 
-
-
 contract IRewardDistributionRecipient is Ownable {
     address rewardDistribution;
 
@@ -599,11 +582,6 @@ contract IRewardDistributionRecipient is Ownable {
 // File: contracts/CurveRewards.sol
 
 pragma solidity ^0.5.0;
-
-
-
-
-
 
 contract LPTokenWrapper {
     using SafeMath for uint256;

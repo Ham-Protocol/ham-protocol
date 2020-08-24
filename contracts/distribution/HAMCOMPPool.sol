@@ -1,7 +1,3 @@
-/**
- *Submitted for verification at Etherscan.io on 2020-07-17
-*/
-
 /*
    ____            __   __        __   _
   / __/__ __ ___  / /_ / /  ___  / /_ (_)__ __
@@ -567,8 +563,6 @@ library SafeERC20 {
 
 pragma solidity ^0.5.0;
 
-
-
 contract IRewardDistributionRecipient is Ownable {
     address public rewardDistribution;
 
@@ -595,8 +589,6 @@ pragma solidity ^0.5.0;
 interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
-
-
 
 contract LPTokenWrapper {
     using SafeMath for uint256;
@@ -721,21 +713,21 @@ contract HAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
         updateReward(address(0))
     {
         if (block.timestamp > starttime) {
-          if (block.timestamp >= periodFinish) {
-              rewardRate = reward.div(DURATION);
-          } else {
-              uint256 remaining = periodFinish.sub(block.timestamp);
-              uint256 leftover = remaining.mul(rewardRate);
-              rewardRate = reward.add(leftover).div(DURATION);
-          }
-          lastUpdateTime = block.timestamp;
-          periodFinish = block.timestamp.add(DURATION);
-          emit RewardAdded(reward);
+            if (block.timestamp >= periodFinish) {
+                rewardRate = reward.div(DURATION);
+            } else {
+                uint256 remaining = periodFinish.sub(block.timestamp);
+                uint256 leftover = remaining.mul(rewardRate);
+                rewardRate = reward.add(leftover).div(DURATION);
+            }
+            lastUpdateTime = block.timestamp;
+            periodFinish = block.timestamp.add(DURATION);
+            emit RewardAdded(reward);
         } else {
-          rewardRate = reward.div(DURATION);
-          lastUpdateTime = starttime;
-          periodFinish = starttime.add(DURATION);
-          emit RewardAdded(reward);
+            rewardRate = reward.div(DURATION);
+            lastUpdateTime = starttime;
+            periodFinish = starttime.add(DURATION);
+            emit RewardAdded(reward);
         }
     }
 }

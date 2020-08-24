@@ -29,8 +29,6 @@ const StyledButton = styled.button<StyledButtonProps>`
   background-color: ${props => props.theme.color[200]};
   border: 0;
   border-radius: 28px;
-  box-shadow: 6px 6px 12px ${props => props.theme.color[300]},
-    -12px -12px 24px ${props => props.theme.color[100]}aa;
   color: ${props => !props.disabled ? props.theme.color[500] : props.theme.color[400]};
   cursor: pointer;
   display: flex;
@@ -45,7 +43,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   text-transform: uppercase;
   width: 56px;
   &:hover {
-    background-color: ${props => props.theme.color[100]};
+    background-color: ${props => props.theme.color['hover']};
   }
 `
 

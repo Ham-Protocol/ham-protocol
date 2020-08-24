@@ -20,7 +20,7 @@ const Dial: React.FC<DialProps> = ({ children, disabled, size = 256, value }) =>
           value={value}
           styles={buildStyles({
             strokeLinecap: 'round',
-            pathColor: !disabled ? color.secondary.main : color[400],
+            pathColor: !disabled ? color[300] : color['fillBar'],
             pathTransitionDuration: 1,
           })}
         />
@@ -55,7 +55,7 @@ const StyledInner = styled.div<StyledInnerProps>`
 `
 
 const StyledOuter = styled.div`
-  background-color: ${props => props.theme.color[300]};
+  background-color: ${props => props.theme.color[100]};
   border-radius: 10000px;
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;

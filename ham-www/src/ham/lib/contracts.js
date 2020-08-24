@@ -15,7 +15,7 @@ import UNIFactJson from './unifact2.json';
 import UNIPairJson from './uni2.json';
 import UNIRouterJson from './uniR.json';
 
-import WETHPoolJson from '../clean_build/contracts/HAMETHPool.json'; 
+import WETHPoolJson from '../clean_build/contracts/HAMETHPool.json';
 import YFIPoolJson from '../clean_build/contracts/HAMYFIPool.json';
 import LENDPoolJson from '../clean_build/contracts/HAMLENDPool.json';
 import DAIPoolJson from '../clean_build/contracts/HAMDAIPool.json';
