@@ -18,7 +18,7 @@ import UNIRouterJson from './uniR.json';
 import WETHPoolJson from '../clean_build/contracts/HAMETHPool.json';
 import YFIPoolJson from '../clean_build/contracts/HAMYFIPool.json';
 import LENDPoolJson from '../clean_build/contracts/HAMLENDPool.json';
-import COMPPoolJson from '../clean_build/contracts/HAMCOMPPool.json';
+import DAIPoolJson from '../clean_build/contracts/HAMDAIPool.json';
 import SNXPoolJson from '../clean_build/contracts/HAMSNXPool.json';
 import LINKPoolJson from '../clean_build/contracts/HAMLINKPool.json';
 
@@ -121,7 +121,6 @@ export class Contracts {
       {"tokenAddr": this.yfi.options.address, "poolAddr": this.yfi_pool.options.address},
       {"tokenAddr": this.snx.options.address, "poolAddr": this.snx_pool.options.address},
       {"tokenAddr": this.weth.options.address, "poolAddr": this.eth_pool.options.address},
-      {"tokenAddr": this.comp.options.address, "poolAddr": this.comp_pool.options.address},
       {"tokenAddr": this.link.options.address, "poolAddr": this.link_pool.options.address},
       {"tokenAddr": this.lend.options.address, "poolAddr": this.lend_pool.options.address},
       {"tokenAddr": this.dai.options.address, "poolAddr": this.dai_pool.options.address},

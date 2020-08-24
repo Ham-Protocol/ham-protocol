@@ -574,8 +574,8 @@ contract IRewardDistributionRecipient is Ownable {
     }
 
     function setRewardDistribution(address _rewardDistribution)
-    external
-    onlyOwner
+        external
+        onlyOwner
     {
         rewardDistribution = _rewardDistribution;
     }
@@ -661,21 +661,21 @@ contract HAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
             return rewardPerTokenStored;
         }
         return
-        rewardPerTokenStored.add(
-            lastTimeRewardApplicable()
-            .sub(lastUpdateTime)
-            .mul(rewardRate)
-            .mul(1e18)
-            .div(totalSupply())
+            rewardPerTokenStored.add(
+                lastTimeRewardApplicable()
+                .sub(lastUpdateTime)
+                .mul(rewardRate)
+                .mul(1e18)
+                .div(totalSupply())
         );
     }
 
     function earned(address account) public view returns (uint256) {
         return
-        balanceOf(account)
-        .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
-        .div(1e18)
-        .add(rewards[account]);
+            balanceOf(account)
+            .mul(rewardPerToken().sub(userRewardPerTokenPaid[account]))
+            .div(1e18)
+            .add(rewards[account]);
     }
 
     // stake visibility is public as overriding LPTokenWrapper's stake() function
@@ -708,9 +708,9 @@ contract HAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
     }
 
     function notifyRewardAmount(uint256 reward)
-    external
-    onlyRewardDistribution
-    updateReward(address(0))
+        external
+        onlyRewardDistribution
+        updateReward(address(0))
     {
         if (block.timestamp > starttime) {
             if (block.timestamp >= periodFinish) {
