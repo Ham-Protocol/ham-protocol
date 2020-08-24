@@ -340,21 +340,20 @@ contract HAMRebaser {
         uint256 currSupply = ham.totalSupply();
 
         uint256 mintAmount;
-        // reduce indexDelta to account for minting
+        // Reduce indexDelta to account for minting.
         if (positive) {
             uint256 mintPerc = indexDelta.mul(rebaseMintPerc).div(10**18);
             indexDelta = indexDelta.sub(mintPerc);
             mintAmount = currSupply.mul(mintPerc).div(10**18);
         }
 
-        // rebase
-        uint256 supplyAfterRebase = ham.rebase(epoch, indexDelta, positive);
+        // Perform rebase.
+        ham.rebase(epoch, indexDelta, positive);
         assert(ham.hamsScalingFactor() <= ham.maxScalingFactor());
 
-        // perform actions after rebase
+        // Perform actions after rebase.
         afterRebase(mintAmount, offPegPerc);
     }
-
 
     function uniswapV2Call(
         address sender,
