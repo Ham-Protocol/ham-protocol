@@ -1,6 +1,5 @@
 import React, { useMemo, useEffect } from 'react'
 import styled from 'styled-components'
-import ReactTooltip from 'react-tooltip'
 
 import { useParams } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
@@ -18,7 +17,7 @@ import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
 import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
-import WrappedStatuses, { WrappedStatus } from '../../wrapping/index'
+
 interface FarmProps {
   toggleWrappedStatus: () => void
   wrappedStatus: string
