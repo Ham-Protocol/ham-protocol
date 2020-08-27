@@ -16,6 +16,8 @@ import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
+import StepProgressBar from '../../components/StepProgressBar'
+
 const Farm: React.FC = () => {
   const { farmId } = useParams()
   const {
@@ -61,6 +63,7 @@ const Farm: React.FC = () => {
         title={name}
       />
       <StyledFarm>
+        { depositTokenName === 'YCRV_HAM_UNI_LP' ? <StepProgressBar percent={0} /> : null }
         <StyledCardsWrapper>
           <StyledCardWrapper>
             <Harvest poolContract={contract} />
