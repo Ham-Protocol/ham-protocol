@@ -1,5 +1,6 @@
 import React, { useMemo, useEffect } from 'react'
 import styled from 'styled-components'
+import ReactTooltip from 'react-tooltip'
 
 import { useParams } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
@@ -17,7 +18,7 @@ import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
 import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
-
+import WrappedStatuses, { WrappedStatus } from '../../wrapping/index'
 interface FarmProps {
   toggleWrappedStatus: () => void
   wrappedStatus: string
@@ -97,17 +98,29 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
           </StyledCardWrapper>
         </StyledCardsWrapper>
         <Spacer size="lg" />
-        <div>
+
+        <StyledCardsWrapper>
+          <StyledCardWrapper>
+          {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
           <Button
             onClick={onRedeem}
             text="Harvest & Withdraw"
-          />
-          
-        </div>
-        <Spacer size="lg" />
-        <div>
-          {depositTokenName === 'WETH' ?
+          />: null }
+          </StyledCardWrapper>
+          <Spacer />
+          <StyledCardWrapper>
+          {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
           <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
+          
+          </StyledCardWrapper>
+        </StyledCardsWrapper>
+
+        <div>
+        {depositTokenName !== 'WETH' && depositTokenName !== 'ETH'  ?
+          <Button
+            onClick={onRedeem}
+            text="Harvest & Withdraw"
+          /> : null }
         </div>
         <Spacer size="lg" />
       </StyledFarm>

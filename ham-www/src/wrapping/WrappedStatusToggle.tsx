@@ -1,5 +1,6 @@
 import React, { useContext } from 'react'
 import styled, { ThemeContext } from 'styled-components'
+import ReactTooltip from 'react-tooltip'
 
 import { WrappedStatus, WrappedStatuses } from '.'
 
@@ -33,8 +34,9 @@ const WrappedStatusToggle: React.FC<WrappedStatusToggleProps> = ({ wrappedStatus
       toggleGradient={toggleGradient}
       padding={buttonPadding}
       size={buttonSize}>
-      <WrappedEthLogo />
-      <EthLogo />
+      <WrappedEthLogo data-tip="Change to ETH"/>
+      <EthLogo data-tip="Change to WETH" />
+      <ReactTooltip />
     </StyledWrappedStatusToggle>
   )
 }
