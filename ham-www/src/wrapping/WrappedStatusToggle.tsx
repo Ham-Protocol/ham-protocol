@@ -53,6 +53,7 @@ interface StyledWrappedStatusToggleProps {
 }
 
 const StyledWrappedStatusToggle = styled.button<StyledWrappedStatusToggleProps>`
+  align-items: center;
   background: ${props => props.toggleGradient};
   border: 0;
   border-radius: 12px;

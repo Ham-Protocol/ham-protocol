@@ -83,6 +83,9 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
       />  : null }
 
       <StyledFarm>
+      {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
+          <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
+          <Spacer size="lg" />
         <StyledCardsWrapper>
           <StyledCardWrapper>
             <Harvest poolContract={contract} />
@@ -97,30 +100,13 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
           </StyledCardWrapper>
         </StyledCardsWrapper>
         <Spacer size="lg" />
-
-        <StyledCardsWrapper>
-          <StyledCardWrapper>
-          {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
-          <Button
-            onClick={onRedeem}
-            text="Harvest & Withdraw"
-          />: null }
-          </StyledCardWrapper>
-          <Spacer />
-          <StyledCardWrapper>
-          {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
-          <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
-          
-          </StyledCardWrapper>
-        </StyledCardsWrapper>
-
         <div>
-        {depositTokenName !== 'WETH' && depositTokenName !== 'ETH'  ?
           <Button
             onClick={onRedeem}
             text="Harvest & Withdraw"
-          /> : null }
+          />
         </div>
+
         <Spacer size="lg" />
       </StyledFarm>
     </>
