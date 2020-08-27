@@ -16,7 +16,14 @@ import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
-const Farm: React.FC = () => {
+import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
+
+interface FarmProps {
+  toggleWrappedStatus: () => void
+  wrappedStatus: string
+}
+
+const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
   const { farmId } = useParams()
   const {
     contract,
@@ -55,11 +62,26 @@ const Farm: React.FC = () => {
 
   return (
     <>
-      <PageHeader
+      
+      {depositTokenName === 'WETH' ?
+        <PageHeader
+        icon={icon}
+        subtitle={`Deposit ${depositTokenName} or ETH and earn ${earnTokenName}`}
+        title={name}
+      />  : null }
+      {depositTokenName === 'ETH' ?
+        <PageHeader
+        icon={icon}
+        subtitle={`Deposit ${depositTokenName} or WETH and earn ${earnTokenName}`}
+        title={name}
+      />  : null }
+      {depositTokenName !== 'WETH' &&  depositTokenName!=='ETH' ?
+        <PageHeader
         icon={icon}
         subtitle={`Deposit ${depositTokenName} and earn ${earnTokenName}`}
         title={name}
-      />
+      />  : null }
+
       <StyledFarm>
         <StyledCardsWrapper>
           <StyledCardWrapper>
@@ -80,6 +102,12 @@ const Farm: React.FC = () => {
             onClick={onRedeem}
             text="Harvest & Withdraw"
           />
+          
+        </div>
+        <Spacer size="lg" />
+        <div>
+          {depositTokenName === 'WETH' ?
+          <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
         </div>
         <Spacer size="lg" />
       </StyledFarm>

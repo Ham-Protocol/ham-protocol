@@ -21,14 +21,16 @@ import FarmCards from './components/FarmCards'
 interface FarmsProps {
   toggleTheme: () => void
   theme: string
+  toggleWrappedStatus: () => void
+  wrappedStatus: string
 }
 
-const Farms: React.FC<FarmsProps> = ({ theme, toggleTheme }) => {
+const Farms: React.FC<FarmsProps> = ({ theme, toggleTheme, wrappedStatus, toggleWrappedStatus}) => {
   const { path } = useRouteMatch()
   const { account, connect } = useWallet()
   return (
     <Switch>
-      <Page toggleTheme={toggleTheme} theme={theme}>
+      <Page toggleTheme={toggleTheme} theme={theme}  >
       {!!account ? (
         <>
           <Route exact path={path}>
@@ -40,7 +42,7 @@ const Farms: React.FC<FarmsProps> = ({ theme, toggleTheme }) => {
             <FarmCards />
           </Route>
           <Route path={`${path}/:farmId`}>
-            <Farm />
+            <Farm  toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus}/>
           </Route>
         </>
       ) : (
