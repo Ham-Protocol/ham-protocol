@@ -15,7 +15,7 @@ interface StepProgressBar {
 }
 
 const StepProgressBar: React.FC<StepProgressBar> = ({ percent }) => {
-  const { color, gradient } = useContext(ThemeContext)
+  const { color } = useContext(ThemeContext)
   const [activeStep, changeStep] = useState(0)
 
   const steps = [
@@ -69,7 +69,7 @@ const StepProgressBar: React.FC<StepProgressBar> = ({ percent }) => {
 }
 
 const StyledProgressBarContainer = styled.div`
-  background-color: ${props => props.theme.color[200]};
+  background: linear-gradient(${props => props.theme.color['card']}, ${props => props.theme.color['bg']});
   border-radius: 16px;
   width: 75%;
   margin: 0px 5px 50px 5px;

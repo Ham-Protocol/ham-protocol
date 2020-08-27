@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useParams } from 'react-router-dom'
@@ -55,6 +55,8 @@ const Farm: React.FC = () => {
     return earnToken.toUpperCase()
   }, [earnToken])
 
+  let [percent, changePercent] = useState(0)
+
   return (
     <>
       <PageHeader
@@ -63,7 +65,11 @@ const Farm: React.FC = () => {
         title={name}
       />
       <StyledFarm>
-        { depositTokenName === 'YCRV_HAM_UNI_LP' ? <StepProgressBar percent={0} /> : null }
+        { depositTokenName === 'YCRV_HAM_UNI_LP' ? <StepProgressBar percent={percent} /> : null }
+        { /*
+          // Input to test realtime update of progress bar
+          <input type="number" id="quantity" name="quantity" min="0" max="100" onChange={event => changePercent(parseInt(event.target.value))}></input>
+        */ }
         <StyledCardsWrapper>
           <StyledCardWrapper>
             <Harvest poolContract={contract} />

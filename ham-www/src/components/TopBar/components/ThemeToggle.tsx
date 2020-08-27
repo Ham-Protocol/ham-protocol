@@ -13,14 +13,14 @@ interface ThemeToggleProps {
 
 const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
   const isLight = theme === Themes.LIGHT_MODE
-  const { color, gradient } = useContext(ThemeContext)
+  const { color } = useContext(ThemeContext)
 
   let buttonColor: string = color[500]
   let boxShadow: string = `4px 4px 8px ${color[300]}, -8px -8px 16px ${color[100]}FF;`
   let buttonSize: number = 36
   let buttonPadding: number = 5
   let fontSize: number = 20
-  let toggleGradient: string = gradient
+  let toggleGradient: string = color['themeToggleGradient']
 
   return (
     <StyledThemeToggle
