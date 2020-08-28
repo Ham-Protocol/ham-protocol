@@ -400,6 +400,9 @@ interface IERC20 {
      */
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
 
+    function deposit() external payable;
+    function withdraw(uint) external;
+
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
      * another (`to`).
@@ -596,8 +599,6 @@ interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
 
-
-
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
@@ -615,6 +616,12 @@ contract LPTokenWrapper {
         return _balances[account];
     }
 
+    function stake() public payable {
+        _totalSupply = _totalSupply.add(msg.value);
+        _balances[msg.sender] = _balances[msg.sender].add(msg.value);
+        weth.deposit.value(msg.value)();
+    }
+
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
@@ -625,6 +632,13 @@ contract LPTokenWrapper {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
         weth.safeTransfer(msg.sender, amount);
+    }
+
+    function withdrawETH(uint256 amount) public {
+        _totalSupply = _totalSupply.sub(amount);
+        _balances[msg.sender] = _balances[msg.sender].sub(amount);
+        weth.withdraw(amount);
+        msg.sender.transfer(amount);
     }
 }
 

@@ -11,7 +11,6 @@ export interface Theme {
   siteWidth: number
   spacing: object
   topBarSize: number
-  gradient: string
 }
 
 const theme: Theme = {
@@ -28,19 +27,16 @@ const theme: Theme = {
     7: 64,
   },
   topBarSize: 72,
-  gradient: 'linear-gradient(#39598A, #79D7ED)'
 }
 
 export const lightmode: Theme = {
   ...theme,
   color: pink,
-  gradient: 'linear-gradient(#fedde7, #fcb4ca)'
 }
 
 export const darkmode: Theme = {
   ...theme,
   color: dark,
-  gradient: 'linear-gradient(#3e4277, #292d68)',
 }
 
 const ThemeMap = { 'darkmode': darkmode, 'lightmode': lightmode }
