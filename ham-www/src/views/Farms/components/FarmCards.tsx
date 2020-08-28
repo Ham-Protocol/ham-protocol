@@ -63,7 +63,6 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   const { contract } = farm
   const { account } = useWallet()
   const ham = useHam()
-  console.log("===ham",ham, "===account", account)
 
   const getStartTime = useCallback(async () => {
     const startTime = await getPoolStartTime(farm.contract)
