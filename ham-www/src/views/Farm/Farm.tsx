@@ -90,7 +90,8 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
       <StyledFarm>
       {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
           <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
-       { depositTokenName === 'YCRV_HAM_UNI_LP' ? <StepProgressBar percent={percent} /> : null }
+       { depositTokenName === 'YCRV_HAM_UNI_LP' ? 
+          <StepProgressBar percent={percent} /> : null }
         { /*
           // Input to test realtime update of progress bar
           <input type="number" id="quantity" name="quantity" min="0" max="100" onChange={event => changePercent(parseInt(event.target.value))}></input>
