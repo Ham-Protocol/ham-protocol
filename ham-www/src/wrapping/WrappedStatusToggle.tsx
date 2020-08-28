@@ -64,7 +64,6 @@ const StyledWrappedStatusToggle = styled.button<StyledWrappedStatusToggleProps>`
   font-weight: 700;
   height: ${props => props.size}px;
   justify-content: center;
-  margin-right: 25px;
   outline: none;
   overflow: hidden;
   padding-right: ${props => props.padding}px;
