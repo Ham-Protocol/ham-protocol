@@ -16,9 +16,17 @@ import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
-import StepProgressBar from '../../components/StepProgressBar'
 
-const Farm: React.FC = () => {
+import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
+import StepProgressBar from '../../components/StepProgressBar'
+        
+interface FarmProps {
+  toggleWrappedStatus: () => void
+  wrappedStatus: string
+}
+
+const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
+
   const { farmId } = useParams()
   const {
     contract,
@@ -59,17 +67,36 @@ const Farm: React.FC = () => {
 
   return (
     <>
-      <PageHeader
+      
+      {depositTokenName === 'WETH' ?
+        <PageHeader
+        icon={icon}
+        subtitle={`Deposit ${depositTokenName} or ETH and earn ${earnTokenName}`}
+        title={name}
+      />  : null }
+      {depositTokenName === 'ETH' ?
+        <PageHeader
+        icon={icon}
+        subtitle={`Deposit ${depositTokenName} or WETH and earn ${earnTokenName}`}
+        title={name}
+      />  : null }
+      {depositTokenName !== 'WETH' &&  depositTokenName!=='ETH' ?
+        <PageHeader
         icon={icon}
         subtitle={`Deposit ${depositTokenName} and earn ${earnTokenName}`}
         title={name}
-      />
+      />  : null }
+
       <StyledFarm>
-        { depositTokenName === 'YCRV_HAM_UNI_LP' ? <StepProgressBar percent={percent} /> : null }
+      {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
+          <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
+       { depositTokenName === 'YCRV_HAM_UNI_LP' ? 
+          <StepProgressBar percent={percent} /> : null }
         { /*
           // Input to test realtime update of progress bar
           <input type="number" id="quantity" name="quantity" min="0" max="100" onChange={event => changePercent(parseInt(event.target.value))}></input>
-        */ }
+        */ }    
+        <Spacer size="lg" />
         <StyledCardsWrapper>
           <StyledCardWrapper>
             <Harvest poolContract={contract} />

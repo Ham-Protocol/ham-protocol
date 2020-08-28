@@ -88,7 +88,12 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
             <CardIcon>{farm.icon}</CardIcon>
             <StyledTitle>{farm.name}</StyledTitle>
             <StyledDetails>
-              <StyledDetail>Deposit {farm.depositToken.toUpperCase()}</StyledDetail>
+            {farm.depositToken === 'weth' ?
+              <StyledDetail>Deposit {farm.depositToken.toUpperCase()} or ETH</StyledDetail>  : null }
+            {farm.depositToken === 'eth' ?
+              <StyledDetail>Deposit {farm.depositToken.toUpperCase()} or WETH</StyledDetail>  : null }
+            {farm.depositToken !== 'weth' && farm.depositToken !== 'eth' ?
+              <StyledDetail>Deposit {farm.depositToken.toUpperCase()}</StyledDetail>  : null }  
               <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
             </StyledDetails>
             <Button
