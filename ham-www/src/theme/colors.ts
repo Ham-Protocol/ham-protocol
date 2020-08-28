@@ -18,10 +18,11 @@ export const pink = {
   500:  '#80495D', //Cursor on links color.
   600:  '#5B2639', //Title color.
   800:  '#2D121B',
-  'hover':  '#fddce6', // On hover.
-  'card':  '#fdcddc', // Card color.
   'bg': '#ffffff',
-  'fillBar': '#00D110'
+  'card':  '#fdcddc', // Card color.
+  'fillBar': '#00D110',
+  'hover':  '#fddce6', // On hover.
+  'themeToggleGradient': 'linear-gradient(#fedde7, #fcb4ca)',
 }
 
 export const dark = {
@@ -32,8 +33,9 @@ export const dark = {
   500:  '#dddddd', //Cursor on links.
   600:  '#dddddd', //Title color.
   800:  '#dddddd',
-  'hover':  '#383e75', // On hover buttons.
-  'card':  '#292d68', // Card color.
   'bg': '#161a55',
-  'fillBar': '#00D110'
+  'card':  '#292d68', // Card color.
+  'fillBar': '#00D110',
+  'hover':  '#383e75', // On hover buttons.
+  'themeToggleGradient': 'linear-gradient(#3e4277, #292d68)',
 }

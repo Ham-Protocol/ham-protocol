@@ -17,7 +17,6 @@ import Farm from '../Farm'
 
 import FarmCards from './components/FarmCards'
 
-
 interface FarmsProps {
   toggleTheme: () => void
   theme: string

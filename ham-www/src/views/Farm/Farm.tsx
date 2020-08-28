@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo, useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { useParams } from 'react-router-dom'
@@ -16,14 +16,17 @@ import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
-import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
 
+import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
+import StepProgressBar from '../../components/StepProgressBar'
+        
 interface FarmProps {
   toggleWrappedStatus: () => void
   wrappedStatus: string
 }
 
 const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
+
   const { farmId } = useParams()
   const {
     contract,
@@ -60,6 +63,8 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
     return earnToken.toUpperCase()
   }, [earnToken])
 
+  let [percent, changePercent] = useState(0)
+
   return (
     <>
       
@@ -85,7 +90,12 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
       <StyledFarm>
       {depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
           <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
-          <Spacer size="lg" />
+       { depositTokenName === 'YCRV_HAM_UNI_LP' ? <StepProgressBar percent={percent} /> : null }
+        { /*
+          // Input to test realtime update of progress bar
+          <input type="number" id="quantity" name="quantity" min="0" max="100" onChange={event => changePercent(parseInt(event.target.value))}></input>
+        */ }    
+        <Spacer size="lg" />
         <StyledCardsWrapper>
           <StyledCardWrapper>
             <Harvest poolContract={contract} />
@@ -106,7 +116,6 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
             text="Harvest & Withdraw"
           />
         </div>
-
         <Spacer size="lg" />
       </StyledFarm>
     </>
