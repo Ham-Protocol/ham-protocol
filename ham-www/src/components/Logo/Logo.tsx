@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import butcher from '../../assets/img/butcher.png'
+import Butcher from '../../assets/svg/Butcher.svg'
 
 const Logo: React.FC = () => {
   return (
     <StyledLogo>
-      <img src={butcher} height="32" style={{ marginTop: -4 }} />
+      <img src={Butcher} height="32" style={{ marginTop: -4 }} />
       <StyledText>HAM Harvester</StyledText>
     </StyledLogo>
   )
