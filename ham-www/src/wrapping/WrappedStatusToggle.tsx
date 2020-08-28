@@ -54,7 +54,7 @@ interface StyledWrappedStatusToggleProps {
 
 const StyledWrappedStatusToggle = styled.button<StyledWrappedStatusToggleProps>`
   align-items: center;
-  background: ${props => props.theme.color['card']};
+  background: ${props => props.theme.color[200]};
   border: 0;
   border-radius: 12px;
   color: ${props => props.color};
