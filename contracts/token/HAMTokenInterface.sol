@@ -14,7 +14,7 @@ contract HAMTokenInterface is HAMTokenStorage, HAMGovernanceStorage {
     /**
      * @notice Event emitted when tokens are rebased
      */
-    event Rebase(uint256 epoch, uint256 prevHamsScalingFactor, uint256 newYamsScalingFactor);
+    event Rebase(uint256 epoch, uint256 prevHamsScalingFactor, uint256 newHamsScalingFactor);
 
     /*** Gov Events ***/
 
