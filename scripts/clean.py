@@ -1,10 +1,13 @@
 import json
+import pathlib
+import os
 from pprint import pprint
 networkId = "1"
 networkId2 = "1001"
 from os import listdir
-from os.path import isfile, join, dirname, abspath
-mypath = dirname(dirname(abspath(__file__))) + "/build/contracts/"
+from os.path import isfile, join
+mypath = os.path.abspath(os.getcwd()) + "/build/contracts/"
+newpath = os.path.abspath(os.getcwd()) + "/clean_build/contracts/"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 onlyfiles
 
@@ -28,7 +31,8 @@ for file in onlyfiles:
                     cleaned["networks"][networkId2]["address"] = a["networks"][networkId2]["address"],
                     cleaned["networks"][networkId2]["address"] = cleaned["networks"][networkId2]["address"][0]
                     cleaned["networks"][networkId2]["transactionHash"] = a["networks"][networkId2]["transactionHash"]
-                with open(mypath+file, "w+") as c:
+                with open(newpath+file, "w+") as c:
+                    print(newpath+file)
                     c.write(json.dumps(cleaned))
             except Exception as e:
                 print(e)
