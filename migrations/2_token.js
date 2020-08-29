@@ -17,7 +17,6 @@ module.exports = migration;
 
 // ============ Deploy Functions ============
 
-
 async function deployToken(deployer, network) {
   await deployer.deploy(HAMImplementation);
   if (network != "mainnet") {

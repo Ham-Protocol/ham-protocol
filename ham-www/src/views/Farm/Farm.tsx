@@ -16,7 +16,6 @@ import { getContract } from '../../utils/erc20'
 import Harvest from './components/Harvest'
 import Stake from './components/Stake'
 
-
 import WrappedStatusToggle from '../../wrapping/WrappedStatusToggle'
 import StepProgressBar from '../../components/StepProgressBar'
         
@@ -26,7 +25,6 @@ interface FarmProps {
 }
 
 const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
-
   const { farmId } = useParams()
   const {
     contract,

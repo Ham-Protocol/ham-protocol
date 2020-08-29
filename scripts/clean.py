@@ -1,10 +1,12 @@
 import json
+import pathlib
+import os
 from pprint import pprint
 networkId = "1"
 networkId2 = "1001"
 from os import listdir
-from os.path import isfile, join, dirname, abspath
-mypath = dirname(dirname(abspath(__file__))) + "/build/contracts/"
+from os.path import isfile, join
+mypath = os.path.abspath(os.getcwd()) + "/build/contracts/"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 onlyfiles
 
