@@ -603,7 +603,7 @@ contract LPTokenWrapper {
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
 
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() internal view returns (uint256) {
         return _totalSupply;
     }
 
