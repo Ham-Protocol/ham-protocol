@@ -5,7 +5,7 @@ var Web3 = require('web3');
 module.exports = {
   compilers: {
     solc: {
-      version: '0.5.17',
+      version: '0.6.0',
       docker: process.env.DOCKER_COMPILER !== undefined
         ? process.env.DOCKER_COMPILER === 'true' : true,
       parser: 'solcjs',
