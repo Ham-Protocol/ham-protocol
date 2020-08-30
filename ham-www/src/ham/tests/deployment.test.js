@@ -51,9 +51,9 @@ describe("post-deployment", () => {
     });
 
     test("pool balances", async () => {
-      let ycrv_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.ycrv_pool.options.address).call();
+      let yycrv_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.yycrv_pool.options.address).call();
 
-      expect(ycrv_balance).toBe(ham.toBigN(1500000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
+      expect(yycrv_balance).toBe(ham.toBigN(1500000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
 
       let yfi_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.yfi_pool.options.address).call();
 
@@ -131,7 +131,7 @@ describe("post-deployment", () => {
     });
 
     test("incentives owner", async () => {
-      let owner = await ham.contracts.ycrv_pool.methods.owner().call();
+      let owner = await ham.contracts.yycrv_pool.methods.owner().call();
       expect(owner).toBe(ham.contracts.timelock.options.address)
     });
 

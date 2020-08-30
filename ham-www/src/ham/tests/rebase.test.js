@@ -45,19 +45,19 @@ describe("rebase_tests", () => {
 
   beforeEach(async () => {
     await ham.testing.resetEVM("0x2");
-    let a = await ham.contracts.ycrv.methods.transfer(user, "2000000000000000000000000").send({
+    let a = await ham.contracts.yycrv.methods.transfer(user, "2000000000000000000000000").send({
       from: unlocked_account
     });
   });
 
   describe("rebase", () => {
-    test("user has ycrv", async () => {
-      let bal0 = await ham.contracts.ycrv.methods.balanceOf(user).call();
+    test("user has yycrv", async () => {
+      let bal0 = await ham.contracts.yycrv.methods.balanceOf(user).call();
       expect(bal0).toBe("2000000000000000000000000");
     });
     test("create pair", async () => {
       await ham.contracts.uni_fact.methods.createPair(
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         ham.contracts.ham.options.address
       ).send({
         from: user,
@@ -72,7 +72,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -82,7 +82,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         10000000,
         10000000,
         10000000,
@@ -95,7 +95,7 @@ describe("rebase_tests", () => {
       });
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
       ham.contracts.uni_pair.options.address = pair;
       let bal = await ham.contracts.uni_pair.methods.balanceOf(user).call();
@@ -109,7 +109,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -119,7 +119,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         100000,
         100000,
         100000,
@@ -132,7 +132,7 @@ describe("rebase_tests", () => {
       });
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
       ham.contracts.uni_pair.options.address = pair;
       let bal = await ham.contracts.uni_pair.methods.balanceOf(user).call();
@@ -143,7 +143,7 @@ describe("rebase_tests", () => {
         100,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -174,7 +174,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -184,7 +184,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         100000,
         100000,
         100000,
@@ -197,7 +197,7 @@ describe("rebase_tests", () => {
       });
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
       ham.contracts.uni_pair.options.address = pair;
       let bal = await ham.contracts.uni_pair.methods.balanceOf(user).call();
@@ -208,7 +208,7 @@ describe("rebase_tests", () => {
         100,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -246,7 +246,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -256,7 +256,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         "1000000000000000000000000",
         "1000000000000000000000000",
         "1000000000000000000000000",
@@ -270,7 +270,7 @@ describe("rebase_tests", () => {
 
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
 
       ham.contracts.uni_pair.options.address = pair;
@@ -281,7 +281,7 @@ describe("rebase_tests", () => {
         "100000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -297,7 +297,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -318,7 +318,7 @@ describe("rebase_tests", () => {
         "100000000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -339,7 +339,7 @@ describe("rebase_tests", () => {
         "10000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -396,9 +396,9 @@ describe("rebase_tests", () => {
 
       let resHAM = await ham.contracts.ham.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-      let resycrv = await ham.contracts.ycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
+      let resyycrv = await ham.contracts.yycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-      console.log("bal user, bal ham res, bal res crv", bal1, resHAM, resycrv);
+      console.log("bal user, bal ham res, bal res crv", bal1, resHAM, resyycrv);
       r = await ham.contracts.uni_pair.methods.getReserves().call();
       q = await ham.contracts.uni_router.methods.quote(ham.toBigN(10**18).toString(), r[0], r[1]).call();
       console.log("post positive rebase quote", q);
@@ -408,7 +408,7 @@ describe("rebase_tests", () => {
       // used full ham reserves
       expect(ham.toBigN(resHAM).toNumber()).toBe(0);
       // increases reserves
-      expect(ham.toBigN(resycrv).toNumber()).toBeGreaterThan(0);
+      expect(ham.toBigN(resyycrv).toNumber()).toBeGreaterThan(0);
 
 
       // not below peg
@@ -422,7 +422,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -432,7 +432,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         "1000000000000000000000000",
         "1000000000000000000000000",
         "1000000000000000000000000",
@@ -446,7 +446,7 @@ describe("rebase_tests", () => {
 
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
 
       ham.contracts.uni_pair.options.address = pair;
@@ -457,7 +457,7 @@ describe("rebase_tests", () => {
         "100000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -473,7 +473,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -495,7 +495,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -516,7 +516,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -566,13 +566,13 @@ describe("rebase_tests", () => {
 
       let resHAM = await ham.contracts.ham.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-      let resycrv = await ham.contracts.ycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
+      let resyycrv = await ham.contracts.yycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
       // balance decreases
       expect(ham.toBigN(bal1).toNumber()).toBeLessThan(ham.toBigN(bal).toNumber());
       // no increases to reserves
       expect(ham.toBigN(resHAM).toNumber()).toBe(0);
-      expect(ham.toBigN(resycrv).toNumber()).toBe(0);
+      expect(ham.toBigN(resyycrv).toNumber()).toBe(0);
     });
     test("no rebasing", async () => {
       await ham.contracts.ham.methods.approve(
@@ -582,7 +582,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -592,7 +592,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         "1000000000000000000000000",
         "1000000000000000000000000",
         "1000000000000000000000000",
@@ -606,7 +606,7 @@ describe("rebase_tests", () => {
 
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
 
       ham.contracts.uni_pair.options.address = pair;
@@ -617,7 +617,7 @@ describe("rebase_tests", () => {
         "100000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -633,7 +633,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -655,7 +655,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -668,7 +668,7 @@ describe("rebase_tests", () => {
         "10000000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -690,7 +690,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -703,7 +703,7 @@ describe("rebase_tests", () => {
         "10000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -753,13 +753,13 @@ describe("rebase_tests", () => {
 
       let resHAM = await ham.contracts.ham.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-      let resycrv = await ham.contracts.ycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
+      let resyycrv = await ham.contracts.yycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
       // no change
       expect(ham.toBigN(bal1).toNumber()).toBe(ham.toBigN(bal).toNumber());
       // no increases to reserves
       expect(ham.toBigN(resHAM).toNumber()).toBe(0);
-      expect(ham.toBigN(resycrv).toNumber()).toBe(0);
+      expect(ham.toBigN(resyycrv).toNumber()).toBe(0);
       r = await ham.contracts.uni_pair.methods.getReserves().call();
       q = await ham.contracts.uni_router.methods.quote(ham.toBigN(10**18).toString(), r[0], r[1]).call();
       console.log("quote post no rebase", q);
@@ -773,7 +773,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -783,7 +783,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         "1000000000000000000000000",
         "1000000000000000000000000",
         "1000000000000000000000000",
@@ -797,7 +797,7 @@ describe("rebase_tests", () => {
 
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
 
       ham.contracts.uni_pair.options.address = pair;
@@ -808,7 +808,7 @@ describe("rebase_tests", () => {
         "100000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -824,7 +824,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -845,7 +845,7 @@ describe("rebase_tests", () => {
         "500000000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -866,7 +866,7 @@ describe("rebase_tests", () => {
         "10000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -918,12 +918,12 @@ describe("rebase_tests", () => {
 
       let resHAM = await ham.contracts.ham.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-      let resycrv = await ham.contracts.ycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
+      let resyycrv = await ham.contracts.yycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-      console.log(bal, bal1, resHAM, resycrv);
+      console.log(bal, bal1, resHAM, resyycrv);
       expect(ham.toBigN(bal).toNumber()).toBeLessThan(ham.toBigN(bal1).toNumber());
       expect(ham.toBigN(resHAM).toNumber()).toBeGreaterThan(0);
-      expect(ham.toBigN(resycrv).toNumber()).toBeGreaterThan(0);
+      expect(ham.toBigN(resyycrv).toNumber()).toBeGreaterThan(0);
       r = await ham.contracts.uni_pair.methods.getReserves().call();
       q = await ham.contracts.uni_router.methods.quote(ham.toBigN(10**18).toString(), r[0], r[1]).call();
       console.log("quote post rebase w/ reserves", q);
@@ -952,7 +952,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -962,7 +962,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         "1000000000000000000000000",
         "1000000000000000000000000",
         "1000000000000000000000000",
@@ -976,7 +976,7 @@ describe("rebase_tests", () => {
 
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
 
       ham.contracts.uni_pair.options.address = pair;
@@ -987,7 +987,7 @@ describe("rebase_tests", () => {
         "100000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -1003,7 +1003,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -1024,7 +1024,7 @@ describe("rebase_tests", () => {
         "500000000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -1045,7 +1045,7 @@ describe("rebase_tests", () => {
         "10000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -1095,7 +1095,7 @@ describe("rebase_tests", () => {
         from: user,
         gas: 80000
       });
-      await ham.contracts.ycrv.methods.approve(
+      await ham.contracts.yycrv.methods.approve(
         ham.contracts.uni_router.options.address,
         -1
       ).send({
@@ -1105,7 +1105,7 @@ describe("rebase_tests", () => {
 
       await ham.contracts.uni_router.methods.addLiquidity(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address,
+        ham.contracts.yycrv.options.address,
         "1000000000000000000000000",
         "1000000000000000000000000",
         "1000000000000000000000000",
@@ -1119,7 +1119,7 @@ describe("rebase_tests", () => {
 
       let pair = await ham.contracts.uni_fact.methods.getPair(
         ham.contracts.ham.options.address,
-        ham.contracts.ycrv.options.address
+        ham.contracts.yycrv.options.address
       ).call();
 
       ham.contracts.uni_pair.options.address = pair;
@@ -1130,7 +1130,7 @@ describe("rebase_tests", () => {
         "100000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -1146,7 +1146,7 @@ describe("rebase_tests", () => {
         100000,
         [
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ],
         user,
         1596740361 + 10000000
@@ -1167,7 +1167,7 @@ describe("rebase_tests", () => {
         "500000000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
@@ -1188,7 +1188,7 @@ describe("rebase_tests", () => {
         "10000000000000000000",
         100000,
         [
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham.contracts.ham.options.address
         ],
         user,
