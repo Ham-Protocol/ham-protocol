@@ -18,7 +18,7 @@ import UNIRouterJson from './uniR.json';
 import WETHPoolJson from '../clean_build/contracts/HAMETHPool.json';
 import YFIPoolJson from '../clean_build/contracts/HAMYFIPool.json';
 import LENDPoolJson from '../clean_build/contracts/HAMLENDPool.json';
-import DAIPoolJson from '../clean_build/contracts/HAMDAIPool.json';
+import BZRXPoolJson from '../clean_build/contracts/HAMBZRXPool.json';
 import SNXPoolJson from '../clean_build/contracts/HAMSNXPool.json';
 import LINKPoolJson from '../clean_build/contracts/HAMLINKPool.json';
 
@@ -52,12 +52,12 @@ export class Contracts {
     this.link_pool = new this.web3.eth.Contract(LINKPoolJson.abi);
     this.lend_pool = new this.web3.eth.Contract(LENDPoolJson.abi);
     this.snx_pool = new this.web3.eth.Contract(SNXPoolJson.abi);
-    this.dai_pool = new this.web3.eth.Contract(DAIPoolJson.abi);
+    this.bzrx_pool = new this.web3.eth.Contract(BZRXPoolJson.abi);
 
     this.link = new this.web3.eth.Contract(ERC20Json.abi);
     this.lend = new this.web3.eth.Contract(ERC20Json.abi);
     this.snx = new this.web3.eth.Contract(ERC20Json.abi);
-    this.dai = new this.web3.eth.Contract(ERC20Json.abi);
+    this.bzrx = new this.web3.eth.Contract(ERC20Json.abi);
     this.ham_yycrv_uni_lp = new this.web3.eth.Contract(ERC20Json.abi);
 
     this.erc20 = new this.web3.eth.Contract(ERC20Json.abi);
@@ -94,7 +94,7 @@ export class Contracts {
       { contract: this.eth_pool, json: WETHPoolJson },
       { contract: this.yfi_pool, json: YFIPoolJson },
       { contract: this.snx_pool, json: SNXPoolJson },
-      { contract: this.dai_pool, json: DAIPoolJson },
+      { contract: this.bzrx_pool, json: BZRXPoolJson },
       { contract: this.lend_pool, json: LENDPoolJson },
       { contract: this.link_pool, json: LINKPoolJson },
     ]
@@ -112,7 +112,7 @@ export class Contracts {
     this.snx.options.address = addressMap["SNX"];
     this.link.options.address = addressMap["LINK"];
     this.lend.options.address = addressMap["LEND"];
-    this.dai.options.address = addressMap["DAI"];
+    this.bzrx.options.address = addressMap["BZRX"];
     this.uni_fact.options.address = addressMap["uniswapFactoryV2"];
     this.uni_router.options.address = addressMap["UNIRouter"];
     this.ham_yycrv_uni_lp.options.address = addressMap["HAMYYCRV"];
@@ -123,7 +123,7 @@ export class Contracts {
       {"tokenAddr": this.weth.options.address, "poolAddr": this.eth_pool.options.address},
       {"tokenAddr": this.link.options.address, "poolAddr": this.link_pool.options.address},
       {"tokenAddr": this.lend.options.address, "poolAddr": this.lend_pool.options.address},
-      {"tokenAddr": this.dai.options.address, "poolAddr": this.dai_pool.options.address},
+      {"tokenAddr": this.bzrx.options.address, "poolAddr": this.bzrx_pool.options.address},
     ]
   }
 

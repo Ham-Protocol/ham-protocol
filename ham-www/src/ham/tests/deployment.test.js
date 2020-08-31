@@ -59,9 +59,9 @@ describe("post-deployment", () => {
 
       expect(yfi_balance).toBe(ham.toBigN(250000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
 
-      let dai_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.dai_pool.options.address).call();
+      let bzrx_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.bzrx_pool.options.address).call();
 
-      expect(dai_balance).toBe(ham.toBigN(250000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
+      expect(bzrx_balance).toBe(ham.toBigN(250000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
 
       let eth_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.eth_pool.options.address).call();
 

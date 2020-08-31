@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react'
 
+import React, {useCallback, useEffect, useState} from 'react'
 import { Contract } from 'web3-eth-contract'
 
 import { ham as hamAddress } from '../../constants/tokenAddresses'
@@ -9,6 +9,14 @@ import { getPoolContracts } from '../../hamUtils'
 import Context from './context'
 import { Farm } from './types'
 
+import HAM_LEND_Icon from '../../assets/svg/HAM_LEND_Icon.svg'
+import HAM_BZRX_Icon from '../../assets/svg/HAM_BZRX_Icon.svg'
+import HAM_LINK_Icon from '../../assets/svg/HAM_LINK_Icon.svg'
+import HAM_SNX_Icon from '../../assets/svg/HAM_SNX_Icon.svg'
+import HAM_WETH_Icon from '../../assets/svg/HAM_WETH_Icon.svg'
+import HAM_YYCRV_Icon from '../../assets/svg/HAM_YYCRV_Icon.svg'
+import  HAM_YFI_Icon from '../../assets/svg/HAM_YFI_Icon.svg'
+
 const NAME_FOR_POOL: { [key: string]: string } = {
   yfi_pool: 'Waifu Rough Cuts',
   eth_pool: 'Bacon Wrapped ETH',
@@ -16,17 +24,17 @@ const NAME_FOR_POOL: { [key: string]: string } = {
   link_pool: 'Sausage Links',
   lend_pool: 'Lend Larder',
   snx_pool: 'Spartan Smokery',
-  dai_pool: 'Dai Durocs'
+  bzrx_pool: 'Bzx Butchers',
 }
 
-const ICON_FOR_POOL: { [key: string]: string } = {
-  yfi_pool: '🐽',
-  eth_pool: '🥓',
-  link_pool: '🌭',
-  lend_pool: '🥩',
-  snx_pool: '🍖',
-  yycrv_pool: '🍔',
-  dai_pool: '🐖'
+const ICON_FOR_POOL: { [key: string]: JSX.Element} = {
+  yfi_pool: <img src={HAM_YFI_Icon} height="64"></img>,
+  eth_pool: <img src={HAM_WETH_Icon} height="64"></img>,
+  link_pool:<img src={HAM_LINK_Icon} height="64"></img>,
+  lend_pool: <img src={HAM_LEND_Icon}height="64"></img>,
+  snx_pool: <img src={HAM_SNX_Icon} height="64"></img>,
+  bzrx_pool: <img src={HAM_BZRX_Icon} height="64"></img>,
+  yycrv_pool: <img src={HAM_YYCRV_Icon} height="64"></img>,
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
@@ -36,7 +44,7 @@ const SORT_FOR_POOL: { [key: string]: number } = {
   yycrv_pool: 3,
   link_pool: 4,
   lend_pool: 5,
-  dai_pool: 6,//swapped mkr for dai
+  bzrx_pool: 6,//swapped mkr for bzrx
 }
 
 const Farms: React.FC = ({ children }) => {
