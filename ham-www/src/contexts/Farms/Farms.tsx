@@ -28,13 +28,13 @@ const NAME_FOR_POOL: { [key: string]: string } = {
 }
 
 const ICON_FOR_POOL: { [key: string]: JSX.Element} = {
-  yfi_pool: <img src={HAM_YFI_Icon} height="64"></img>,
-  eth_pool: <img src={HAM_WETH_Icon} height="64"></img>,
-  link_pool:<img src={HAM_LINK_Icon} height="64"></img>,
-  lend_pool: <img src={HAM_LEND_Icon}height="64"></img>,
-  snx_pool: <img src={HAM_SNX_Icon} height="64"></img>,
-  bzrx_pool: <img src={HAM_BZRX_Icon} height="64"></img>,
-  yycrv_pool: <img src={HAM_YYCRV_Icon} height="64"></img>,
+  yfi_pool: <img src={HAM_YFI_Icon} height="49"></img>,
+  eth_pool: <img src={HAM_WETH_Icon} height="49"></img>,
+  link_pool:<img src={HAM_LINK_Icon} height="49"></img>,
+  lend_pool: <img src={HAM_LEND_Icon}height="49"></img>,
+  snx_pool: <img src={HAM_SNX_Icon} height="49"></img>,
+  bzrx_pool: <img src={HAM_BZRX_Icon} height="49"></img>,
+  yycrv_pool: <img src={HAM_YYCRV_Icon} height="49"></img>,
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
