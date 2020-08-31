@@ -20,27 +20,26 @@ library UniswapV2OracleLibrary {
         blockTimestamp = currentBlockTimestamp();
         (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast) = UniswapPair(pair).getReserves();
         if (isToken0) {
-          priceCumulative = UniswapPair(pair).price0CumulativeLast();
+            priceCumulative = UniswapPair(pair).price0CumulativeLast();
 
-          // if time has elapsed since the last update on the pair, mock the accumulated price values
-          if (blockTimestampLast != blockTimestamp) {
-              // subtraction overflow is desired
-              uint32 timeElapsed = blockTimestamp - blockTimestampLast;
-              // addition overflow is desired
-              // counterfactual
-              priceCumulative += uint(FixedPoint.fraction(reserve1, reserve0)._x) * timeElapsed;
-          }
+            // if time has elapsed since the last update on the pair, mock the accumulated price values
+            if (blockTimestampLast != blockTimestamp) {
+                // subtraction overflow is desired
+                uint32 timeElapsed = blockTimestamp - blockTimestampLast;
+                // addition overflow is desired
+                // counterfactual
+                priceCumulative += uint(FixedPoint.fraction(reserve1, reserve0)._x) * timeElapsed;
+            }
         } else {
-          priceCumulative = UniswapPair(pair).price1CumulativeLast();
-          // if time has elapsed since the last update on the pair, mock the accumulated price values
-          if (blockTimestampLast != blockTimestamp) {
-              // subtraction overflow is desired
-              uint32 timeElapsed = blockTimestamp - blockTimestampLast;
-              // addition overflow is desired
-              // counterfactual
-              priceCumulative += uint(FixedPoint.fraction(reserve0, reserve1)._x) * timeElapsed;
-          }
+            priceCumulative = UniswapPair(pair).price1CumulativeLast();
+            // if time has elapsed since the last update on the pair, mock the accumulated price values
+            if (blockTimestampLast != blockTimestamp) {
+                // subtraction overflow is desired
+                uint32 timeElapsed = blockTimestamp - blockTimestampLast;
+                // addition overflow is desired
+                // counterfactual
+                priceCumulative += uint(FixedPoint.fraction(reserve0, reserve1)._x) * timeElapsed;
+            }
         }
-
     }
 }

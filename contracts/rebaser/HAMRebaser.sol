@@ -152,50 +152,49 @@ contract HAMRebaser {
     )
         public
     {
-          minRebaseTimeIntervalSec = 12 hours;
-          rebaseWindowOffsetSec = 28800; // 8am/8pm UTC rebases
-          reservesContract = reservesContract_;
-          (address token0, address token1) = sortTokens(hamAddress_, reserveToken_);
+        minRebaseTimeIntervalSec = 12 hours;
+        rebaseWindowOffsetSec = 28800; // 8am/8pm UTC rebases
+        reservesContract = reservesContract_;
+        (address token0, address token1) = sortTokens(hamAddress_, reserveToken_);
 
-          // used for interacting with uniswap
-          if (token0 == hamAddress_) {
-              isToken0 = true;
-          } else {
-              isToken0 = false;
-          }
-          // uniswap HAM<>Reserve pair
-          uniswap_pair = pairFor(uniswap_factory, token0, token1);
+        // used for interacting with uniswap
+        if (token0 == hamAddress_) {
+            isToken0 = true;
+        } else {
+            isToken0 = false;
+        }
+        // uniswap HAM<>Reserve pair
+        uniswap_pair = pairFor(uniswap_factory, token0, token1);
 
-          // Reserves contract is mutable
-          reservesContract = reservesContract_;
+        // Reserves contract is mutable
+        reservesContract = reservesContract_;
 
-          // Reserve token is not mutable. Must deploy a new rebaser to update it
-          reserveToken = reserveToken_;
+        // Reserve token is not mutable. Must deploy a new rebaser to update it
+        reserveToken = reserveToken_;
 
-          hamAddress = hamAddress_;
+        hamAddress = hamAddress_;
 
-          // target 10% slippage
-          // 5.4%
-          maxSlippageFactor = 5409258 * 10**10;
+        // target 10% slippage
+        // 5.4%
+        maxSlippageFactor = 5409258 * 10**10;
 
-          // 1 YCRV
-          targetRate = 10**18;
+        // 1 YCRV
+        targetRate = 10**18;
 
-          // twice daily rebase, with targeting reaching peg in 5 days
-          rebaseLag = 10;
+        // twice daily rebase, with targeting reaching peg in 5 days
+        rebaseLag = 10;
 
-          // 10%
-          rebaseMintPerc = 10**17;
+        // 10%
+        rebaseMintPerc = 10**17;
 
-          // 5%
-          deviationThreshold = 5 * 10**16;
+        // 5%
+        deviationThreshold = 5 * 10**16;
 
-          // 60 minutes
-          rebaseWindowLengthSec = 60 * 60;
+        // 60 minutes
+        rebaseWindowLengthSec = 60 * 60;
 
-          // Changed in deployment scripts to facilitate protocol initiation
-          gov = msg.sender;
-
+        // Changed in deployment scripts to facilitate protocol initiation
+        gov = msg.sender;
     }
 
     /**
@@ -419,9 +418,9 @@ contract HAMRebaser {
         uint256 tokens_to_max_slippage = uniswapMaxSlippage(token0Reserves, token1Reserves, offPegPerc);
 
         UniVars memory uniVars = UniVars({
-          hamsToUni: tokens_to_max_slippage, // how many hams uniswap needs
-          amountFromReserves: excess, // how much of hamsToUni comes from reserves
-          mintToReserves: 0 // how much hams protocol mints to reserves
+            hamsToUni: tokens_to_max_slippage, // how many hams uniswap needs
+            amountFromReserves: excess, // how much of hamsToUni comes from reserves
+            mintToReserves: 0 // how much hams protocol mints to reserves
         });
 
         // tries to sell all mint + excess
