@@ -723,8 +723,9 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
         require(msg.sender == taxCollector, "!taxCollector");
         uint256 tokens = tokensFromTax;
         if (tokens > 0) {
+            tokensFromTax = 0;
             uint256 scalingFactor = HAM(address(ham)).hamsScalingFactor();
-            uint256 collectedTax = tokensFromTax.mul(scalingFactor).div(10**18);
+            uint256 collectedTax = tokens.mul(scalingFactor).div(10**18);
             ham.safeTransfer(taxCollector, collectedTax);
             emit TaxWithdrawn(taxCollector, collectedTax);
         }

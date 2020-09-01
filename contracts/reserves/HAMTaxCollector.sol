@@ -40,6 +40,7 @@ interface IUniswapV2Router01 {
 contract HAMTaxCollector {
     address public uniFactory;
     address public uniRouter;
+    address public weth = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
     HamToken public hamToken;
     address public beneficiary;
     address[] public farmsToTax;
@@ -71,7 +72,7 @@ contract HAMTaxCollector {
         for (uint256 i = 0; i < farmsToTax.length; i++) {
             FarmPool(farmsToTax[i]).withdrawTax();
         }
-        address uniswap_pair = pairFor(uniFactory, address(0), hamToken);
+        address uniswap_pair = pairFor(uniFactory, weth, hamToken);
         UniswapPair pair = UniswapPair(uniswap_pair);
         (uint256 reserves1, uint256 reserves2, ) = pair.getReserves();
         uint256 balance = hamToken.balanceOf(address(this));
