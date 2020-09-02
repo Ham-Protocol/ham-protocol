@@ -1,4 +1,4 @@
-pragma solidity 0.5.17;
+pragma solidity ^0.5.0;
 
 import "../lib/IERC20.sol";
 import "../lib/SafeERC20.sol";
@@ -15,8 +15,6 @@ interface HamToken {
     function transferFrom(address from, address to, uint256 value) external returns(bool);
     function balanceOf(address who) external view returns(uint256);
 }
-
-pragma solidity >=0.6.2;
 
 interface IUniswapV2Router01 {
     function swapExactTokensForTokens(
@@ -40,7 +38,7 @@ interface IUniswapV2Router01 {
 contract HAMTaxCollector {
     address public uniFactory;
     address public uniRouter;
-    address public weth = 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2;
+    address public weth = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
     HamToken public hamToken;
     address public beneficiary;
     address[] public farmsToTax;
@@ -72,15 +70,15 @@ contract HAMTaxCollector {
         for (uint256 i = 0; i < farmsToTax.length; i++) {
             FarmPool(farmsToTax[i]).withdrawTax();
         }
-        address uniswap_pair = pairFor(uniFactory, weth, hamToken);
+        address uniswap_pair = UniswapV2Library.pairFor(uniFactory, weth, address(hamToken));
         UniswapPair pair = UniswapPair(uniswap_pair);
         (uint256 reserves1, uint256 reserves2, ) = pair.getReserves();
         uint256 balance = hamToken.balanceOf(address(this));
         uint256 amountOut = IUniswapV2Router01(uniRouter).getAmountOut(balance, reserves1, reserves2);
         address[] memory path = new address[](2);
-        path[0] = hamToken;
-        path[1] = address(0);
-        uint256[] amounts = IUniswapV2Router01(uniRouter).swapExactTokensForExactETH(balance, amountOut, path);
+        path[0] = address(hamToken);
+        path[1] = weth;
+        uint256[] memory amounts = IUniswapV2Router01(uniRouter).swapTokensForExactETH(balance, amountOut, path, beneficiary, block.timestamp);
         emit TaxesCollected(amounts[0], amounts[1]);
     }
 }
