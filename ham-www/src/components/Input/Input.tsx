@@ -27,10 +27,10 @@ const Input: React.FC<InputProps> = ({
 
 const StyledInputWrapper = styled.div`
   align-items: center;
-  background-color: ${props => props.theme.color[200]};
+  background-color: ${props => props.theme.color["buttonRegular"]};
   border-radius: ${props => props.theme.borderRadius}px;
-  box-shadow: inset 4px 4px 8px ${props => props.theme.color[300]},
-    inset -6px -6px 12px ${props => props.theme.color[100]};
+  box-shadow: inset 4px 4px 8px ${props => props.theme.color["shadow"]},
+    inset -6px -6px 12px ${props => props.theme.color["buttonHighlight"]};
   display: flex;
   height: 72px;
   padding: 0 ${props => props.theme.spacing[3]}px;
@@ -39,7 +39,7 @@ const StyledInputWrapper = styled.div`
 const StyledInput = styled.input`
   background: none;
   border: 0;
-  color: ${props => props.theme.color[600]};
+  color: ${props => props.theme.color["title"]};
   font-size: 18px;
   flex: 1;
   height: 56px;

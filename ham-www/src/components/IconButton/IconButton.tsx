@@ -26,10 +26,10 @@ interface StyledButtonProps {
 
 const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
-  background-color: ${props => props.theme.color[200]};
+  background-color: ${props => props.theme.color["buttonRegular"]};
   border: 0;
   border-radius: 28px;
-  color: ${props => !props.disabled ? props.theme.color[500] : props.theme.color[400]};
+  color: ${props => !props.disabled ? props.theme.color["textHighlight"] : props.theme.color["textRegular"]};
   cursor: pointer;
   display: flex;
   font-weight: 700;

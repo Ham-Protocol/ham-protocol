@@ -79,7 +79,7 @@ const StyledStat = styled.div`
 `
 
 const StyledValue = styled.span`
-  color: ${props => props.theme.color[600]};
+  color: ${props => props.theme.color["title"]};
   font-size: 36px;
   font-weight: 700;
 `
