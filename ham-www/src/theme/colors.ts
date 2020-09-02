@@ -17,7 +17,7 @@ export const pink = {
   "textRegular":  '#AA8592', //Link color and text color.
   "textHighlight":  '#80495D', //Cursor on links color.
   "title":  '#5B2639', //Title color.
-  'bg': '#fffafb',
+  'bg': '#fffefe',
   'card':  '#ffe6eb', // Card color.
   'fillBar': '#00D110',
   'hover':  '#fddce6', // On hover.
