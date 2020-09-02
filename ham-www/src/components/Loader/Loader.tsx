@@ -41,7 +41,7 @@ const StyledHam = styled.div`
 `
 
 const StyledText = styled.div`
-  color: ${props => props.theme.color[400]};
+  color: ${props => props.theme.color["textRegular"]};
 `
 
 export default Loader

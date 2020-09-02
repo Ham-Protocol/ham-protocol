@@ -29,11 +29,11 @@ const Button: React.FC<ButtonProps> = ({
   let buttonColor: string
   switch (variant) {
     case 'secondary':
-      buttonColor = color[500]
+      buttonColor = color["textHighlight"]
       break
     case 'default':
     default:
-      buttonColor = color[500]
+      buttonColor = color["textHighlight"]
   }
 
   let boxShadow: string
@@ -42,23 +42,23 @@ const Button: React.FC<ButtonProps> = ({
   let fontSize: number
   switch (size) {
     case 'sm':
-      boxShadow = `4px 4px 8px ${color[300]},
-        -8px -8px 16px ${color[100]}FF;`
+      boxShadow = `4px 4px 8px ${color["shadow"]},
+        -8px -8px 16px ${color["buttonHighlight"]}FF;`
       buttonPadding = spacing[3]
       buttonSize = 36
       fontSize = 14
       break
     case 'lg':
-      boxShadow = `6px 6px 12px ${color[300]},
-        -12px -12px 24px ${color[100]}ff;`
+      boxShadow = `6px 6px 12px ${color["shadow"]},
+        -12px -12px 24px ${color["buttonHighlight"]}ff;`
       buttonPadding = spacing[4]
       buttonSize = 72
       fontSize = 16
       break
     case 'md':
     default:
-      boxShadow = `6px 6px 12px ${color[300]},
-        -12px -12px 24px -2px ${color[100]}ff;`
+      boxShadow = `6px 6px 12px ${color["shadow"]},
+        -12px -12px 24px -2px ${color["buttonHighlight"]}ff;`
       buttonPadding = spacing[4]
       buttonSize = 56
       fontSize = 16
@@ -101,7 +101,7 @@ interface StyledButtonProps {
 
 const StyledButton = styled.button<StyledButtonProps>`
   align-items: center;
-  background-color: ${props => props.theme.color[200]};
+  background-color: ${props => props.theme.color["buttonRegular"]};
   border: 0;
   border-radius: 12px;
   color: ${props => !props.disabled ? props.color : `${props.color}55`};
