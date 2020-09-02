@@ -69,8 +69,8 @@ const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
 
   svg {
     height: auto;
-    padding: 2px 2px 2px 2px;
-    width: 2rem;
+    padding: 5px 2px 2px 2px;
+    width: 1.6rem;
     transition: all 0.25s linear;
 
     // Sun icon.
