@@ -51,17 +51,17 @@ describe("post-deployment", () => {
     });
 
     test("pool balances", async () => {
-      let ycrv_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.ycrv_pool.options.address).call();
+      let yycrv_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.yycrv_pool.options.address).call();
 
-      expect(ycrv_balance).toBe(ham.toBigN(1500000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
+      expect(yycrv_balance).toBe(ham.toBigN(1500000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
 
       let yfi_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.yfi_pool.options.address).call();
 
       expect(yfi_balance).toBe(ham.toBigN(250000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
 
-      let dai_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.dai_pool.options.address).call();
+      let bzrx_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.bzrx_pool.options.address).call();
 
-      expect(dai_balance).toBe(ham.toBigN(250000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
+      expect(bzrx_balance).toBe(ham.toBigN(250000).times(ham.toBigN(10**18)).times(ham.toBigN(1)).toString())
 
       let eth_balance = await ham.contracts.ham.methods.balanceOf(ham.contracts.eth_pool.options.address).call();
 
@@ -131,7 +131,7 @@ describe("post-deployment", () => {
     });
 
     test("incentives owner", async () => {
-      let owner = await ham.contracts.ycrv_pool.methods.owner().call();
+      let owner = await ham.contracts.yycrv_pool.methods.owner().call();
       expect(owner).toBe(ham.contracts.timelock.options.address)
     });
 

@@ -20,9 +20,9 @@ export class Account {
     return this.walletInfo["DAI"]
   }
 
-  async getYCRVWalletBalance() {
-    this.walletInfo["YCRV"] = await this.contracts.ycrv.methods.balanceOf(this.accountInfo).call();
-    return this.walletInfo["YCRV"]
+  async getYYCRVWalletBalance() {
+    this.walletInfo["YYCRV"] = await this.contracts.yycrv.methods.balanceOf(this.accountInfo).call();
+    return this.walletInfo["YYCRV"]
   }
 
   async getYFIWalletBalance() {

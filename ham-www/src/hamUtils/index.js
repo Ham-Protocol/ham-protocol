@@ -124,7 +124,7 @@ export const getCirculatingSupply = async (ham) => {
     return 0;
   }
   let hamsDistributed = ham.toBigN(8 * timePassed * 250000 / 625000); //hams from first 8 pools
-  let starttimePool2 = ham.toBigN(await ham.contracts.ycrv_pool.methods.starttime().call()).toNumber();
+  let starttimePool2 = ham.toBigN(await ham.contracts.yycrv_ham_uni_lp_pool.methods.starttime().call()).toNumber();
   timePassed = now["timestamp"] - starttime;
   let pool2Hams = ham.toBigN(timePassed * 1500000 / 625000); // hams from second pool. note: just accounts for first week
   let circulating = pool2Hams.plus(hamsDistributed).times(scalingFactor).div(10**36).toFixed(2)

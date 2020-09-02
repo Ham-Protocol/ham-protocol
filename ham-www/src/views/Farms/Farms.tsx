@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 import { useWallet } from 'use-wallet'
 
-import butcher from '../../assets/img/butcher.png'
+import Butcher from '../../assets/svg/Butcher.svg'
 
 import Button from '../../components/Button'
 
@@ -34,7 +34,7 @@ const Farms: React.FC<FarmsProps> = ({ theme, toggleTheme, wrappedStatus, toggle
         <>
           <Route exact path={path}>
             <PageHeader
-              icon={<img src={butcher} height="96" />}
+              icon={<img src={Butcher} height="96" />}
               subtitle="Earn HAM tokens by providing liquidity."
               title="Select a farm."
             />
