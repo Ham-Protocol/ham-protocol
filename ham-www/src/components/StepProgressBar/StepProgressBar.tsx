@@ -77,7 +77,7 @@ const StyledProgressBarContainer = styled.div`
 `
 
 const StyledSubtitle = styled.h3`
-  color: ${props => props.theme.color[500]};
+  color: ${props => props.theme.color["textHighlight"]};
   font-size: 18px;
   font-weight: 400;
   text-align: center;

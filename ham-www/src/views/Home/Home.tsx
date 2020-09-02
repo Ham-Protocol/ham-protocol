@@ -80,7 +80,7 @@ const StyledSpacer = styled.div`
 const StyledLink = styled.a`
   font-weight: 700l
   text-decoration: none;
-  color: ${props => props.theme.color[500]};
+  color: ${props => props.theme.color["textHighlight"]};
 `
 
 export default Home

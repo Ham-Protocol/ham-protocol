@@ -11,13 +11,12 @@ export const red = {
 }
 
 export const pink = {
-  100:  '#fedde7', //Brightness above buttons.
-  200:  '#fdd7e3', //Button color.
-  300:  '#fcb4ca', //Shadow beneath buttons.
-  400:  '#AA8592', //Link color and text color.
-  500:  '#80495D', //Cursor on links color.
-  600:  '#5B2639', //Title color.
-  800:  '#2D121B',
+  "buttonHighlight":  '#fedde7', //Brightness above buttons.
+  "buttonRegular":  '#fdd7e3', //Button color.
+  "shadow":  '#fcb4ca', //Shadow beneath buttons.
+  "textRegular":  '#AA8592', //Link color and text color.
+  "textHighlight":  '#80495D', //Cursor on links color.
+  "title":  '#5B2639', //Title color.
   'bg': '#ffffff',
   'card':  '#fdcddc', // Card color.
   'fillBar': '#00D110',
@@ -26,13 +25,12 @@ export const pink = {
 }
 
 export const dark = {
-  100:  '#2a2f70', //Brightness above buttons.
-  200:  '#3e4277', //Button color.
-  300:  '#00061d', //Shadow beneath buttons.
-  400:  '#b0b0b0', //Link color and text color.
-  500:  '#dddddd', //Cursor on links.
-  600:  '#dddddd', //Title color.
-  800:  '#dddddd',
+  "buttonHighlight":  '#2a2f70', //Brightness above buttons.
+  "buttonRegular":  '#3e4277', //Button color.
+  "shadow":  '#00061d', //Shadow beneath buttons.
+  "textRegular":  '#b0b0b0', //Link color and text color.
+  "textHighlight":  '#dddddd', //Cursor on links.
+  "title":  '#dddddd', //Title color.
   'bg': '#161a55',
   'card':  '#292d68', // Card color.
   'fillBar': '#00D110',
