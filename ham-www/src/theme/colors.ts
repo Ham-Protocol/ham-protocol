@@ -11,17 +11,17 @@ export const red = {
 }
 
 export const pink = {
-  "buttonHighlight":  '#fedde7', //Brightness above buttons.
-  "buttonRegular":  '#fdd7e3', //Button color.
+  "buttonHighlight":  '#ffe8ec', //Brightness above buttons.
+  "buttonRegular":  '#fff0f3', //Button color.
   "shadow":  '#fcb4ca', //Shadow beneath buttons.
   "textRegular":  '#AA8592', //Link color and text color.
   "textHighlight":  '#80495D', //Cursor on links color.
   "title":  '#5B2639', //Title color.
-  'bg': '#ffffff',
-  'card':  '#fdcddc', // Card color.
+  'bg': '#fffafb',
+  'card':  '#ffe6eb', // Card color.
   'fillBar': '#00D110',
   'hover':  '#fddce6', // On hover.
-  'themeToggleGradient': 'linear-gradient(#fedde7, #fcb4ca)',
+  'themeToggleGradient': 'linear-gradient(#fff0f3, #ffe6eb)',
 }
 
 export const dark = {
