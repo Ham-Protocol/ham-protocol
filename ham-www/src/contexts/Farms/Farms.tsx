@@ -15,16 +15,20 @@ import HAM_LINK_Icon from '../../assets/svg/HAM_LINK_Icon.svg'
 import HAM_SNX_Icon from '../../assets/svg/HAM_SNX_Icon.svg'
 import HAM_WETH_Icon from '../../assets/svg/HAM_WETH_Icon.svg'
 import HAM_YYCRV_Icon from '../../assets/svg/HAM_YYCRV_Icon.svg'
-import  HAM_YFI_Icon from '../../assets/svg/HAM_YFI_Icon.svg'
+import HAM_YFI_Icon from '../../assets/svg/HAM_YFI_Icon.svg'
+import Eth from '../../assets/svg/Eth.svg'
 
 const NAME_FOR_POOL: { [key: string]: string } = {
   yfi_pool: 'Waifu Rough Cuts',
   eth_pool: 'Bacon Wrapped ETH',
-  yycrv_pool: 'The HAMburgery',
+  yycrv_ham_pool: 'The HAMburgery',
   link_pool: 'Sausage Links',
   lend_pool: 'Lend Larder',
   snx_pool: 'Spartan Smokery',
   bzrx_pool: 'Bzx Butchers',
+  yycrv_pool: 'Curved Chops',
+  eth_ham_pool: 'Ham/ETH LP',
+
 }
 
 const ICON_FOR_POOL: { [key: string]: JSX.Element} = {
@@ -35,6 +39,9 @@ const ICON_FOR_POOL: { [key: string]: JSX.Element} = {
   snx_pool: <img src={HAM_SNX_Icon} height="49"></img>,
   bzrx_pool: <img src={HAM_BZRX_Icon} height="49"></img>,
   yycrv_pool: <img src={HAM_YYCRV_Icon} height="49"></img>,
+  yycrv_ham_pool: <img src={HAM_YYCRV_Icon} height="49"></img>,
+  eth_ham_pool: <img src={Eth} height="49"></img>,
+
 }
 
 const SORT_FOR_POOL: { [key: string]: number } = {
@@ -45,6 +52,8 @@ const SORT_FOR_POOL: { [key: string]: number } = {
   link_pool: 4,
   lend_pool: 5,
   bzrx_pool: 6,//swapped mkr for bzrx
+  eth_ham_pool: 7,
+  yycrv_ham_pool: 8, 
 }
 
 const Farms: React.FC = ({ children }) => {
@@ -66,9 +75,9 @@ const Farms: React.FC = ({ children }) => {
         tokenKey = 'weth'
       } else if (tokenKey === 'ampl') {
         tokenKey = 'ampl_eth_uni_lp' //I have kept this just in case.
-      } else if (tokenKey === 'yycrv') {
+      } else if (tokenKey === 'yycrv_ham_pool') {
         tokenKey = 'yycrv_ham_uni_lp'
-      } else if (tokenKey === 'eth'){
+      } else if (tokenKey === 'eth_ham_pool'){
         tokenKey = 'eth_ham_uni_lp'
       }
 
