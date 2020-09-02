@@ -49,8 +49,8 @@ export class Contracts {
 
     this.yfi_pool = new this.web3.eth.Contract(YFIPoolJson.abi);
     this.eth_pool = new this.web3.eth.Contract(WETHPoolJson.abi);
-    this.yycrv_ham_pool = new this.web3.eth.Contract(IncJson.abi);
-    this.eth_ham_pool = new this.web3.eth.Contract(IncJson.abi);
+    this.yycrv_ham_uni_lp_pool = new this.web3.eth.Contract(IncJson.abi);
+    this.eth_ham_uni_lp_pool = new this.web3.eth.Contract(IncJson.abi);
 
     this.yycrv_pool = new this.web3.eth.Contract(YYCRVPoolJson.abi);
     this.link_pool = new this.web3.eth.Contract(LINKPoolJson.abi);
@@ -66,8 +66,7 @@ export class Contracts {
     this.ham_eth_uni_lp = new this.web3.eth.Contract(ERC20Json.abi);
 
     this.erc20 = new this.web3.eth.Contract(ERC20Json.abi);
-    this.pool = new this.web3.eth.Contract(LENDPoolJson.abi); //why is this.pool associated with lendpoolJson? 
-
+    this.pool = new this.web3.eth.Contract(LENDPoolJson.abi); 
 
 
     this.rebaser = new this.web3.eth.Contract(HAMRebaserJson.abi);
@@ -95,8 +94,8 @@ export class Contracts {
       { contract: this.reserves, json: HAMReservesJson },
       { contract: this.gov, json: HAMGovJson },
       { contract: this.timelock, json: HAMTimelockJson },
-      { contract: this.yycrv_ham_pool, json: IncJson },
-      { contract: this.eth_ham_pool, json: IncJson },
+      { contract: this.yycrv_ham_uni_lp_pool, json: IncJson },
+      { contract: this.eth_ham_uni_lp_pool, json: IncJson },
       { contract: this.yycrv_pool, json: YYCRVPoolJson },
       { contract: this.eth_pool, json: WETHPoolJson },
       { contract: this.yfi_pool, json: YFIPoolJson },

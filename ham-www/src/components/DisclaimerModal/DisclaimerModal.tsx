@@ -32,7 +32,7 @@ const DisclaimerModal: React.FC<DisclaimerModal> = ({ onConfirm, onDismiss }) =>
       return (
         <div>
           <p>Attention HAM Uniswap LPs</p>
-          <p>The only Uniswap pool that is compatible with HAM is HAM/yCRV (Curve yPool tokens)</p>
+          <p>The only Uniswap pool that is compatible with HAM is HAM/yyCRV and HAM/Eth</p>
           <p>Providing liquidity for other Uniswap pools is dangerous</p>
           <p>You will LOSE your share of rebases</p>
         </div>

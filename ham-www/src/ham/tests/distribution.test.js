@@ -36,7 +36,7 @@ describe("Distribution", () => {
   let weth_account = "0xf9e11762d522ea29dd78178c9baf83b7b093aacc";
   let lend_account = "0x3b08aa814bea604917418a9f0907e7fc430e742c";
   let link_account = "0xbe6977e08d4479c0a6777539ae0e8fa27be4e9d6";
-  let bzrx_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //Dai replacing mkr. 
+  let bzrx_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //bzrx replacing mkr. 
   let snx_account = "0xb696d629cd0a00560151a434f6b4478ad6c228d7";
   let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606"; //I need to know if these addresses are real accounts being used or if they are generated for the test, bzrx is using mkrs old address as it's own (please delete this comment once solved).
   beforeAll(async () => {
@@ -1081,7 +1081,7 @@ describe("Distribution", () => {
   });
 
   describe("bzrx", () => {
-    test("rewards from pool 1s mkr", async () => {
+    test("rewards from pool 1s bzrx", async () => {
         await ham.testing.resetEVM("0x2");
         await ham.web3.eth.sendTransaction({from: user2, to: bzrx_account, value : ham.toBigN(100000*10**18).toString()});
         let eth_bal = await ham.web3.eth.getBalance(bzrx_account);
@@ -1148,6 +1148,74 @@ describe("Distribution", () => {
         expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
     });
   }); //bzrx replacing mkr
+  describe("yycrv", () => {
+    test("rewards from pool 1s yycrv", async () => {
+        await ham.testing.resetEVM("0x2");
+        await ham.web3.eth.sendTransaction({from: user2, to: yycrv_account, value : ham.toBigN(100000*10**18).toString()});
+        let eth_bal = await ham.web3.eth.getBalance(yycrv_account);
+
+        await ham.contracts.yycrv.methods.transfer(user, "10000000000000000000000").send({
+          from: yycrv_account
+        });
+
+        let a = await ham.web3.eth.getBlock('latest');
+
+        let starttime = await ham.contracts.yycrv_pool.methods.starttime().call();
+
+        let waittime = starttime - a["timestamp"];
+        if (waittime > 0) {
+          await ham.testing.increaseTime(waittime);
+        } else {
+          console.log("late entry", waittime)
+        }
+
+        await ham.contracts.yycrv.methods.approve(ham.contracts.yycrv_pool.options.address, -1).send({from: user});
+
+        await ham.contracts.yycrv_pool.methods.stake(
+          "10000000000000000000000"
+        ).send({
+          from: user,
+          gas: 300000
+        });
+
+        let earned = await ham.contracts.yycrv_pool.methods.earned(user).call();
+
+        let rr = await ham.contracts.yycrv_pool.methods.rewardRate().call();
+
+        let rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
+        //console.log(earned, rr, rpt);
+        await ham.testing.increaseTime(625000 + 100);
+        // await ham.testing.mineBlock();
+
+        earned = await ham.contracts.yycrv_pool.methods.earned(user).call();
+
+        rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
+
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
+
+        //console.log(earned, ysf, rpt);
+
+
+        let ham_bal = await ham.contracts.ham.methods.balanceOf(user).call()
+
+        let j = await ham.contracts.yycrv_pool.methods.exit().send({
+          from: user,
+          gas: 300000
+        });
+
+        //console.log(j.events)
+
+        let weth_bal = await ham.contracts.yycrv.methods.balanceOf(user).call()
+
+        expect(weth_bal).toBe("10000000000000000000000")
+
+
+        let ham_bal2 = await ham.contracts.ham.methods.balanceOf(user).call()
+
+        let two_fity = ham.toBigN(250).times(ham.toBigN(10**3)).times(ham.toBigN(10**18))
+        expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
+    });
+  });
 
   describe("snx", () => {
     test("rewards from pool 1s snx", async () => {
