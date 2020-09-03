@@ -70,7 +70,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   }
 
   useEffect(() => {
-    if (farm && farm.id === 'yycrv_ham_uni_lp' || 'eth_ham_uni_lp'  ) {
+    if (farm && (farm.id == 'ham_yycrv_bpt' || farm.id == 'eth_ham_bpt' || farm.id == 'eth_ham_uni_lp')) {
+      console.log(farm.id)
       getStartTime()
     }
   }, [farm, getStartTime])

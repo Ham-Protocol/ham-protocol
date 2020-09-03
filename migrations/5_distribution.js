@@ -1,26 +1,29 @@
+require('dotenv-flow').config();
 // ============ Contracts ============
 
 // List of tokens for farming.
 let tokens = [
   "ETH",
-  "AMPL",
   "YFI",
   "LINK",
-  "MKR",
   "LEND",
-  "COMP",
+  "BZRX",
   "SNX",
+  "YYCRV",
+  "ETHBPT",
+  "YYCRVBPT",
 ]
 
 let amountsPerPool = {
   "ETH": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
-  "AMPL": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "YFI": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "LINK": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
-  "MKR": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "LEND": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
-  "COMP": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "BZRX": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "SNX": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "YYCRV": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "ETHBPT": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "YYCRVBPT": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
 }
 
 let contractName = (name) => `HAM${name}Pool`
@@ -61,6 +64,10 @@ module.exports = migration;
 
 async function deployDistribution(deployer, network, accounts) {
   console.log(network)
+  if (network == "goerli" || network == "mainnet") {
+    accounts[0] = process.env.DEPLOYER_ACCOUNT
+  }
+
   let ham = await HAMProxy.deployed();
   let yReserves = await HAMReserves.deployed()
   let yRebaser = await HAMRebaser.deployed()
@@ -71,7 +78,6 @@ async function deployDistribution(deployer, network, accounts) {
       await deployer.deploy(contractArtifacts[i]);
     }
     await deployer.deploy(HAMIncentivizer);
-
 
     let poolContracts = {}
     for (let i = 0; i < contractArtifacts.length; i++) {
@@ -109,7 +115,7 @@ async function deployDistribution(deployer, network, accounts) {
     }
     await ycrv_pool.methods.setRewardDistribution(Timelock.address).send({from: accounts[0], gas: 100000})
 
-
+    console.log("setting ownership to timelock")
     // Set ownership to timelock.
     for (let i = 0; i < tokens.length; i++) {
       await poolContracts[tokens[i]].methods.transferOwnership(Timelock.address).send({from: accounts[0], gas: 100000})
@@ -117,37 +123,17 @@ async function deployDistribution(deployer, network, accounts) {
     await ycrv_pool.methods.transferOwnership(Timelock.address).send({from: accounts[0], gas: 100000})
   }
 
+  console.log("set all gov to timelock")
   await Promise.all([
     ham._setPendingGov(Timelock.address),
     yReserves._setPendingGov(Timelock.address),
     yRebaser._setPendingGov(Timelock.address),
   ]);
 
-  await Promise.all([
-      tl.executeTransaction(
-        HAMProxy.address,
-        0,
-        "_acceptGov()",
-        "0x",
-        0
-      ),
+  await tl.executeTransaction(HAMProxy.address, 0, "_acceptGov()", "0x", 0);
+  await tl.executeTransaction(HAMReserves.address, 0, "_acceptGov()", "0x", 0);
+  await tl.executeTransaction(HAMRebaser.address, 0, "_acceptGov()", "0x", 0);
 
-      tl.executeTransaction(
-        HAMReserves.address,
-        0,
-        "_acceptGov()",
-        "0x",
-        0
-      ),
-
-      tl.executeTransaction(
-        HAMRebaser.address,
-        0,
-        "_acceptGov()",
-        "0x",
-        0
-      ),
-  ]);
   await tl.setPendingAdmin(Gov.address);
   await gov.__acceptAdmin();
   await gov.__abdicate();
