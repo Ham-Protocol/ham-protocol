@@ -4,24 +4,26 @@ require('dotenv-flow').config();
 // List of tokens for farming.
 let tokens = [
   "ETH",
-  "AMPL",
   "YFI",
   "LINK",
-  "MKR",
   "LEND",
   "BZRX",
   "SNX",
+  "YYCRV",
+  "ETHBPT",
+  "YYCRVBPT",
 ]
 
 let amountsPerPool = {
   "ETH": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
-  "AMPL": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "YFI": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "LINK": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
-  "MKR": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "LEND": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "BZRX": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
   "SNX": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "YYCRV": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "ETHBPT": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
+  "YYCRVBPT": web3.utils.toBN(250000).mul(web3.utils.toBN(10**18)),
 }
 
 let contractName = (name) => `HAM${name}Pool`
@@ -65,6 +67,7 @@ async function deployDistribution(deployer, network, accounts) {
   if (network == "goerli" || network == "mainnet") {
     accounts[0] = process.env.DEPLOYER_ACCOUNT
   }
+
   let ham = await HAMProxy.deployed();
   let yReserves = await HAMReserves.deployed()
   let yRebaser = await HAMRebaser.deployed()
@@ -75,7 +78,6 @@ async function deployDistribution(deployer, network, accounts) {
       await deployer.deploy(contractArtifacts[i]);
     }
     await deployer.deploy(HAMIncentivizer);
-
 
     let poolContracts = {}
     for (let i = 0; i < contractArtifacts.length; i++) {

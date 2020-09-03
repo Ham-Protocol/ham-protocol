@@ -58,7 +58,7 @@ module.exports = {
     goerli: {
       network_id: '5',
       provider: () => new HDWalletProvider(
-          [process.env.DEPLOYER_PRIVATE_KEY],
+          process.env.DEPLOYER_PRIVATE_KEY,
           process.env.GOERLI_API,
           0,
           1,
