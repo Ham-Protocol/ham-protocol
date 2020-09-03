@@ -1,0 +1,1 @@
+{"abi": [{"constant": false, "inputs": [], "name": "withdrawTax", "outputs": [], "payable": false, "stateMutability": "nonpayable", "type": "function"}], "networks": {}}

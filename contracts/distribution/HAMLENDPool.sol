@@ -592,8 +592,6 @@ interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
 
-
-
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
@@ -633,6 +631,8 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
     uint256 public rewardRate = 0;
     uint256 public lastUpdateTime;
     uint256 public rewardPerTokenStored;
+    uint256 public tokensFromTax;
+    address public taxCollector;
     mapping(address => uint256) public userRewardPerTokenPaid;
     mapping(address => uint256) public rewards;
 
@@ -640,6 +640,7 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
     event Staked(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
+    event TaxWithdrawn(address indexed beneficiary, uint256 reward);
 
     modifier checkStart() {
         require(block.timestamp >= starttime,"not start");
@@ -654,6 +655,11 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
             userRewardPerTokenPaid[account] = rewardPerTokenStored;
         }
         _;
+    }
+
+    function setTaxCollector(address newCollector) external onlyOwner {
+        require(newCollector != address(0x0), "!nonzero");
+        taxCollector = newCollector;
     }
 
     function lastTimeRewardApplicable() public view returns (uint256) {
@@ -704,10 +710,24 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
+            uint256 tax = reward.div(100);
+            tokensFromTax = tokensFromTax.add(tax);
             uint256 scalingFactor = HAM(address(ham)).hamsScalingFactor();
-            uint256 trueReward = reward.mul(scalingFactor).div(10**18);
+            uint256 trueReward = reward.sub(tax).mul(scalingFactor).div(10**18);
             ham.safeTransfer(msg.sender, trueReward);
             emit RewardPaid(msg.sender, trueReward);
+        }
+    }
+
+    function withdrawTax() public checkStart {
+        require(msg.sender == taxCollector, "!taxCollector");
+        uint256 tokens = tokensFromTax;
+        if (tokens > 0) {
+            tokensFromTax = 0;
+            uint256 scalingFactor = HAM(address(ham)).hamsScalingFactor();
+            uint256 collectedTax = tokens.mul(scalingFactor).div(10**18);
+            ham.safeTransfer(taxCollector, collectedTax);
+            emit TaxWithdrawn(taxCollector, collectedTax);
         }
     }
 
@@ -717,21 +737,21 @@ contract HAMLENDPool is LPTokenWrapper, IRewardDistributionRecipient {
         updateReward(address(0))
     {
         if (block.timestamp > starttime) {
-          if (block.timestamp >= periodFinish) {
-              rewardRate = reward.div(DURATION);
-          } else {
-              uint256 remaining = periodFinish.sub(block.timestamp);
-              uint256 leftover = remaining.mul(rewardRate);
-              rewardRate = reward.add(leftover).div(DURATION);
-          }
-          lastUpdateTime = block.timestamp;
-          periodFinish = block.timestamp.add(DURATION);
-          emit RewardAdded(reward);
+            if (block.timestamp >= periodFinish) {
+                rewardRate = reward.div(DURATION);
+            } else {
+                uint256 remaining = periodFinish.sub(block.timestamp);
+                uint256 leftover = remaining.mul(rewardRate);
+                rewardRate = reward.add(leftover).div(DURATION);
+            }
+            lastUpdateTime = block.timestamp;
+            periodFinish = block.timestamp.add(DURATION);
+            emit RewardAdded(reward);
         } else {
-          rewardRate = reward.div(DURATION);
-          lastUpdateTime = starttime;
-          periodFinish = starttime.add(DURATION);
-          emit RewardAdded(reward);
+            rewardRate = reward.div(DURATION);
+            lastUpdateTime = starttime;
+            periodFinish = starttime.add(DURATION);
+            emit RewardAdded(reward);
         }
     }
 }
