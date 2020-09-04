@@ -17,7 +17,7 @@ const WrappedStatusToggle: React.FC<WrappedStatusToggleProps> = ({ wrappedStatus
   const { color, spacing, gradient } = useContext(ThemeContext)
 
   let buttonColor: string = color[500]
-  let boxShadow: string = `4px 4px 8px ${color[300]}, -8px -8px 16px ${color[100]}FF;`
+  let boxShadow: string = `4px 4px 8px ${color["shadow"]}, -8px -8px 16px ${color["buttonHighlight"]}FF;`
   let buttonSize: number = 72
   let buttonPadding: number = 10
   let fontSize: number = 20
@@ -54,7 +54,7 @@ interface StyledWrappedStatusToggleProps {
 
 const StyledWrappedStatusToggle = styled.button<StyledWrappedStatusToggleProps>`
   align-items: center;
-  background: ${props => props.theme.color[200]};
+  background: ${props => props.theme.color["buttonRegular"]};
   border: 0;
   border-radius: 12px;
   color: ${props => props.color};

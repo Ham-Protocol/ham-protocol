@@ -34,15 +34,6 @@ const AccountModal: React.FC<ModalProps> = ({ onDismiss }) => {
           <StyledValue>{displayBalance}</StyledValue>
           <Label text="HAM Balance" />
         </StyledBalance>
-        <StyledBalanceActions>
-          <IconButton>
-            <RemoveIcon />
-          </IconButton>
-          <StyledSpacer />
-          <IconButton>
-            <AddIcon />
-          </IconButton>
-        </StyledBalanceActions>
       </StyledBalanceWrapper>
 
       <StyledSpacer />
@@ -66,7 +57,7 @@ const StyledSpacer = styled.div`
 `
 
 const StyledValue = styled.div`
-  color: ${props => props.theme.color[600]};
+  color: ${props => props.theme.color["title"]};
   font-size: 36px;
   font-weight: 700;
 `

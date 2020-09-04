@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import butcher from '../../assets/img/butcher.png'
+import Butcher from '../../assets/svg/Butcher.svg'
 
 const Logo: React.FC = () => {
   return (
     <StyledLogo>
-      <img src={butcher} height="32" style={{ marginTop: -4 }} />
+      <img src={Butcher} height="32" style={{ marginTop: -4 }} />
       <StyledText>HAM Harvester</StyledText>
     </StyledLogo>
   )
@@ -18,7 +18,7 @@ const StyledLogo = styled.div`
 `
 
 const StyledText = styled.span`
-  color: ${props => props.theme.color[600]};
+  color: ${props => props.theme.color["title"]};
   font-size: 18px;
   font-weight: 700;
   margin-left: ${props => props.theme.spacing[2]}px;

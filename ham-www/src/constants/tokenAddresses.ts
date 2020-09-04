@@ -1,1 +1,1 @@
-export const ham = '0x0e2298e3b3390e3b945a5456fbf59ecc3f55da16'
+export const ham = '0xed3f9acd69a91654a68e9d64b0d1525988133de4'

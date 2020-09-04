@@ -18,9 +18,12 @@ import UNIRouterJson from './uniR.json';
 import WETHPoolJson from '../clean_build/contracts/HAMETHPool.json';
 import YFIPoolJson from '../clean_build/contracts/HAMYFIPool.json';
 import LENDPoolJson from '../clean_build/contracts/HAMLENDPool.json';
-import DAIPoolJson from '../clean_build/contracts/HAMDAIPool.json';
+import BZRXPoolJson from '../clean_build/contracts/HAMBZRXPool.json';
 import SNXPoolJson from '../clean_build/contracts/HAMSNXPool.json';
 import LINKPoolJson from '../clean_build/contracts/HAMLINKPool.json';
+import YYCRVPoolJson from '../clean_build/contracts/HAMYYCRVPool.json';
+import HAMYYCRVBPTPoolJson from '../clean_build/contracts/HAMYYCRVBPTPool.json';
+import HAMETHBPTPoolJson from '../clean_build/contracts/HAMETHBPTPool.json';
 
 import IncJson from '../clean_build/contracts/HAMIncentivizer.json';
 
@@ -41,28 +44,30 @@ export class Contracts {
     this.uni_pair = new this.web3.eth.Contract(UNIPairJson);
     this.uni_router = new this.web3.eth.Contract(UNIRouterJson);
     this.uni_fact = new this.web3.eth.Contract(UNIFactJson);
-    this.yfi = new this.web3.eth.Contract(ERC20Json.abi);
-    this.ycrv = new this.web3.eth.Contract(ERC20Json.abi);
     this.ham = new this.web3.eth.Contract(HAMJson.abi);
 
-    this.yfi_pool = new this.web3.eth.Contract(YFIPoolJson.abi);
-    this.eth_pool = new this.web3.eth.Contract(WETHPoolJson.abi);
-    this.ycrv_pool = new this.web3.eth.Contract(IncJson.abi);
-
-    this.link_pool = new this.web3.eth.Contract(LINKPoolJson.abi);
-    this.lend_pool = new this.web3.eth.Contract(LENDPoolJson.abi);
-    this.snx_pool = new this.web3.eth.Contract(SNXPoolJson.abi);
-    this.dai_pool = new this.web3.eth.Contract(DAIPoolJson.abi);
-
+    this.yfi = new this.web3.eth.Contract(ERC20Json.abi);
+    this.yycrv = new this.web3.eth.Contract(ERC20Json.abi);
+    this.eth = new this.web3.eth.Contract(ERC20Json.abi);
     this.link = new this.web3.eth.Contract(ERC20Json.abi);
     this.lend = new this.web3.eth.Contract(ERC20Json.abi);
     this.snx = new this.web3.eth.Contract(ERC20Json.abi);
-    this.dai = new this.web3.eth.Contract(ERC20Json.abi);
-    this.ham_ycrv_uni_lp = new this.web3.eth.Contract(ERC20Json.abi);
+    this.bzrx = new this.web3.eth.Contract(ERC20Json.abi);
+    this.ham_yycrv_bpt = new this.web3.eth.Contract(ERC20Json.abi);
+    this.ham_eth_bpt = new this.web3.eth.Contract(ERC20Json.abi);
+
+    this.yfi_pool = new this.web3.eth.Contract(YFIPoolJson.abi);
+    this.eth_pool = new this.web3.eth.Contract(WETHPoolJson.abi);
+    this.ham_yycrv_bpt_pool = new this.web3.eth.Contract(HAMYYCRVBPTPoolJson.abi);
+    this.eth_ham_bpt_pool = new this.web3.eth.Contract(HAMETHBPTPoolJson.abi);
+    this.yycrv_pool = new this.web3.eth.Contract(YYCRVPoolJson.abi);
+    this.link_pool = new this.web3.eth.Contract(LINKPoolJson.abi);
+    this.lend_pool = new this.web3.eth.Contract(LENDPoolJson.abi);
+    this.snx_pool = new this.web3.eth.Contract(SNXPoolJson.abi);
+    this.bzrx_pool = new this.web3.eth.Contract(BZRXPoolJson.abi);
 
     this.erc20 = new this.web3.eth.Contract(ERC20Json.abi);
-    this.pool = new this.web3.eth.Contract(LENDPoolJson.abi); //why is this.pool associated with lendpoolJson? 
-
+    this.pool = new this.web3.eth.Contract(LENDPoolJson.abi); 
 
 
     this.rebaser = new this.web3.eth.Contract(HAMRebaserJson.abi);
@@ -90,11 +95,13 @@ export class Contracts {
       { contract: this.reserves, json: HAMReservesJson },
       { contract: this.gov, json: HAMGovJson },
       { contract: this.timelock, json: HAMTimelockJson },
-      { contract: this.ycrv_pool, json: IncJson },
+      { contract: this.ham_yycrv_bpt_pool, json: HAMYYCRVBPTPoolJson },
+      { contract: this.eth_ham_bpt_pool, json: HAMETHBPTPoolJson },
+      { contract: this.yycrv_pool, json: YYCRVPoolJson },
       { contract: this.eth_pool, json: WETHPoolJson },
       { contract: this.yfi_pool, json: YFIPoolJson },
       { contract: this.snx_pool, json: SNXPoolJson },
-      { contract: this.dai_pool, json: DAIPoolJson },
+      { contract: this.bzrx_pool, json: BZRXPoolJson },
       { contract: this.lend_pool, json: LENDPoolJson },
       { contract: this.link_pool, json: LINKPoolJson },
     ]
@@ -107,15 +114,16 @@ export class Contracts {
       ),
     );
     this.yfi.options.address = addressMap["YFI"];
-    this.ycrv.options.address = addressMap["YCRV"];
+    this.yycrv.options.address = addressMap["YYCRV"];
     this.weth.options.address = addressMap["WETH"];
     this.snx.options.address = addressMap["SNX"];
     this.link.options.address = addressMap["LINK"];
     this.lend.options.address = addressMap["LEND"];
-    this.dai.options.address = addressMap["DAI"];
+    this.bzrx.options.address = addressMap["BZRX"];
     this.uni_fact.options.address = addressMap["uniswapFactoryV2"];
     this.uni_router.options.address = addressMap["UNIRouter"];
-    this.ham_ycrv_uni_lp.options.address = addressMap["HAMYCRV"];
+    this.ham_yycrv_bpt.options.address = addressMap["HAMYYCRV"];
+    this.ham_eth_bpt.options.address = addressMap["HAMETH"];
 
     this.pools = [
       {"tokenAddr": this.yfi.options.address, "poolAddr": this.yfi_pool.options.address},
@@ -123,7 +131,10 @@ export class Contracts {
       {"tokenAddr": this.weth.options.address, "poolAddr": this.eth_pool.options.address},
       {"tokenAddr": this.link.options.address, "poolAddr": this.link_pool.options.address},
       {"tokenAddr": this.lend.options.address, "poolAddr": this.lend_pool.options.address},
-      {"tokenAddr": this.dai.options.address, "poolAddr": this.dai_pool.options.address},
+      {"tokenAddr": this.bzrx.options.address, "poolAddr": this.bzrx_pool.options.address},
+      {"tokenAddr": this.yycrv.options.address, "poolAddr": this.yycrv_pool.options.address},
+      {"tokenAddr": this.ham_eth_bpt.options.address, "poolAddr": this.ham_eth_bpt.options.address},
+      {"tokenAddr": this.ham_yycrv_bpt.options.address, "poolAddr": this.ham_yycrv_bpt.options.address},
     ]
   }
 
@@ -131,7 +142,8 @@ export class Contracts {
     account
   ) {
     this.yfi.options.from = account;
-    this.ycrv.options.from = account;
+    this.yycrv.options.from = account;
+    this.eth.options.from = account;
     this.ham.options.from = account;
     this.weth.options.from = account;
   }
@@ -312,10 +324,11 @@ export class Contracts {
   ){
     contract.setProvider(provider);
     try {
-      contract.options.address = contractJson.networks[networkId]
-        && contractJson.networks[networkId].address;
+      if (contractJson.networks[networkId]) {
+        contract.options.address = contractJson.networks[networkId].address;
+      }
     } catch (error) {
-      // console.log(error)
+      console.log(error)
     }
   }
 }

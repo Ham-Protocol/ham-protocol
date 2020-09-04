@@ -16,7 +16,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ theme, toggleTheme }) => {
   const { color } = useContext(ThemeContext)
 
   let buttonColor: string = color[500]
-  let boxShadow: string = `4px 4px 8px ${color[300]}, -8px -8px 16px ${color[100]}FF;`
+  let boxShadow: string = `4px 4px 8px ${color["shadow"]}, -8px -8px 16px ${color["buttonHighlight"]}FF;`
   let buttonSize: number = 36
   let buttonPadding: number = 5
   let fontSize: number = 20
@@ -69,15 +69,15 @@ const StyledThemeToggle = styled.button<StyledThemeToggleProps>`
 
   svg {
     height: auto;
-    padding: 2px 2px 2px 2px;
-    width: 2rem;
+    padding: 5px 2px 2px 2px;
+    width: 1.6rem;
     transition: all 0.25s linear;
-    
+
     // Sun icon.
     &:first-child {
       transform: ${({ lightTheme }) => lightTheme ? 'translateY(0)' : 'translateY(100px)'};
     }
-    
+
     // Moon icon.
     &:nth-child(2) {
       transform: ${({ lightTheme }) => lightTheme ? 'translateY(-100px)' : 'translateY(0)'};

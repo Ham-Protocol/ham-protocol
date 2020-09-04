@@ -80,7 +80,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   }
 
   useEffect(() => {
-    if (farm && farm.id === 'ycrv_ham_uni_lp') {
+    if (farm && (farm.id == 'ham_yycrv_bpt' || farm.id == 'eth_ham_bpt' || farm.id == 'eth_ham_uni_lp')) {
+      console.log(farm.id)
       getStartTime()
     }
   }, [farm, getStartTime])
@@ -98,7 +99,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
   const poolActive = startTime * 1000 - Date.now() <= 0
   return (
     <StyledCardWrapper>
-      {farm.id === 'ycrv_ham_uni_lp' && (
+      {farm.id === 'yycrv_ham_uni_lp' && (
         <StyledCardAccent />
       )}
       <Card>
@@ -187,7 +188,7 @@ const StyledCardWrapper = styled.div`
 `
 
 const StyledTitle = styled.h4`
-  color: ${props => props.theme.color[600]};
+  color: ${props => props.theme.color["title"]};
   font-size: 24px;
   font-weight: 700;
   margin: ${props => props.theme.spacing[2]}px 0 0;
@@ -211,7 +212,7 @@ const StyledDetails = styled.div`
 `
 
 const StyledDetail = styled.div`
-  color: ${props => props.theme.color[500]};
+  color: ${props => props.theme.color["textHighlight"]};
 `
 
 const StyledHarvestable = styled.div`

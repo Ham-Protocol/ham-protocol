@@ -32,13 +32,13 @@ describe("Distribution", () => {
   let snapshotId;
   let user;
   let user2;
-  let ycrv_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606";
+  let yycrv_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606";
   let weth_account = "0xf9e11762d522ea29dd78178c9baf83b7b093aacc";
   let lend_account = "0x3b08aa814bea604917418a9f0907e7fc430e742c";
   let link_account = "0xbe6977e08d4479c0a6777539ae0e8fa27be4e9d6";
-  let dai_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //Dai replacing mkr. 
+  let bzrx_account = "0xf37216a8ac034d08b4663108d7532dfcb44583ed"; //bzrx replacing mkr. 
   let snx_account = "0xb696d629cd0a00560151a434f6b4478ad6c228d7";
-  let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606"; //I need to know if these addresses are real accounts being used or if they are generated for the test, dai is using mkrs old address as it's own (please delete this comment once solved).
+  let yfi_account = "0x0eb4add4ba497357546da7f5d12d39587ca24606"; //I need to know if these addresses are real accounts being used or if they are generated for the test, bzrx is using mkrs old address as it's own (please delete this comment once solved).
   beforeAll(async () => {
     const accounts = await ham.web3.eth.getAccounts();
     ham.addAccount(accounts[0]);
@@ -155,8 +155,8 @@ describe("Distribution", () => {
     test("joining and exiting", async() => {
       await ham.testing.resetEVM("0x2");
 
-      await ham.contracts.ycrv.methods.transfer(user, "12000000000000000000000000").send({
-        from: ycrv_account
+      await ham.contracts.yycrv.methods.transfer(user, "12000000000000000000000000").send({
+        from: yycrv_account
       });
 
       await ham.contracts.weth.methods.transfer(user, ham.toBigN(2000).times(ham.toBigN(10**18)).toString()).send({
@@ -217,8 +217,8 @@ describe("Distribution", () => {
           from: user,
           gas: 80000
         });
-        //console.log("approve ycrv")
-        await ham.contracts.ycrv.methods.approve(
+        //console.log("approve yycrv")
+        await ham.contracts.yycrv.methods.approve(
           ham.contracts.uni_router.options.address,
           -1
         ).send({
@@ -226,14 +226,14 @@ describe("Distribution", () => {
           gas: 80000
         });
 
-        let ycrv_bal = await ham.contracts.ycrv.methods.balanceOf(user).call()
+        let yycrv_bal = await ham.contracts.yycrv.methods.balanceOf(user).call()
 
-        console.log("ycrv_bal bal", ycrv_bal)
+        console.log("yycrv_bal bal", yycrv_bal)
 
         console.log("add liq/ create pool")
         await ham.contracts.uni_router.methods.addLiquidity(
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address,
+          ham.contracts.yycrv.options.address,
           ham_bal,
           ham_bal,
           ham_bal,
@@ -247,21 +247,21 @@ describe("Distribution", () => {
 
         let pair = await ham.contracts.uni_fact.methods.getPair(
           ham.contracts.ham.options.address,
-          ham.contracts.ycrv.options.address
+          ham.contracts.yycrv.options.address
         ).call();
 
         ham.contracts.uni_pair.options.address = pair;
         let bal = await ham.contracts.uni_pair.methods.balanceOf(user).call();
 
         await ham.contracts.uni_pair.methods.approve(
-          ham.contracts.ycrv_pool.options.address,
+          ham.contracts.yycrv_pool.options.address,
           -1
         ).send({
           from: user,
           gas: 300000
         });
 
-        starttime = await ham.contracts.ycrv_pool.methods.starttime().call();
+        starttime = await ham.contracts.yycrv_pool.methods.starttime().call();
 
         a = await ham.web3.eth.getBlock('latest');
 
@@ -272,7 +272,7 @@ describe("Distribution", () => {
           console.log("late entry, pool 2", waittime) //"pool 2" is used here, the original file used ampl here instead of snx, so it must be made sure that the pool number does not need to be changed (delete comment once solved).
         }
 
-        await ham.contracts.ycrv_pool.methods.stake(bal).send({from: user, gas: 400000});
+        await ham.contracts.yycrv_pool.methods.stake(bal).send({from: user, gas: 400000});
 
 
         earned = await ham.contracts.snx_pool.methods.earned(user).call();
@@ -293,7 +293,7 @@ describe("Distribution", () => {
 
         console.log(earned, rr, rpt);
 
-        await ham.contracts.ycrv_pool.methods.exit().send({from: user, gas: 400000});
+        await ham.contracts.yycrv_pool.methods.exit().send({from: user, gas: 400000});
 
         ham_bal = await ham.contracts.ham.methods.balanceOf(user).call();
 
@@ -371,8 +371,8 @@ describe("Distribution", () => {
     test("rewards from pool 1s eth with rebase", async () => {
         await ham.testing.resetEVM("0x2");
 
-        await ham.contracts.ycrv.methods.transfer(user, "12000000000000000000000000").send({
-          from: ycrv_account
+        await ham.contracts.yycrv.methods.transfer(user, "12000000000000000000000000").send({
+          from: yycrv_account
         });
 
         await ham.contracts.weth.methods.transfer(user, ham.toBigN(2000).times(ham.toBigN(10**18)).toString()).send({
@@ -436,8 +436,8 @@ describe("Distribution", () => {
             from: user,
             gas: 80000
           });
-          //console.log("approve ycrv")
-          await ham.contracts.ycrv.methods.approve(
+          //console.log("approve yycrv")
+          await ham.contracts.yycrv.methods.approve(
             ham.contracts.uni_router.options.address,
             -1
           ).send({
@@ -445,14 +445,14 @@ describe("Distribution", () => {
             gas: 80000
           });
 
-          let ycrv_bal = await ham.contracts.ycrv.methods.balanceOf(user).call()
+          let yycrv_bal = await ham.contracts.yycrv.methods.balanceOf(user).call()
 
-          console.log("ycrv_bal bal", ycrv_bal)
+          console.log("yycrv_bal bal", yycrv_bal)
 
           console.log("add liq/ create pool")
           await ham.contracts.uni_router.methods.addLiquidity(
             ham.contracts.ham.options.address,
-            ham.contracts.ycrv.options.address,
+            ham.contracts.yycrv.options.address,
             ham_bal,
             ham_bal,
             ham_bal,
@@ -466,7 +466,7 @@ describe("Distribution", () => {
 
           let pair = await ham.contracts.uni_fact.methods.getPair(
             ham.contracts.ham.options.address,
-            ham.contracts.ycrv.options.address
+            ham.contracts.yycrv.options.address
           ).call();
 
           ham.contracts.uni_pair.options.address = pair;
@@ -478,7 +478,7 @@ describe("Distribution", () => {
             "100000000000000000000000",
             100000,
             [
-              ham.contracts.ycrv.options.address,
+              ham.contracts.yycrv.options.address,
               ham.contracts.ham.options.address
             ],
             user,
@@ -494,7 +494,7 @@ describe("Distribution", () => {
             "10000000000000000",
             100000,
             [
-              ham.contracts.ycrv.options.address,
+              ham.contracts.yycrv.options.address,
               ham.contracts.ham.options.address
             ],
             user,
@@ -517,7 +517,7 @@ describe("Distribution", () => {
             "1000000000000000000000",
             100000,
             [
-              ham.contracts.ycrv.options.address,
+              ham.contracts.yycrv.options.address,
               ham.contracts.ham.options.address
             ],
             user,
@@ -539,7 +539,7 @@ describe("Distribution", () => {
             "10000000000000000000",
             100000,
             [
-              ham.contracts.ycrv.options.address,
+              ham.contracts.yycrv.options.address,
               ham.contracts.ham.options.address
             ],
             user,
@@ -587,12 +587,12 @@ describe("Distribution", () => {
 
           let resHAM = await ham.contracts.ham.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-          let resycrv = await ham.contracts.ycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
+          let resyycrv = await ham.contracts.yycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
           // new balance > old balance
           expect(ham.toBigN(bal).toNumber()).toBeLessThan(ham.toBigN(bal1).toNumber());
           // increases reserves
-          expect(ham.toBigN(resycrv).toNumber()).toBeGreaterThan(0);
+          expect(ham.toBigN(resyycrv).toNumber()).toBeGreaterThan(0);
 
           r = await ham.contracts.uni_pair.methods.getReserves().call();
           q = await ham.contracts.uni_router.methods.quote(ham.toBigN(10**18).toString(), r[0], r[1]).call();
@@ -625,8 +625,8 @@ describe("Distribution", () => {
     test("rewards from pool 1s eth with negative rebase", async () => {
         await ham.testing.resetEVM("0x2");
 
-        await ham.contracts.ycrv.methods.transfer(user, "12000000000000000000000000").send({
-          from: ycrv_account
+        await ham.contracts.yycrv.methods.transfer(user, "12000000000000000000000000").send({
+          from: yycrv_account
         });
 
         await ham.contracts.weth.methods.transfer(user, ham.toBigN(2000).times(ham.toBigN(10**18)).toString()).send({
@@ -690,8 +690,8 @@ describe("Distribution", () => {
             from: user,
             gas: 80000
           });
-          //console.log("approve ycrv")
-          await ham.contracts.ycrv.methods.approve(
+          //console.log("approve yycrv")
+          await ham.contracts.yycrv.methods.approve(
             ham.contracts.uni_router.options.address,
             -1
           ).send({
@@ -699,15 +699,15 @@ describe("Distribution", () => {
             gas: 80000
           });
 
-          let ycrv_bal = await ham.contracts.ycrv.methods.balanceOf(user).call()
+          let yycrv_bal = await ham.contracts.yycrv.methods.balanceOf(user).call()
 
-          console.log("ycrv_bal bal", ycrv_bal)
+          console.log("yycrv_bal bal", yycrv_bal)
 
           ham_bal = ham.toBigN(ham_bal);
           console.log("add liq/ create pool")
           await ham.contracts.uni_router.methods.addLiquidity(
             ham.contracts.ham.options.address,
-            ham.contracts.ycrv.options.address,
+            ham.contracts.yycrv.options.address,
             ham_bal.times(.1).toString(),
             ham_bal.times(.1).toString(),
             ham_bal.times(.1).toString(),
@@ -721,7 +721,7 @@ describe("Distribution", () => {
 
           let pair = await ham.contracts.uni_fact.methods.getPair(
             ham.contracts.ham.options.address,
-            ham.contracts.ycrv.options.address
+            ham.contracts.yycrv.options.address
           ).call();
 
           ham.contracts.uni_pair.options.address = pair;
@@ -734,7 +734,7 @@ describe("Distribution", () => {
             100000,
             [
               ham.contracts.ham.options.address,
-              ham.contracts.ycrv.options.address
+              ham.contracts.yycrv.options.address
             ],
             user,
             1596740361 + 10000000
@@ -750,7 +750,7 @@ describe("Distribution", () => {
             100000,
             [
               ham.contracts.ham.options.address,
-              ham.contracts.ycrv.options.address
+              ham.contracts.yycrv.options.address
             ],
             user,
             1596740361 + 10000000
@@ -773,7 +773,7 @@ describe("Distribution", () => {
             100000,
             [
               ham.contracts.ham.options.address,
-              ham.contracts.ycrv.options.address
+              ham.contracts.yycrv.options.address
             ],
             user,
             1596740361 + 10000000
@@ -795,7 +795,7 @@ describe("Distribution", () => {
             100000,
             [
               ham.contracts.ham.options.address,
-              ham.contracts.ycrv.options.address
+              ham.contracts.yycrv.options.address
             ],
             user,
             1596740361 + 10000000
@@ -842,10 +842,10 @@ describe("Distribution", () => {
 
           let resHAM = await ham.contracts.ham.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
-          let resycrv = await ham.contracts.ycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
+          let resyycrv = await ham.contracts.yycrv.methods.balanceOf(ham.contracts.reserves.options.address).call();
 
           expect(ham.toBigN(bal1).toNumber()).toBeLessThan(ham.toBigN(bal).toNumber());
-          expect(ham.toBigN(resycrv).toNumber()).toBe(0);
+          expect(ham.toBigN(resyycrv).toNumber()).toBe(0);
 
           r = await ham.contracts.uni_pair.methods.getReserves().call();
           q = await ham.contracts.uni_router.methods.quote(ham.toBigN(10**18).toString(), r[0], r[1]).call();
@@ -1080,19 +1080,19 @@ describe("Distribution", () => {
     });
   });
 
-  describe("dai", () => {
-    test("rewards from pool 1s mkr", async () => {
+  describe("bzrx", () => {
+    test("rewards from pool 1s bzrx", async () => {
         await ham.testing.resetEVM("0x2");
-        await ham.web3.eth.sendTransaction({from: user2, to: dai_account, value : ham.toBigN(100000*10**18).toString()});
-        let eth_bal = await ham.web3.eth.getBalance(dai_account);
+        await ham.web3.eth.sendTransaction({from: user2, to: bzrx_account, value : ham.toBigN(100000*10**18).toString()});
+        let eth_bal = await ham.web3.eth.getBalance(bzrx_account);
 
-        await ham.contracts.dai.methods.transfer(user, "10000000000000000000000").send({
-          from: dai_account
+        await ham.contracts.bzrx.methods.transfer(user, "10000000000000000000000").send({
+          from: bzrx_account
         });
 
         let a = await ham.web3.eth.getBlock('latest');
 
-        let starttime = await ham.contracts.dai_pool.methods.starttime().call();
+        let starttime = await ham.contracts.bzrx_pool.methods.starttime().call();
 
         let waittime = starttime - a["timestamp"];
         if (waittime > 0) {
@@ -1101,27 +1101,27 @@ describe("Distribution", () => {
           console.log("late entry", waittime)
         }
 
-        await ham.contracts.dai.methods.approve(ham.contracts.dai_pool.options.address, -1).send({from: user});
+        await ham.contracts.bzrx.methods.approve(ham.contracts.bzrx_pool.options.address, -1).send({from: user});
 
-        await ham.contracts.dai_pool.methods.stake(
+        await ham.contracts.bzrx_pool.methods.stake(
           "10000000000000000000000"
         ).send({
           from: user,
           gas: 300000
         });
 
-        let earned = await ham.contracts.dai_pool.methods.earned(user).call();
+        let earned = await ham.contracts.bzrx_pool.methods.earned(user).call();
 
-        let rr = await ham.contracts.dai_pool.methods.rewardRate().call();
+        let rr = await ham.contracts.bzrx_pool.methods.rewardRate().call();
 
-        let rpt = await ham.contracts.dai_pool.methods.rewardPerToken().call();
+        let rpt = await ham.contracts.bzrx_pool.methods.rewardPerToken().call();
         //console.log(earned, rr, rpt);
         await ham.testing.increaseTime(625000 + 100);
         // await ham.testing.mineBlock();
 
-        earned = await ham.contracts.dai_pool.methods.earned(user).call();
+        earned = await ham.contracts.bzrx_pool.methods.earned(user).call();
 
-        rpt = await ham.contracts.dai_pool.methods.rewardPerToken().call();
+        rpt = await ham.contracts.bzrx_pool.methods.rewardPerToken().call();
 
         let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
@@ -1130,14 +1130,14 @@ describe("Distribution", () => {
 
         let ham_bal = await ham.contracts.ham.methods.balanceOf(user).call()
 
-        let j = await ham.contracts.dai_pool.methods.exit().send({
+        let j = await ham.contracts.bzrx_pool.methods.exit().send({
           from: user,
           gas: 300000
         });
 
         //console.log(j.events)
 
-        let weth_bal = await ham.contracts.dai.methods.balanceOf(user).call()
+        let weth_bal = await ham.contracts.bzrx.methods.balanceOf(user).call()
 
         expect(weth_bal).toBe("10000000000000000000000")
 
@@ -1147,7 +1147,75 @@ describe("Distribution", () => {
         let two_fity = ham.toBigN(250).times(ham.toBigN(10**3)).times(ham.toBigN(10**18))
         expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
     });
-  }); //dai replacing mkr
+  }); //bzrx replacing mkr
+  describe("yycrv", () => {
+    test("rewards from pool 1s yycrv", async () => {
+        await ham.testing.resetEVM("0x2");
+        await ham.web3.eth.sendTransaction({from: user2, to: yycrv_account, value : ham.toBigN(100000*10**18).toString()});
+        let eth_bal = await ham.web3.eth.getBalance(yycrv_account);
+
+        await ham.contracts.yycrv.methods.transfer(user, "10000000000000000000000").send({
+          from: yycrv_account
+        });
+
+        let a = await ham.web3.eth.getBlock('latest');
+
+        let starttime = await ham.contracts.yycrv_pool.methods.starttime().call();
+
+        let waittime = starttime - a["timestamp"];
+        if (waittime > 0) {
+          await ham.testing.increaseTime(waittime);
+        } else {
+          console.log("late entry", waittime)
+        }
+
+        await ham.contracts.yycrv.methods.approve(ham.contracts.yycrv_pool.options.address, -1).send({from: user});
+
+        await ham.contracts.yycrv_pool.methods.stake(
+          "10000000000000000000000"
+        ).send({
+          from: user,
+          gas: 300000
+        });
+
+        let earned = await ham.contracts.yycrv_pool.methods.earned(user).call();
+
+        let rr = await ham.contracts.yycrv_pool.methods.rewardRate().call();
+
+        let rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
+        //console.log(earned, rr, rpt);
+        await ham.testing.increaseTime(625000 + 100);
+        // await ham.testing.mineBlock();
+
+        earned = await ham.contracts.yycrv_pool.methods.earned(user).call();
+
+        rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
+
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
+
+        //console.log(earned, ysf, rpt);
+
+
+        let ham_bal = await ham.contracts.ham.methods.balanceOf(user).call()
+
+        let j = await ham.contracts.yycrv_pool.methods.exit().send({
+          from: user,
+          gas: 300000
+        });
+
+        //console.log(j.events)
+
+        let weth_bal = await ham.contracts.yycrv.methods.balanceOf(user).call()
+
+        expect(weth_bal).toBe("10000000000000000000000")
+
+
+        let ham_bal2 = await ham.contracts.ham.methods.balanceOf(user).call()
+
+        let two_fity = ham.toBigN(250).times(ham.toBigN(10**3)).times(ham.toBigN(10**18))
+        expect(ham.toBigN(ham_bal2).minus(ham.toBigN(ham_bal)).toString()).toBe(two_fity.times(1).toString())
+    });
+  });
 
   describe("snx", () => {
     test("rewards from pool 1s snx", async () => {
