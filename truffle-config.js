@@ -45,23 +45,10 @@ module.exports = {
     mainnet: {
       network_id: '1',
       provider: () => new HDWalletProvider(
-          process.env.DEPLOYER_PRIVATE_KEY,
-          "https://mainnet.infura.io/v3/731a2b3d28e445b7ac56f23507614fea",
-          0,
-          1,
-      ),
-      gasPrice: Number(process.env.GAS_PRICE),
-      gas: 8000000,
-      from: process.env.DEPLOYER_ACCOUNT,
-      timeoutBlocks: 800,
-    },
-    goerli: {
-      network_id: '5',
-      provider: () => new HDWalletProvider(
-          process.env.DEPLOYER_PRIVATE_KEY,
-          process.env.GOERLI_API,
-          0,
-          1,
+        [process.env.DEPLOYER_PRIVATE_KEY],
+        "https://mainnet.infura.io/v3/731a2b3d28e445b7ac56f23507614fea",
+        0,
+        1,
       ),
       gasPrice: Number(process.env.GAS_PRICE),
       gas: 8000000,
