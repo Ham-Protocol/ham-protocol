@@ -326,8 +326,6 @@ export class Contracts {
     try {
       if (contractJson.networks[networkId]) {
         contract.options.address = contractJson.networks[networkId].address;
-      } else {
-        contract.options.address = "0x587A07cE5c265A38Dd6d42def1566BA73eeb06F5"
       }
     } catch (error) {
       console.log(error)
