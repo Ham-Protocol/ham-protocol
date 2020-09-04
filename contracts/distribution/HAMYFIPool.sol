@@ -592,7 +592,6 @@ interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
 
-
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
@@ -624,7 +623,7 @@ contract LPTokenWrapper {
 }
 
 contract HAMYFIPool is LPTokenWrapper, IRewardDistributionRecipient {
-    IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
+    IERC20 public ham;
     uint256 public constant DURATION = 625000; // ~7 1/4 days
 
     uint256 public starttime = 1597172400; // 2020-08-11 19:00:00 (UTC UTC +00:00)
@@ -639,6 +638,10 @@ contract HAMYFIPool is LPTokenWrapper, IRewardDistributionRecipient {
     event Staked(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
+
+    constructor(address hamToken) public {
+        ham = IERC20(hamToken);
+    }
 
     modifier checkStart(){
         require(block.timestamp >= starttime,"not start");
