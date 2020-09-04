@@ -486,6 +486,9 @@ library Address {
 
 pragma solidity ^0.5.0;
 
+
+
+
 /**
  * @title SafeERC20
  * @dev Wrappers around ERC20 operations that throw on failure (when the token
@@ -591,7 +594,7 @@ contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public bzrx = IERC20(0xc00e94Cb662C3520282E6f5717214004A7f26888);
+    IERC20 public comp = IERC20(0xc00e94Cb662C3520282E6f5717214004A7f26888);
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -607,17 +610,17 @@ contract LPTokenWrapper {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        bzrx.safeTransferFrom(msg.sender, address(this), amount);
+        comp.safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        bzrx.safeTransfer(msg.sender, amount);
+        comp.safeTransfer(msg.sender, amount);
     }
 }
 
-contract HAMBZRXPool is LPTokenWrapper, IRewardDistributionRecipient {
+contract HAMCOMPPool is LPTokenWrapper, IRewardDistributionRecipient {
     IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
     uint256 public constant DURATION = 625000; // ~7 1/4 days
 

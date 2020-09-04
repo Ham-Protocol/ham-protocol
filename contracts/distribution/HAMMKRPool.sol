@@ -598,7 +598,7 @@ contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public yycrv = IERC20(0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2);
+    IERC20 public mkr = IERC20(0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2);
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -614,17 +614,17 @@ contract LPTokenWrapper {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        yycrv.safeTransferFrom(msg.sender, address(this), amount);
+        mkr.safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        yycrv.safeTransfer(msg.sender, amount);
+        mkr.safeTransfer(msg.sender, amount);
     }
 }
 
-contract HAMYYCRVPool is LPTokenWrapper, IRewardDistributionRecipient {
+contract HAMMKRPool is LPTokenWrapper, IRewardDistributionRecipient {
     IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
     uint256 public constant DURATION = 625000; // ~7 1/4 days
 
