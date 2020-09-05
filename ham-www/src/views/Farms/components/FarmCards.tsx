@@ -117,9 +117,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm }) => {
               <StyledDetail>Earn {farm.earnToken.toUpperCase()}</StyledDetail>
             </StyledDetails>
             <Spacer />
-            <StyledHarvestable>
-              {harvestable ? `${numeral(harvestable).format('0.00a')} HAMs ready to harvest.` : undefined}
-            </StyledHarvestable>
+              {harvestable ? (
+                  <StyledHarvestable>
+                    `${numeral(harvestable).format('0.00a')} HAMs ready to harvest.`
+                  </StyledHarvestable>
+              ): undefined}
             <Button
               disabled={!poolActive}
               text={poolActive ? 'Select' : undefined}
