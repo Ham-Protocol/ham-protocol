@@ -563,8 +563,6 @@ library SafeERC20 {
 
 pragma solidity ^0.5.0;
 
-
-
 contract IRewardDistributionRecipient is Ownable {
     address public rewardDistribution;
 
@@ -587,18 +585,15 @@ contract IRewardDistributionRecipient is Ownable {
 
 pragma solidity ^0.5.0;
 
-
-
 interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
-
 
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public ampl_eth_uni_lp = IERC20(0xc5be99A02C6857f9Eac67BbCE58DF5572498F40c);
+    IERC20 public ham_yycrv_bpt = IERC20(0xc5be99A02C6857f9Eac67BbCE58DF5572498F40c);
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -614,18 +609,18 @@ contract LPTokenWrapper {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        ampl_eth_uni_lp.safeTransferFrom(msg.sender, address(this), amount);
+        ham_yycrv_bpt.safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        ampl_eth_uni_lp.safeTransfer(msg.sender, amount);
+        ham_yycrv_bpt.safeTransfer(msg.sender, amount);
     }
 }
 
-contract HAMAMPLPool is LPTokenWrapper, IRewardDistributionRecipient {
-    IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
+contract HAMYYCRVBPTPool is LPTokenWrapper, IRewardDistributionRecipient {
+    IERC20 public ham;
     uint256 public constant DURATION = 625000; // ~7 1/4 days
 
     uint256 public starttime = 1597172400; // 2020-08-11 19:00:00 (UTC UTC +00:00)
@@ -640,6 +635,10 @@ contract HAMAMPLPool is LPTokenWrapper, IRewardDistributionRecipient {
     event Staked(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
+
+    constructor(address hamToken) public {
+        ham = IERC20(hamToken);
+    }
 
     modifier checkStart(){
         require(block.timestamp >= starttime,"not start");

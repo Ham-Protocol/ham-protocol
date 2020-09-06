@@ -486,9 +486,6 @@ library Address {
 
 pragma solidity ^0.5.0;
 
-
-
-
 /**
  * @title SafeERC20
  * @dev Wrappers around ERC20 operations that throw on failure (when the token
@@ -563,8 +560,6 @@ library SafeERC20 {
 
 pragma solidity ^0.5.0;
 
-
-
 contract IRewardDistributionRecipient is Ownable {
     address public rewardDistribution;
 
@@ -592,13 +587,11 @@ interface HAM {
     function hamsScalingFactor() external returns (uint256);
 }
 
-
-
 contract LPTokenWrapper {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IERC20 public mkr = IERC20(0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2);
+    IERC20 public bzrx = IERC20(0xc00e94Cb662C3520282E6f5717214004A7f26888);
 
     uint256 private _totalSupply;
     mapping(address => uint256) private _balances;
@@ -614,18 +607,18 @@ contract LPTokenWrapper {
     function stake(uint256 amount) public {
         _totalSupply = _totalSupply.add(amount);
         _balances[msg.sender] = _balances[msg.sender].add(amount);
-        mkr.safeTransferFrom(msg.sender, address(this), amount);
+        bzrx.safeTransferFrom(msg.sender, address(this), amount);
     }
 
     function withdraw(uint256 amount) public {
         _totalSupply = _totalSupply.sub(amount);
         _balances[msg.sender] = _balances[msg.sender].sub(amount);
-        mkr.safeTransfer(msg.sender, amount);
+        bzrx.safeTransfer(msg.sender, amount);
     }
 }
 
-contract HAMMKRPool is LPTokenWrapper, IRewardDistributionRecipient {
-    IERC20 public ham = IERC20(0x0e2298E3B3390e3b945a5456fBf59eCc3f55DA16);
+contract HAMBZRXPool is LPTokenWrapper, IRewardDistributionRecipient {
+    IERC20 public ham;
     uint256 public constant DURATION = 625000; // ~7 1/4 days
 
     uint256 public starttime = 1597172400; // 2020-08-11 19:00:00 (UTC UTC +00:00)
@@ -640,6 +633,10 @@ contract HAMMKRPool is LPTokenWrapper, IRewardDistributionRecipient {
     event Staked(address indexed user, uint256 amount);
     event Withdrawn(address indexed user, uint256 amount);
     event RewardPaid(address indexed user, uint256 reward);
+
+    constructor(address hamToken) public {
+        ham = IERC20(hamToken);
+    }
 
     modifier checkStart() {
         require(block.timestamp >= starttime,"not start");
@@ -717,21 +714,21 @@ contract HAMMKRPool is LPTokenWrapper, IRewardDistributionRecipient {
         updateReward(address(0))
     {
         if (block.timestamp > starttime) {
-          if (block.timestamp >= periodFinish) {
-              rewardRate = reward.div(DURATION);
-          } else {
-              uint256 remaining = periodFinish.sub(block.timestamp);
-              uint256 leftover = remaining.mul(rewardRate);
-              rewardRate = reward.add(leftover).div(DURATION);
-          }
-          lastUpdateTime = block.timestamp;
-          periodFinish = block.timestamp.add(DURATION);
-          emit RewardAdded(reward);
+            if (block.timestamp >= periodFinish) {
+                rewardRate = reward.div(DURATION);
+            } else {
+                uint256 remaining = periodFinish.sub(block.timestamp);
+                uint256 leftover = remaining.mul(rewardRate);
+                rewardRate = reward.add(leftover).div(DURATION);
+            }
+            lastUpdateTime = block.timestamp;
+            periodFinish = block.timestamp.add(DURATION);
+            emit RewardAdded(reward);
         } else {
-          rewardRate = reward.div(DURATION);
-          lastUpdateTime = starttime;
-          periodFinish = starttime.add(DURATION);
-          emit RewardAdded(reward);
+            rewardRate = reward.div(DURATION);
+            lastUpdateTime = starttime;
+            periodFinish = starttime.add(DURATION);
+            emit RewardAdded(reward);
         }
     }
 }

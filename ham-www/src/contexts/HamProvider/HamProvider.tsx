@@ -19,14 +19,19 @@ declare global {
 }
 
 const HamProvider: React.FC = ({ children }) => {
-  const { ethereum } = useWallet()
+  const { ethereum, error, status } = useWallet()
   const [ham, setHam] = useState<any>()
 
   useEffect(() => {
+    console.log(status)
+    console.log(ethereum)
+    if (error) {
+      console.log(error)
+    }
     if (ethereum) {
       const hamLib = new Ham(
         ethereum,
-        "1",
+        "5",
         false, {
           defaultAccount: "",
           defaultConfirmations: 1,
