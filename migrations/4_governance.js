@@ -13,9 +13,7 @@ const HAMRebaser = artifacts.require("HAMRebaser");
 
 // Governance
 // deployed third
-const Gov = artifacts.require("GovernorAlpha");
 const Timelock = artifacts.require("Timelock");
-
 
 
 // ============ Main Migration ============
