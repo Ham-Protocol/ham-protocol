@@ -303,8 +303,8 @@ contract HAMRebaser {
     function rebase()
         public
     {
-        // EOA only
-        require(msg.sender == tx.origin);
+        // EOA only or gov
+        require(msg.sender == tx.origin || msg.sender == gov);
         // ensure rebasing at correct time
         _inRebaseWindow();
 
@@ -417,9 +417,9 @@ contract HAMRebaser {
         uint256 tokens_to_max_slippage = uniswapMaxSlippage(token0Reserves, token1Reserves, offPegPerc);
 
         UniVars memory uniVars = UniVars({
-          hamsToUni: tokens_to_max_slippage, // how many hams uniswap needs
-          amountFromReserves: excess, // how much of hamsToUni comes from reserves
-          mintToReserves: 0 // how much hams protocol mints to reserves
+            hamsToUni: tokens_to_max_slippage, // how many hams uniswap needs
+            amountFromReserves: excess, // how much of hamsToUni comes from reserves
+            mintToReserves: 0 // how much hams protocol mints to reserves
         });
 
         // tries to sell all mint + excess
