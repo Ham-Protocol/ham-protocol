@@ -1,7 +1,6 @@
 pragma solidity 0.5.17;
 
 import "./HAMTokenStorage.sol";
-import "./HAMGovernanceStorage.sol";
 
 contract HAMTokenInterface is HAMTokenStorage {
 
