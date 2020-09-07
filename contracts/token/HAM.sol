@@ -1,9 +1,8 @@
 pragma solidity 0.5.17;
 
-/* import "./HAMTokenInterface.sol"; */
-import "./HAMGovernance.sol";
+import "./HAMTokenInterface.sol";
 
-contract HAMToken is HAMGovernanceToken {
+contract HAMToken is HAMTokenInterface {
     // Modifiers
     modifier onlyGov() {
         require(msg.sender == gov);
@@ -33,7 +32,7 @@ contract HAMToken is HAMGovernanceToken {
     )
         public
     {
-        require(hamsScalingFactor == 0, "already initialized");
+        require(scalingFactor == 0, "already initialized");
         name = name_;
         symbol = symbol_;
         decimals = decimals_;
@@ -56,8 +55,8 @@ contract HAMToken is HAMGovernanceToken {
         view
         returns (uint256)
     {
-        // scaling factor can only go up to 2**256-1 = initSupply * hamsScalingFactor
-        // this is used to check if hamsScalingFactor will be too high to compute balances when rebasing.
+        // scaling factor can only go up to 2**256-1 = initSupply * scalingFactor
+        // this is used to check if scalingFactor will be too high to compute balances when rebasing.
         return uint256(-1) / initSupply;
     }
 
@@ -81,19 +80,17 @@ contract HAMToken is HAMGovernanceToken {
       totalSupply = totalSupply.add(amount);
 
       // get underlying value
-      uint256 hamValue = amount.mul(internalDecimals).div(hamsScalingFactor);
+      uint256 hamValue = amount.mul(internalDecimals).div(scalingFactor);
 
       // increase initSupply
       initSupply = initSupply.add(hamValue);
 
       // make sure the mint didnt push maxScalingFactor too low
-      require(hamsScalingFactor <= _maxScalingFactor(), "max scaling factor too low");
+      require(scalingFactor <= _maxScalingFactor(), "max scaling factor too low");
 
       // add balance
       _hamBalances[to] = _hamBalances[to].add(hamValue);
 
-      // add delegates to the minter
-      _moveDelegates(address(0), _delegates[to], hamValue);
       emit Mint(to, amount);
     }
 
@@ -113,10 +110,10 @@ contract HAMToken is HAMGovernanceToken {
         // underlying balance is stored in hams, so divide by current scaling factor
 
         // note, this means as scaling factor grows, dust will be untransferrable.
-        // minimum transfer value == hamsScalingFactor / 1e24;
+        // minimum transfer value == scalingFactor / 1e24;
 
         // get amount in underlying
-        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(scalingFactor);
 
         // sub from balance of sender
         _hamBalances[msg.sender] = _hamBalances[msg.sender].sub(hamValue);
@@ -125,7 +122,6 @@ contract HAMToken is HAMGovernanceToken {
         _hamBalances[to] = _hamBalances[to].add(hamValue);
         emit Transfer(msg.sender, to, value);
 
-        _moveDelegates(_delegates[msg.sender], _delegates[to], hamValue);
         return true;
     }
 
@@ -144,14 +140,12 @@ contract HAMToken is HAMGovernanceToken {
         _allowedFragments[from][msg.sender] = _allowedFragments[from][msg.sender].sub(value);
 
         // get value in hams
-        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(scalingFactor);
 
         // sub from from
         _hamBalances[from] = _hamBalances[from].sub(hamValue);
         _hamBalances[to] = _hamBalances[to].add(hamValue);
         emit Transfer(from, to, value);
-
-        _moveDelegates(_delegates[from], _delegates[to], hamValue);
         return true;
     }
 
@@ -164,7 +158,7 @@ contract HAMToken is HAMGovernanceToken {
       view
       returns (uint256)
     {
-      return _hamBalances[who].mul(hamsScalingFactor).div(internalDecimals);
+      return _hamBalances[who].mul(scalingFactor).div(internalDecimals);
     }
 
     /** @notice Currently returns the internal storage amount
@@ -224,8 +218,7 @@ contract HAMToken is HAMGovernanceToken {
         external
         returns (bool)
     {
-        _allowedFragments[msg.sender][spender] =
-            _allowedFragments[msg.sender][spender].add(addedValue);
+        _allowedFragments[msg.sender][spender] = _allowedFragments[msg.sender][spender].add(addedValue);
         emit Approval(msg.sender, spender, _allowedFragments[msg.sender][spender]);
         return true;
     }
@@ -320,26 +313,26 @@ contract HAMToken is HAMGovernanceToken {
         returns (uint256)
     {
         if (indexDelta == 0) {
-          emit Rebase(epoch, hamsScalingFactor, hamsScalingFactor);
+          emit Rebase(epoch, scalingFactor, scalingFactor);
           return totalSupply;
         }
 
-        uint256 prevHamsScalingFactor = hamsScalingFactor;
+        uint256 prevscalingFactor = scalingFactor;
 
         if (!positive) {
-           hamsScalingFactor = hamsScalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
+           scalingFactor = scalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
         } else {
-            uint256 newScalingFactor = hamsScalingFactor.mul(BASE.add(indexDelta)).div(BASE);
+            uint256 newScalingFactor = scalingFactor.mul(BASE.add(indexDelta)).div(BASE);
             if (newScalingFactor < _maxScalingFactor()) {
-                hamsScalingFactor = newScalingFactor;
+                scalingFactor = newScalingFactor;
             } else {
-              hamsScalingFactor = _maxScalingFactor();
+              scalingFactor = _maxScalingFactor();
             }
         }
 
         // The rebase bug is this line right here, don't solve until properly understood.
-        totalSupply = initSupply.mul(hamsScalingFactor);
-        emit Rebase(epoch, prevHamsScalingFactor, hamsScalingFactor);
+        totalSupply = initSupply.mul(scalingFactor).div(BASE);
+        emit Rebase(epoch, prevscalingFactor, scalingFactor);
         return totalSupply;
     }
 }
@@ -366,7 +359,7 @@ contract HAM is HAMToken {
 
         initSupply = initSupply_.mul(10**24/ (BASE));
         totalSupply = initSupply_;
-        hamsScalingFactor = BASE;
+        scalingFactor = BASE;
         _hamBalances[initial_owner] = initSupply_.mul(10**24 / (BASE));
 
         // owner renounces ownership after deployment as they need to set

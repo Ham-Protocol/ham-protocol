@@ -37,8 +37,4 @@ module.exports = migration;
 
 async function deployGovernance(deployer, network) {
   await deployer.deploy(Timelock);
-  await deployer.deploy(Gov,
-      Timelock.address,
-      HAMProxy.address
-  );
 }
