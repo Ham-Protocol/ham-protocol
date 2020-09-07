@@ -40,10 +40,6 @@ const Timelock = artifacts.require("Timelock");
 // Deployed fourth.
 let contractArtifacts = tokens.map((tokenName) => artifacts.require(contractName(tokenName)))
 
-
-// deployed fifth
-const HAMIncentivizer = artifacts.require("HAMIncentivizer");
-
 // ============ Main Migration ============
 
 const migration = async (deployer, network, accounts) => {
@@ -68,22 +64,19 @@ async function deployDistribution(deployer, network, accounts) {
   let gov = await Gov.deployed();
   if (network != "test") {
     for (let i = 0; i < contractArtifacts.length; i++) {
-      await deployer.deploy(contractArtifacts[i]);
+      await deployer.deploy(contractArtifacts[i], ham.address);
     }
-    await deployer.deploy(HAMIncentivizer);
 
 
     let poolContracts = {}
     for (let i = 0; i < contractArtifacts.length; i++) {
       poolContracts[tokens[i]] = new web3.eth.Contract(contractArtifacts[i].abi, contractArtifacts[i].address)
     }
-    let ycrv_pool = new web3.eth.Contract(HAMIncentivizer.abi, HAMIncentivizer.address);
 
     console.log("setting distributor");
     for (let i = 0; i < tokens.length; i++) {
       await poolContracts[tokens[i]].methods.setRewardDistribution(accounts[0]).send({from: accounts[0], gas: 100000})
     }
-    await ycrv_pool.methods.setRewardDistribution(accounts[0]).send({from: accounts[0], gas: 100000})
 
     let two_fifty = web3.utils.toBN(10**3).mul(web3.utils.toBN(10**18)).mul(web3.utils.toBN(250));
     let one_five = two_fifty.mul(web3.utils.toBN(6));
@@ -93,28 +86,22 @@ async function deployDistribution(deployer, network, accounts) {
     for (let i = 0; i < tokens.length; i++) {
       await ham.transfer(contractArtifacts[i].address, amountsPerPool[tokens[i]].toString())
     }
-    await ham._setIncentivizer(HAMIncentivizer.address)
 
     console.log("notifying");
     for (let i = 0; i < tokens.length; i++) {
       await poolContracts[tokens[i]].methods.notifyRewardAmount(amountsPerPool[tokens[i]].toString()).send({from:accounts[0]})
     }
-    // incentives is a minter and prepopulates itself.
-    await ycrv_pool.methods.notifyRewardAmount("0").send({from: accounts[0], gas: 500000})
 
     console.log("setting distribution");
     // Set reward distribution to timelock.
     for (let i = 0; i < tokens.length; i++) {
       await poolContracts[tokens[i]].methods.setRewardDistribution(Timelock.address).send({from: accounts[0], gas: 100000})
     }
-    await ycrv_pool.methods.setRewardDistribution(Timelock.address).send({from: accounts[0], gas: 100000})
-
 
     // Set ownership to timelock.
     for (let i = 0; i < tokens.length; i++) {
       await poolContracts[tokens[i]].methods.transferOwnership(Timelock.address).send({from: accounts[0], gas: 100000})
     }
-    await ycrv_pool.methods.transferOwnership(Timelock.address).send({from: accounts[0], gas: 100000})
   }
 
   await Promise.all([
