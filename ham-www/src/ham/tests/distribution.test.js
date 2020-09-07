@@ -196,7 +196,7 @@ describe("Distribution", () => {
 
       rpt = await ham.contracts.eth_pool.methods.rewardPerToken().call();
 
-      let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+      let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
       console.log(earned, ysf, rpt);
 
@@ -344,7 +344,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.eth_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -412,7 +412,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.eth_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -666,7 +666,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.eth_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -917,7 +917,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.yfi_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -985,7 +985,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.lend_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -1054,7 +1054,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.link_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -1123,7 +1123,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.bzrx_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -1191,7 +1191,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.yycrv_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 
@@ -1268,7 +1268,7 @@ describe("Distribution", () => {
 
         rpt = await ham.contracts.snx_pool.methods.rewardPerToken().call();
 
-        let ysf = await ham.contracts.ham.methods.scalingFactor().call();
+        let ysf = await ham.contracts.ham.methods.hamsScalingFactor().call();
 
         //console.log(earned, ysf, rpt);
 

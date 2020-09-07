@@ -32,7 +32,7 @@ contract HAMToken is HAMTokenInterface {
     )
         public
     {
-        require(scalingFactor == 0, "already initialized");
+        require(hamsScalingFactor == 0, "already initialized");
         name = name_;
         symbol = symbol_;
         decimals = decimals_;
@@ -55,8 +55,8 @@ contract HAMToken is HAMTokenInterface {
         view
         returns (uint256)
     {
-        // scaling factor can only go up to 2**256-1 = initSupply * scalingFactor
-        // this is used to check if scalingFactor will be too high to compute balances when rebasing.
+        // scaling factor can only go up to 2**256-1 = initSupply * hamsScalingFactor
+        // this is used to check if hamsScalingFactor will be too high to compute balances when rebasing.
         return uint256(-1) / initSupply;
     }
 
@@ -80,13 +80,13 @@ contract HAMToken is HAMTokenInterface {
       totalSupply = totalSupply.add(amount);
 
       // get underlying value
-      uint256 hamValue = amount.mul(internalDecimals).div(scalingFactor);
+      uint256 hamValue = amount.mul(internalDecimals).div(hamsScalingFactor);
 
       // increase initSupply
       initSupply = initSupply.add(hamValue);
 
       // make sure the mint didnt push maxScalingFactor too low
-      require(scalingFactor <= _maxScalingFactor(), "max scaling factor too low");
+      require(hamsScalingFactor <= _maxScalingFactor(), "max scaling factor too low");
 
       // add balance
       _hamBalances[to] = _hamBalances[to].add(hamValue);
@@ -110,10 +110,10 @@ contract HAMToken is HAMTokenInterface {
         // underlying balance is stored in hams, so divide by current scaling factor
 
         // note, this means as scaling factor grows, dust will be untransferrable.
-        // minimum transfer value == scalingFactor / 1e24;
+        // minimum transfer value == hamsScalingFactor / 1e24;
 
         // get amount in underlying
-        uint256 hamValue = value.mul(internalDecimals).div(scalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
 
         // sub from balance of sender
         _hamBalances[msg.sender] = _hamBalances[msg.sender].sub(hamValue);
@@ -140,7 +140,7 @@ contract HAMToken is HAMTokenInterface {
         _allowedFragments[from][msg.sender] = _allowedFragments[from][msg.sender].sub(value);
 
         // get value in hams
-        uint256 hamValue = value.mul(internalDecimals).div(scalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
 
         // sub from from
         _hamBalances[from] = _hamBalances[from].sub(hamValue);
@@ -158,7 +158,7 @@ contract HAMToken is HAMTokenInterface {
       view
       returns (uint256)
     {
-      return _hamBalances[who].mul(scalingFactor).div(internalDecimals);
+      return _hamBalances[who].mul(hamsScalingFactor).div(internalDecimals);
     }
 
     /** @notice Currently returns the internal storage amount
@@ -313,26 +313,26 @@ contract HAMToken is HAMTokenInterface {
         returns (uint256)
     {
         if (indexDelta == 0) {
-          emit Rebase(epoch, scalingFactor, scalingFactor);
+          emit Rebase(epoch, hamsScalingFactor, hamsScalingFactor);
           return totalSupply;
         }
 
-        uint256 prevscalingFactor = scalingFactor;
+        uint256 prevHamsScalingFactor = hamsScalingFactor;
 
         if (!positive) {
-           scalingFactor = scalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
+           hamsScalingFactor = hamsScalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
         } else {
-            uint256 newScalingFactor = scalingFactor.mul(BASE.add(indexDelta)).div(BASE);
+            uint256 newScalingFactor = hamsScalingFactor.mul(BASE.add(indexDelta)).div(BASE);
             if (newScalingFactor < _maxScalingFactor()) {
-                scalingFactor = newScalingFactor;
+                hamsScalingFactor = newScalingFactor;
             } else {
-              scalingFactor = _maxScalingFactor();
+              hamsScalingFactor = _maxScalingFactor();
             }
         }
 
         // The rebase bug is this line right here, don't solve until properly understood.
-        totalSupply = initSupply.mul(scalingFactor).div(BASE);
-        emit Rebase(epoch, prevscalingFactor, scalingFactor);
+        totalSupply = initSupply.mul(hamsScalingFactor).div(BASE);
+        emit Rebase(epoch, prevHamsScalingFactor, hamsScalingFactor);
         return totalSupply;
     }
 }
@@ -359,7 +359,7 @@ contract HAM is HAMToken {
 
         initSupply = initSupply_.mul(10**24/ (BASE));
         totalSupply = initSupply_;
-        scalingFactor = BASE;
+        hamsScalingFactor = BASE;
         _hamBalances[initial_owner] = initSupply_.mul(10**24 / (BASE));
 
         // owner renounces ownership after deployment as they need to set

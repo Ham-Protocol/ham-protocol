@@ -25,6 +25,7 @@ contract HAMRebaser {
     // Stable ordering is not guaranteed.
     Transaction[] public transactions;
 
+    uint256 public constant BASE = 10**18;
 
     /// @notice Governance address
     address public gov;

@@ -65,7 +65,7 @@ contract HAMTokenStorage {
     /**
      * @notice Scaling factor that adjusts everyone's balances
      */
-    uint256 public scalingFactor;
+    uint256 public hamsScalingFactor;
 
     mapping (address => uint256) internal _hamBalances;
 
