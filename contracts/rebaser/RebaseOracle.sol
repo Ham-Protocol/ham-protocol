@@ -7,9 +7,9 @@ import "../lib/UniswapV2OracleLibrary.sol";
 
 contract RebaseOracle {
 
+    uint256 constant BASE = 10**18;
     uint256 public tokenCumulativePriceLast;
     uint256 public targetCumulativePriceLast;
-    uint256 constant BASE = 10**18;
 
     address public tokenPair;
     address public targetPair;
@@ -35,21 +35,21 @@ contract RebaseOracle {
         _;
     }
 
-    constructor(address uni_factory_, address rebaser_) public {
+    constructor(address _uni_factory, address _rebaser) public {
         gov = msg.sender;
-        uni_factory = uni_factory_;
-        rebaser = rebaser_;
+        uni_factory = _uni_factory;
+        rebaser = _rebaser;
     }
 
-    function setTokenPair(address tokenAddress_, address pairedAddress_)
+    function setTokenPair(address _tokenAddress, address _pairedAddress)
         public
         onlyGov
     {
-        require(tokenAddress_ != address(0) && pairedAddress_ != address(0), "!zero");
-        require(tokenAddress_ != pairedAddress_, "same");
-        (address token0, address token1) = UniswapV2Library.sortTokens(tokenAddress_, pairedAddress_);
+        require(_tokenAddress != address(0) && _pairedAddress != address(0), "!zero");
+        require(_tokenAddress != _pairedAddress, "same");
+        (address token0, address token1) = UniswapV2Library.sortTokens(_tokenAddress, _pairedAddress);
         // Used for interacting with uniswap
-        if (token0 == tokenAddress_) {
+        if (token0 == _tokenAddress) {
             isToken0 = true;
         } else {
             isToken0 = false;
@@ -62,13 +62,13 @@ contract RebaseOracle {
     //    // Uniswap ETH/DAI pair
     //    address dai = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
     //    address weth = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-    function setTargetPair(address _targetAddress, address pairedAddress_)
+    function setTargetPair(address _targetAddress, address _pairedAddress)
         public
         onlyGov
     {
-        require(_targetAddress != address(0) && pairedAddress_ != address(0), "!zero");
-        require(_targetAddress != pairedAddress_, "same");
-        (address token0, address token1) = UniswapV2Library.sortTokens(_targetAddress, pairedAddress_);
+        require(_targetAddress != address(0) && _pairedAddress != address(0), "!zero");
+        require(_targetAddress != _pairedAddress, "same");
+        (address token0, address token1) = UniswapV2Library.sortTokens(_targetAddress, _pairedAddress);
         // Used for interacting with uniswap
         if (token0 == _targetAddress) {
             isTarget0 = true;
