@@ -7,15 +7,8 @@ import '../lib/IUniswapV2Pair.sol';
 import "../lib/UniswapV2OracleLibrary.sol";
 import "../token/HAMTokenInterface.sol";
 
-
 contract HAMRebaser {
-
     using SafeMath for uint256;
-
-    modifier onlyGov() {
-        require(msg.sender == gov);
-        _;
-    }
 
     struct Transaction {
         bool enabled;
@@ -28,42 +21,6 @@ contract HAMRebaser {
       uint256 amountFromReserves;
       uint256 mintToReserves;
     }
-
-    /// @notice an event emitted when a transaction fails
-    event TransactionFailed(address indexed destination, uint index, bytes data);
-
-    /// @notice an event emitted when maxSlippageFactor is changed
-    event NewMaxSlippageFactor(uint256 oldSlippageFactor, uint256 newSlippageFactor);
-
-    /// @notice an event emitted when deviationThreshold is changed
-    event NewDeviationThreshold(uint256 oldDeviationThreshold, uint256 newDeviationThreshold);
-
-    /**
-     * @notice Sets the treasury mint percentage of rebase
-     */
-    event NewRebaseMintPercent(uint256 oldRebaseMintPerc, uint256 newRebaseMintPerc);
-
-
-    /**
-     * @notice Sets the reserve contract
-     */
-    event NewReserveContract(address oldReserveContract, address newReserveContract);
-
-    /**
-     * @notice Sets the reserve contract
-     */
-    event TreasuryIncreased(uint256 reservesAdded, uint256 hamsSold, uint256 hamsFromReserves, uint256 hamsToReserves);
-
-
-    /**
-     * @notice Event emitted when pendingGov is changed
-     */
-    event NewPendingGov(address oldPendingGov, address newPendingGov);
-
-    /**
-     * @notice Event emitted when gov is changed
-     */
-    event NewGov(address oldGov, address newGov);
 
     // Stable ordering is not guaranteed.
     Transaction[] public transactions;
@@ -144,6 +101,47 @@ contract HAMRebaser {
     /// @notice Whether or not this token is first in uniswap HAM<>Reserve pair
     bool public isToken0;
 
+    /// @notice an event emitted when a transaction fails
+    event TransactionFailed(address indexed destination, uint index, bytes data);
+
+    /// @notice an event emitted when maxSlippageFactor is changed
+    event NewMaxSlippageFactor(uint256 oldSlippageFactor, uint256 newSlippageFactor);
+
+    /// @notice an event emitted when deviationThreshold is changed
+    event NewDeviationThreshold(uint256 oldDeviationThreshold, uint256 newDeviationThreshold);
+
+    /**
+     * @notice Sets the treasury mint percentage of rebase
+     */
+    event NewRebaseMintPercent(uint256 oldRebaseMintPerc, uint256 newRebaseMintPerc);
+
+
+    /**
+     * @notice Sets the reserve contract
+     */
+    event NewReserveContract(address oldReserveContract, address newReserveContract);
+
+    /**
+     * @notice Sets the reserve contract
+     */
+    event TreasuryIncreased(uint256 reservesAdded, uint256 hamsSold, uint256 hamsFromReserves, uint256 hamsToReserves);
+
+
+    /**
+     * @notice Event emitted when pendingGov is changed
+     */
+    event NewPendingGov(address oldPendingGov, address newPendingGov);
+
+    /**
+     * @notice Event emitted when gov is changed
+     */
+    event NewGov(address oldGov, address newGov);
+
+    modifier onlyGov() {
+        require(msg.sender == gov);
+        _;
+    }
+
     constructor(
         address hamAddress_,
         address reserveToken_,
@@ -179,7 +177,7 @@ contract HAMRebaser {
           maxSlippageFactor = 5409258 * 10**10;
 
           // 1 YCRV
-          targetRate = 10**18;
+          targetRate = BASE;
 
           // twice daily rebase, with targeting reaching peg in 5 days
           rebaseLag = 10;
@@ -333,7 +331,7 @@ contract HAMRebaser {
         HAMTokenInterface ham = HAMTokenInterface(hamAddress);
 
         if (positive) {
-            require(ham.hamsScalingFactor().mul(uint256(10**18).add(indexDelta)).div(10**18) < ham.maxScalingFactor(), "new scaling factor will be too big");
+            require(ham.hamsScalingFactor().mul(uint256(BASE).add(indexDelta)).div(BASE) < ham.maxScalingFactor(), "new scaling factor will be too big");
         }
 
 
@@ -342,9 +340,9 @@ contract HAMRebaser {
         uint256 mintAmount;
         // Reduce indexDelta to account for minting.
         if (positive) {
-            uint256 mintPerc = indexDelta.mul(rebaseMintPerc).div(10**18);
+            uint256 mintPerc = indexDelta.mul(rebaseMintPerc).div(BASE);
             indexDelta = indexDelta.sub(mintPerc);
-            mintAmount = currSupply.mul(mintPerc).div(10**18);
+            mintAmount = currSupply.mul(mintPerc).div(BASE);
         }
 
         // Perform rebase.
@@ -499,7 +497,7 @@ contract HAMRebaser {
         if (isToken0) {
           if (offPegPerc >= 10**17) {
               // cap slippage
-              return token0.mul(maxSlippageFactor).div(10**18);
+              return token0.mul(maxSlippageFactor).div(BASE);
           } else {
               // in the 5-10% off peg range, slippage is essentially 2*x (where x is percentage of pool to buy).
               // all we care about is not pushing below the peg, so underestimate
@@ -507,13 +505,13 @@ contract HAMRebaser {
               // should be ~= offPegPerc * 2 / 3, which will keep us above the peg
               //
               // this is a conservative heuristic
-              return token0.mul(offPegPerc / 3).div(10**18);
+              return token0.mul(offPegPerc / 3).div(BASE);
           }
         } else {
             if (offPegPerc >= 10**17) {
-                return token1.mul(maxSlippageFactor).div(10**18);
+                return token1.mul(maxSlippageFactor).div(BASE);
             } else {
-                return token1.mul(offPegPerc / 3).div(10**18);
+                return token1.mul(offPegPerc / 3).div(BASE);
             }
         }
     }
@@ -600,7 +598,7 @@ contract HAMRebaser {
         priceCumulativeLast = priceCumulative;
         blockTimestampLast = blockTimestamp;
 
-        return FixedPoint.decode144(FixedPoint.mul(priceAverage, 10**18));
+        return FixedPoint.decode144(FixedPoint.mul(priceAverage, BASE));
     }
 
     /**
@@ -622,7 +620,7 @@ contract HAMRebaser {
         // cumulative price is in (uq112x112 price * seconds) units so we simply wrap it after division by time elapsed
         FixedPoint.uq112x112 memory priceAverage = FixedPoint.uq112x112(uint224((priceCumulative - priceCumulativeLast) / timeElapsed));
 
-        return FixedPoint.decode144(FixedPoint.mul(priceAverage, 10**18));
+        return FixedPoint.decode144(FixedPoint.mul(priceAverage, BASE));
     }
 
     /**
@@ -730,9 +728,9 @@ contract HAMRebaser {
 
         // indexDelta =  (rate - targetRate) / targetRate
         if (rate > targetRate) {
-            return (rate.sub(targetRate).mul(10**18).div(targetRate), true);
+            return (rate.sub(targetRate).mul(BASE).div(targetRate), true);
         } else {
-            return (targetRate.sub(rate).mul(10**18).div(targetRate), false);
+            return (targetRate.sub(rate).mul(BASE).div(targetRate), false);
         }
     }
 
