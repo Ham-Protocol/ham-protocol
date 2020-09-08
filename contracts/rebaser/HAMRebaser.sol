@@ -670,14 +670,12 @@ contract HAMRebaser {
      *         Otherwise, returns false.
      */
     function inRebaseWindow() public view returns (bool) {
-
         // rebasing is delayed until there is a liquid market
         _inRebaseWindow();
         return true;
     }
 
     function _inRebaseWindow() internal view {
-
         // rebasing is delayed until there is a liquid market
         require(rebasingActive, "rebasing not active");
 
@@ -722,7 +720,31 @@ contract HAMRebaser {
             || (rate < targetRate && targetRate.sub(rate) < absoluteDeviationThreshold);
     }
 
-    /* - Constructor Helpers - */
+    /* - Uniswap Helpers - */
+    /**
+     * @notice given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
+     *
+     * @param amountIn input amount of the asset
+     * @param reserveIn reserves of the asset being sold
+     * @param reserveOut reserves if the asset being purchased
+     */
+
+    function getAmountOut(
+        uint amountIn,
+        uint reserveIn,
+        uint reserveOut
+    )
+    internal
+    pure
+    returns (uint amountOut)
+    {
+        require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
+        require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
+        uint amountInWithFee = amountIn.mul(997);
+        uint numerator = amountInWithFee.mul(reserveOut);
+        uint denominator = reserveIn.mul(1000).add(amountInWithFee);
+        amountOut = numerator / denominator;
+    }
 
     // calculates the CREATE2 address for a pair without making any external calls
     function pairFor(
