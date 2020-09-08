@@ -47,7 +47,7 @@ import "../lib/IRewardDistributionRecipient.sol";
 pragma solidity ^0.5.0;
 
 interface HAM {
-    function hamsScalingFactor() external returns (uint256);
+    function scalingFactor() external returns (uint256);
 }
 
 contract LPTokenWrapper {
@@ -164,7 +164,7 @@ contract HAMBZRXPool is LPTokenWrapper, IRewardDistributionRecipient {
         uint256 reward = earned(msg.sender);
         if (reward > 0) {
             rewards[msg.sender] = 0;
-            uint256 scalingFactor = HAM(address(ham)).hamsScalingFactor();
+            uint256 scalingFactor = HAM(address(ham)).scalingFactor();
             uint256 trueReward = reward.mul(scalingFactor).div(10**18);
             ham.safeTransfer(msg.sender, trueReward);
             emit RewardPaid(msg.sender, trueReward);
