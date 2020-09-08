@@ -22,16 +22,7 @@ contract HAMRebaser {
       uint256 mintToReserves;
     }
 
-    // Stable ordering is not guaranteed.
-    Transaction[] public transactions;
-
     uint256 public constant BASE = 10**18;
-
-    /// @notice Governance address
-    address public gov;
-
-    /// @notice Pending Governance address
-    address public pendingGov;
 
     /// @notice Spreads out getting to the target price
     uint256 public rebaseLag;
@@ -63,16 +54,27 @@ contract HAMRebaser {
     /// @notice The number of rebase cycles since inception
     uint256 public epoch;
 
-    // rebasing is not active initially. It can be activated at T+12 hours from
-    // deployment time
-    ///@notice boolean showing rebase activation status
-    bool public rebasingActive;
-
     /// @notice delays rebasing activation to facilitate liquidity
     uint256 public constant rebaseDelay = 12 hours;
 
     /// @notice Time of TWAP initialization
     uint256 public timeOfTWAPInit;
+
+    /// @notice last TWAP cumulative price;
+    uint256 public priceCumulativeLast;
+
+    // Max slippage factor when buying reserve token. Magic number based on
+    // the fact that uniswap is a constant product. Therefore,
+    // targeting a % max slippage can be achieved by using a single precomputed
+    // number. i.e. 2.5% slippage is always equal to some f(maxSlippageFactor, reserves)
+    /// @notice the maximum slippage factor when buying reserve token
+    uint256 public maxSlippageFactor;
+
+    /// @notice Governance address
+    address public gov;
+
+    /// @notice Pending Governance address
+    address public pendingGov;
 
     /// @notice HAM token address
     address public hamAddress;
@@ -89,18 +91,16 @@ contract HAMRebaser {
     /// @notice last TWAP update time
     uint32 public blockTimestampLast;
 
-    /// @notice last TWAP cumulative price;
-    uint256 public priceCumulativeLast;
-
-    // Max slippage factor when buying reserve token. Magic number based on
-    // the fact that uniswap is a constant product. Therefore,
-    // targeting a % max slippage can be achieved by using a single precomputed
-    // number. i.e. 2.5% slippage is always equal to some f(maxSlippageFactor, reserves)
-    /// @notice the maximum slippage factor when buying reserve token
-    uint256 public maxSlippageFactor;
-
     /// @notice Whether or not this token is first in uniswap HAM<>Reserve pair
     bool public isToken0;
+
+    // rebasing is not active initially. It can be activated at T+12 hours from
+    // deployment time
+    ///@notice boolean showing rebase activation status
+    bool public rebasingActive;
+
+    // Stable ordering is not guaranteed.
+    Transaction[] public transactions;
 
     /// @notice an event emitted when a transaction fails
     event TransactionFailed(address indexed destination, uint index, bytes data);
@@ -127,7 +127,6 @@ contract HAMRebaser {
      */
     event TreasuryIncreased(uint256 reservesAdded, uint256 hamsSold, uint256 hamsFromReserves, uint256 hamsToReserves);
 
-
     /**
      * @notice Event emitted when pendingGov is changed
      */
@@ -151,50 +150,47 @@ contract HAMRebaser {
     )
         public
     {
-          minRebaseTimeIntervalSec = 12 hours;
-          rebaseWindowOffsetSec = 28800; // 8am/8pm UTC rebases
-          reservesContract = reservesContract_;
-          (address token0, address token1) = sortTokens(hamAddress_, reserveToken_);
+        minRebaseTimeIntervalSec = 12 hours;
+        rebaseWindowOffsetSec = 28800; // 8am/8pm UTC rebases
+        reservesContract = reservesContract_;
+        (address token0, address token1) = sortTokens(hamAddress_, reserveToken_);
 
-          // used for interacting with uniswap
-          if (token0 == hamAddress_) {
-              isToken0 = true;
-          } else {
-              isToken0 = false;
-          }
-          // uniswap HAM<>Reserve pair
-          uniswap_pair = pairFor(uniswap_factory, token0, token1);
+        // used for interacting with uniswap
+        if (token0 == hamAddress_) {
+            isToken0 = true;
+        }
+        // uniswap HAM<>Reserve pair
+        uniswap_pair = pairFor(uniswap_factory, token0, token1);
 
-          // Reserves contract is mutable
-          reservesContract = reservesContract_;
+        // Reserves contract is mutable
+        reservesContract = reservesContract_;
 
-          // Reserve token is not mutable. Must deploy a new rebaser to update it
-          reserveToken = reserveToken_;
+        // Reserve token is not mutable. Must deploy a new rebaser to update it
+        reserveToken = reserveToken_;
 
-          hamAddress = hamAddress_;
+        hamAddress = hamAddress_;
 
-          // target 10% slippage
-          // 5.4%
-          maxSlippageFactor = 5409258 * 10**10;
+        // target 10% slippage
+        // 5.4%
+        maxSlippageFactor = 5409258 * 10**10;
 
-          // 1 YCRV
-          targetRate = BASE;
+        // 1 YCRV
+        targetRate = BASE;
 
-          // twice daily rebase, with targeting reaching peg in 5 days
-          rebaseLag = 10;
+        // twice daily rebase, with targeting reaching peg in 5 days
+        rebaseLag = 10;
 
-          // 10%
-          rebaseMintPerc = 10**17;
+        // 10%
+        rebaseMintPerc = 10**17;
 
-          // 5%
-          deviationThreshold = 5 * 10**16;
+        // 5%
+        deviationThreshold = 5 * 10**16;
 
-          // 60 minutes
-          rebaseWindowLengthSec = 60 * 60;
+        // 60 minutes
+        rebaseWindowLengthSec = 60 * 60;
 
-          // Changed in deployment scripts to facilitate protocol initiation
-          gov = msg.sender;
-
+        // Changed in deployment scripts to facilitate protocol initiation
+        gov = msg.sender;
     }
 
     /**
@@ -266,6 +262,79 @@ contract HAMRebaser {
         emit NewGov(oldGov, gov);
     }
 
+
+    /**
+     * @notice Sets the deviation threshold fraction. If the exchange rate given by the market
+     *         oracle is within this fractional distance from the targetRate, then no supply
+     *         modifications are made.
+     * @param deviationThreshold_ The new exchange rate threshold fraction.
+     */
+    function setDeviationThreshold(uint256 deviationThreshold_)
+        external
+        onlyGov
+    {
+        require(deviationThreshold > 0);
+        uint256 oldDeviationThreshold = deviationThreshold;
+        deviationThreshold = deviationThreshold_;
+        emit NewDeviationThreshold(oldDeviationThreshold, deviationThreshold_);
+    }
+
+    /**
+     * @notice Sets the rebase lag parameter.
+               It is used to dampen the applied supply adjustment by 1 / rebaseLag
+               If the rebase lag R, equals 1, the smallest value for R, then the full supply
+               correction is applied on each rebase cycle.
+               If it is greater than 1, then a correction of 1/R of is applied on each rebase.
+     * @param rebaseLag_ The new rebase lag parameter.
+     */
+    function setRebaseLag(uint256 rebaseLag_)
+        external
+        onlyGov
+    {
+        require(rebaseLag_ > 0);
+        rebaseLag = rebaseLag_;
+    }
+
+    /**
+     * @notice Sets the targetRate parameter.
+     * @param targetRate_ The new target rate parameter.
+     */
+    function setTargetRate(uint256 targetRate_)
+        external
+        onlyGov
+    {
+        require(targetRate_ > 0);
+        targetRate = targetRate_;
+    }
+
+    /**
+     * @notice Sets the parameters which control the timing and frequency of
+     *         rebase operations.
+     *         a) the minimum time period that must elapse between rebase cycles.
+     *         b) the rebase window offset parameter.
+     *         c) the rebase window length parameter.
+     * @param minRebaseTimeIntervalSec_ More than this much time must pass between rebase
+     *        operations, in seconds.
+     * @param rebaseWindowOffsetSec_ The number of seconds from the beginning of
+              the rebase interval, where the rebase window begins.
+     * @param rebaseWindowLengthSec_ The length of the rebase window in seconds.
+     */
+    function setRebaseTimingParameters(
+        uint256 minRebaseTimeIntervalSec_,
+        uint256 rebaseWindowOffsetSec_,
+        uint256 rebaseWindowLengthSec_
+    )
+        external
+        onlyGov
+    {
+        require(minRebaseTimeIntervalSec_ > 0);
+        require(rebaseWindowOffsetSec_ < minRebaseTimeIntervalSec_);
+
+        minRebaseTimeIntervalSec = minRebaseTimeIntervalSec_;
+        rebaseWindowOffsetSec = rebaseWindowOffsetSec_;
+        rebaseWindowLengthSec = rebaseWindowLengthSec_;
+    }
+
     /** @notice Initializes TWAP start point, starts countdown to first rebase
     *
     */
@@ -332,9 +401,8 @@ contract HAMRebaser {
         HAMTokenInterface ham = HAMTokenInterface(hamAddress);
 
         if (positive) {
-            require(ham.hamsScalingFactor().mul(uint256(BASE).add(indexDelta)).div(BASE) < ham.maxScalingFactor(), "new scaling factor will be too big");
+            require(ham.scalingFactor().mul(uint256(BASE).add(indexDelta)).div(BASE) < ham.maxScalingFactor(), "new scaling factor will be too big");
         }
-
 
         uint256 currSupply = ham.totalSupply();
 
@@ -348,7 +416,7 @@ contract HAMRebaser {
 
         // Perform rebase.
         ham.rebase(epoch, indexDelta, positive);
-        assert(ham.hamsScalingFactor() <= ham.maxScalingFactor());
+        assert(ham.scalingFactor() <= ham.maxScalingFactor());
 
         // Perform actions after rebase.
         afterRebase(mintAmount, offPegPerc);
@@ -496,18 +564,18 @@ contract HAMRebaser {
       returns (uint256)
     {
         if (isToken0) {
-          if (offPegPerc >= 10**17) {
-              // cap slippage
-              return token0.mul(maxSlippageFactor).div(BASE);
-          } else {
-              // in the 5-10% off peg range, slippage is essentially 2*x (where x is percentage of pool to buy).
-              // all we care about is not pushing below the peg, so underestimate
-              // the amount we can sell by dividing by 3. resulting price impact
-              // should be ~= offPegPerc * 2 / 3, which will keep us above the peg
-              //
-              // this is a conservative heuristic
-              return token0.mul(offPegPerc / 3).div(BASE);
-          }
+            if (offPegPerc >= 10**17) {
+                // cap slippage
+                return token0.mul(maxSlippageFactor).div(BASE);
+            } else {
+                // in the 5-10% off peg range, slippage is essentially 2*x (where x is percentage of pool to buy).
+                // all we care about is not pushing below the peg, so underestimate
+                // the amount we can sell by dividing by 3. resulting price impact
+                // should be ~= offPegPerc * 2 / 3, which will keep us above the peg
+                //
+                // this is a conservative heuristic
+                return token0.mul(offPegPerc / 3).div(BASE);
+            }
         } else {
             if (offPegPerc >= 10**17) {
                 return token1.mul(maxSlippageFactor).div(BASE);
@@ -516,32 +584,6 @@ contract HAMRebaser {
             }
         }
     }
-
-    /**
-     * @notice given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
-     *
-     * @param amountIn input amount of the asset
-     * @param reserveIn reserves of the asset being sold
-     * @param reserveOut reserves if the asset being purchased
-     */
-
-   function getAmountOut(
-        uint amountIn,
-        uint reserveIn,
-        uint reserveOut
-    )
-        internal
-        pure
-        returns (uint amountOut)
-    {
-       require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
-       require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
-       uint amountInWithFee = amountIn.mul(997);
-       uint numerator = amountInWithFee.mul(reserveOut);
-       uint denominator = reserveIn.mul(1000).add(amountInWithFee);
-       amountOut = numerator / denominator;
-   }
-
 
     function afterRebase(
         uint256 mintAmount,
@@ -563,8 +605,7 @@ contract HAMRebaser {
         for (uint i = 0; i < transactions.length; i++) {
             Transaction storage t = transactions[i];
             if (t.enabled) {
-                bool result =
-                    externalCall(t.destination, t.data);
+                bool result = externalCall(t.destination, t.data);
                 if (!result) {
                     emit TransactionFailed(t.destination, i, t.data);
                     revert("Transaction Failed");
@@ -625,89 +666,16 @@ contract HAMRebaser {
     }
 
     /**
-     * @notice Sets the deviation threshold fraction. If the exchange rate given by the market
-     *         oracle is within this fractional distance from the targetRate, then no supply
-     *         modifications are made.
-     * @param deviationThreshold_ The new exchange rate threshold fraction.
-     */
-    function setDeviationThreshold(uint256 deviationThreshold_)
-        external
-        onlyGov
-    {
-        require(deviationThreshold > 0);
-        uint256 oldDeviationThreshold = deviationThreshold;
-        deviationThreshold = deviationThreshold_;
-        emit NewDeviationThreshold(oldDeviationThreshold, deviationThreshold_);
-    }
-
-    /**
-     * @notice Sets the rebase lag parameter.
-               It is used to dampen the applied supply adjustment by 1 / rebaseLag
-               If the rebase lag R, equals 1, the smallest value for R, then the full supply
-               correction is applied on each rebase cycle.
-               If it is greater than 1, then a correction of 1/R of is applied on each rebase.
-     * @param rebaseLag_ The new rebase lag parameter.
-     */
-    function setRebaseLag(uint256 rebaseLag_)
-        external
-        onlyGov
-    {
-        require(rebaseLag_ > 0);
-        rebaseLag = rebaseLag_;
-    }
-
-    /**
-     * @notice Sets the targetRate parameter.
-     * @param targetRate_ The new target rate parameter.
-     */
-    function setTargetRate(uint256 targetRate_)
-        external
-        onlyGov
-    {
-        require(targetRate_ > 0);
-        targetRate = targetRate_;
-    }
-
-    /**
-     * @notice Sets the parameters which control the timing and frequency of
-     *         rebase operations.
-     *         a) the minimum time period that must elapse between rebase cycles.
-     *         b) the rebase window offset parameter.
-     *         c) the rebase window length parameter.
-     * @param minRebaseTimeIntervalSec_ More than this much time must pass between rebase
-     *        operations, in seconds.
-     * @param rebaseWindowOffsetSec_ The number of seconds from the beginning of
-              the rebase interval, where the rebase window begins.
-     * @param rebaseWindowLengthSec_ The length of the rebase window in seconds.
-     */
-    function setRebaseTimingParameters(
-        uint256 minRebaseTimeIntervalSec_,
-        uint256 rebaseWindowOffsetSec_,
-        uint256 rebaseWindowLengthSec_)
-        external
-        onlyGov
-    {
-        require(minRebaseTimeIntervalSec_ > 0);
-        require(rebaseWindowOffsetSec_ < minRebaseTimeIntervalSec_);
-
-        minRebaseTimeIntervalSec = minRebaseTimeIntervalSec_;
-        rebaseWindowOffsetSec = rebaseWindowOffsetSec_;
-        rebaseWindowLengthSec = rebaseWindowLengthSec_;
-    }
-
-    /**
      * @return If the latest block timestamp is within the rebase time window it, returns true.
      *         Otherwise, returns false.
      */
     function inRebaseWindow() public view returns (bool) {
-
         // rebasing is delayed until there is a liquid market
         _inRebaseWindow();
         return true;
     }
 
     function _inRebaseWindow() internal view {
-
         // rebasing is delayed until there is a liquid market
         require(rebasingActive, "rebasing not active");
 
@@ -752,7 +720,31 @@ contract HAMRebaser {
             || (rate < targetRate && targetRate.sub(rate) < absoluteDeviationThreshold);
     }
 
-    /* - Constructor Helpers - */
+    /* - Uniswap Helpers - */
+    /**
+     * @notice given an input amount of an asset and pair reserves, returns the maximum output amount of the other asset
+     *
+     * @param amountIn input amount of the asset
+     * @param reserveIn reserves of the asset being sold
+     * @param reserveOut reserves if the asset being purchased
+     */
+
+    function getAmountOut(
+        uint amountIn,
+        uint reserveIn,
+        uint reserveOut
+    )
+    internal
+    pure
+    returns (uint amountOut)
+    {
+        require(amountIn > 0, 'UniswapV2Library: INSUFFICIENT_INPUT_AMOUNT');
+        require(reserveIn > 0 && reserveOut > 0, 'UniswapV2Library: INSUFFICIENT_LIQUIDITY');
+        uint amountInWithFee = amountIn.mul(997);
+        uint numerator = amountInWithFee.mul(reserveOut);
+        uint denominator = reserveIn.mul(1000).add(amountInWithFee);
+        amountOut = numerator / denominator;
+    }
 
     // calculates the CREATE2 address for a pair without making any external calls
     function pairFor(

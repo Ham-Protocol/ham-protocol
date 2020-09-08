@@ -135,7 +135,7 @@ async function deployDistribution(deployer, network, accounts) {
         0
       ),
   ]);
-  await tl.setPendingAdmin(Gov.address);
-  await gov.__acceptAdmin();
-  await gov.__abdicate();
+  // await tl.setPendingAdmin(gov.address);
+  // await gov.__acceptAdmin();
+  // await gov.__abdicate();
 }

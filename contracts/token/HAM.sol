@@ -32,12 +32,63 @@ contract HAMToken is HAMTokenInterface {
     )
         public
     {
-        require(hamsScalingFactor == 0, "already initialized");
+        require(scalingFactor == 0, "already initialized");
         name = name_;
         symbol = symbol_;
         decimals = decimals_;
     }
 
+
+    /* - Governance Functions - */
+
+    /** @notice sets the rebaser
+     * @param rebaser_ The address of the rebaser contract to use for authentication.
+     */
+    function _setRebaser(address rebaser_)
+        external
+        onlyGov
+    {
+        address oldRebaser = rebaser;
+        rebaser = rebaser_;
+        emit NewRebaser(oldRebaser, rebaser_);
+    }
+
+    /** @notice sets the incentivizer
+     * @param incentivizer_ The address of the rebaser contract to use for authentication.
+     */
+    function _setIncentivizer(address incentivizer_)
+        external
+        onlyGov
+    {
+        address oldIncentivizer = incentivizer;
+        incentivizer = incentivizer_;
+        emit NewIncentivizer(oldIncentivizer, incentivizer_);
+    }
+
+    /** @notice sets the pendingGov
+     * @param pendingGov_ The address of the rebaser contract to use for authentication.
+     */
+    function _setPendingGov(address pendingGov_)
+        external
+        onlyGov
+    {
+        address oldPendingGov = pendingGov;
+        pendingGov = pendingGov_;
+        emit NewPendingGov(oldPendingGov, pendingGov_);
+    }
+
+    /** @notice lets msg.sender accept governance
+     *
+     */
+    function _acceptGov()
+        external
+    {
+        require(msg.sender == pendingGov, "!pending");
+        address oldGov = gov;
+        gov = pendingGov;
+        pendingGov = address(0);
+        emit NewGov(oldGov, gov);
+    }
 
     /**
     * @notice Computes the current max scaling factor
@@ -55,8 +106,8 @@ contract HAMToken is HAMTokenInterface {
         view
         returns (uint256)
     {
-        // scaling factor can only go up to 2**256-1 = initSupply * hamsScalingFactor
-        // this is used to check if hamsScalingFactor will be too high to compute balances when rebasing.
+        // scaling factor can only go up to 2**256-1 = initSupply * scalingFactor
+        // this is used to check if scalingFactor will be too high to compute balances when rebasing.
         return uint256(-1) / initSupply;
     }
 
@@ -73,25 +124,23 @@ contract HAMToken is HAMTokenInterface {
         return true;
     }
 
-    function _mint(address to, uint256 amount)
-        internal
-    {
-      // increase totalSupply
-      totalSupply = totalSupply.add(amount);
+    function _mint(address to, uint256 amount) internal {
+        // increase totalSupply
+        totalSupply = totalSupply.add(amount);
 
-      // get underlying value
-      uint256 hamValue = amount.mul(internalDecimals).div(hamsScalingFactor);
+        // get underlying value
+        uint256 hamValue = amount.mul(internalDecimals).div(scalingFactor);
 
-      // increase initSupply
-      initSupply = initSupply.add(hamValue);
+        // increase initSupply
+        initSupply = initSupply.add(hamValue);
 
-      // make sure the mint didnt push maxScalingFactor too low
-      require(hamsScalingFactor <= _maxScalingFactor(), "max scaling factor too low");
+        // make sure the mint didnt push maxScalingFactor too low
+        require(scalingFactor <= _maxScalingFactor(), "max scaling factor too low");
 
-      // add balance
-      _hamBalances[to] = _hamBalances[to].add(hamValue);
+        // add balance
+        _hamBalances[to] = _hamBalances[to].add(hamValue);
 
-      emit Mint(to, amount);
+        emit Mint(to, amount);
     }
 
     /* - ERC20 functionality - */
@@ -110,10 +159,10 @@ contract HAMToken is HAMTokenInterface {
         // underlying balance is stored in hams, so divide by current scaling factor
 
         // note, this means as scaling factor grows, dust will be untransferrable.
-        // minimum transfer value == hamsScalingFactor / 1e24;
+        // minimum transfer value == scalingFactor / 1e24;
 
         // get amount in underlying
-        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(scalingFactor);
 
         // sub from balance of sender
         _hamBalances[msg.sender] = _hamBalances[msg.sender].sub(hamValue);
@@ -140,7 +189,7 @@ contract HAMToken is HAMTokenInterface {
         _allowedFragments[from][msg.sender] = _allowedFragments[from][msg.sender].sub(value);
 
         // get value in hams
-        uint256 hamValue = value.mul(internalDecimals).div(hamsScalingFactor);
+        uint256 hamValue = value.mul(internalDecimals).div(scalingFactor);
 
         // sub from from
         _hamBalances[from] = _hamBalances[from].sub(hamValue);
@@ -158,7 +207,7 @@ contract HAMToken is HAMTokenInterface {
       view
       returns (uint256)
     {
-      return _hamBalances[who].mul(hamsScalingFactor).div(internalDecimals);
+      return _hamBalances[who].mul(scalingFactor).div(internalDecimals);
     }
 
     /** @notice Currently returns the internal storage amount
@@ -242,58 +291,6 @@ contract HAMToken is HAMTokenInterface {
         emit Approval(msg.sender, spender, _allowedFragments[msg.sender][spender]);
         return true;
     }
-
-    /* - Governance Functions - */
-
-    /** @notice sets the rebaser
-     * @param rebaser_ The address of the rebaser contract to use for authentication.
-     */
-    function _setRebaser(address rebaser_)
-        external
-        onlyGov
-    {
-        address oldRebaser = rebaser;
-        rebaser = rebaser_;
-        emit NewRebaser(oldRebaser, rebaser_);
-    }
-
-    /** @notice sets the incentivizer
-     * @param incentivizer_ The address of the rebaser contract to use for authentication.
-     */
-    function _setIncentivizer(address incentivizer_)
-        external
-        onlyGov
-    {
-        address oldIncentivizer = incentivizer;
-        incentivizer = incentivizer_;
-        emit NewIncentivizer(oldIncentivizer, incentivizer_);
-    }
-
-    /** @notice sets the pendingGov
-     * @param pendingGov_ The address of the rebaser contract to use for authentication.
-     */
-    function _setPendingGov(address pendingGov_)
-        external
-        onlyGov
-    {
-        address oldPendingGov = pendingGov;
-        pendingGov = pendingGov_;
-        emit NewPendingGov(oldPendingGov, pendingGov_);
-    }
-
-    /** @notice lets msg.sender accept governance
-     *
-     */
-    function _acceptGov()
-        external
-    {
-        require(msg.sender == pendingGov, "!pending");
-        address oldGov = gov;
-        gov = pendingGov;
-        pendingGov = address(0);
-        emit NewGov(oldGov, gov);
-    }
-
     /* - Extras - */
 
     /**
@@ -313,26 +310,25 @@ contract HAMToken is HAMTokenInterface {
         returns (uint256)
     {
         if (indexDelta == 0) {
-          emit Rebase(epoch, hamsScalingFactor, hamsScalingFactor);
-          return totalSupply;
+            emit Rebase(epoch, scalingFactor, scalingFactor);
+            return totalSupply;
         }
 
-        uint256 prevHamsScalingFactor = hamsScalingFactor;
+        uint256 prevScalingFactor = scalingFactor;
 
         if (!positive) {
-           hamsScalingFactor = hamsScalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
+            scalingFactor = scalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
         } else {
-            uint256 newScalingFactor = hamsScalingFactor.mul(BASE.add(indexDelta)).div(BASE);
+            uint256 newScalingFactor = scalingFactor.mul(BASE.add(indexDelta)).div(BASE);
             if (newScalingFactor < _maxScalingFactor()) {
-                hamsScalingFactor = newScalingFactor;
+                scalingFactor = newScalingFactor;
             } else {
-              hamsScalingFactor = _maxScalingFactor();
+                scalingFactor = _maxScalingFactor();
             }
         }
 
-        // The rebase bug is this line right here, don't solve until properly understood.
-        totalSupply = initSupply.mul(hamsScalingFactor).div(BASE);
-        emit Rebase(epoch, prevHamsScalingFactor, hamsScalingFactor);
+        totalSupply = initSupply.mul(scalingFactor).div(BASE);
+        emit Rebase(epoch, prevScalingFactor, scalingFactor);
         return totalSupply;
     }
 }
@@ -359,7 +355,7 @@ contract HAM is HAMToken {
 
         initSupply = initSupply_.mul(10**24/ (BASE));
         totalSupply = initSupply_;
-        hamsScalingFactor = BASE;
+        scalingFactor = BASE;
         _hamBalances[initial_owner] = initSupply_.mul(10**24 / (BASE));
 
         // owner renounces ownership after deployment as they need to set
