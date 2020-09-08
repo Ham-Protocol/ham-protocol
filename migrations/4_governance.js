@@ -13,9 +13,7 @@ const HAMRebaser = artifacts.require("HAMRebaser");
 
 // Governance
 // deployed third
-const Gov = artifacts.require("GovernorAlpha");
 const Timelock = artifacts.require("Timelock");
-
 
 
 // ============ Main Migration ============
@@ -37,8 +35,4 @@ module.exports = migration;
 
 async function deployGovernance(deployer, network) {
   await deployer.deploy(Timelock);
-  await deployer.deploy(Gov,
-      Timelock.address,
-      HAMProxy.address
-  );
 }

@@ -207,22 +207,6 @@ contract HAMDelegator is HAMTokenInterface, HAMDelegatorInterface {
     }
 
     /**
-     * @notice Get the current allowance from `owner` for `spender`
-     * @param delegator The address of the account which has designated a delegate
-     * @return Address of delegatee
-     */
-    function delegates(
-        address delegator
-    )
-        external
-        view
-        returns (address)
-    {
-        delegator; // Shh
-        delegateToViewAndReturn();
-    }
-
-    /**
      * @notice Get the token balance of the `owner`
      * @param owner The address of the account to query
      * @return The number of tokens owned by `owner`
@@ -289,45 +273,6 @@ contract HAMDelegator is HAMTokenInterface, HAMDelegatorInterface {
         delegateAndReturn();
     }
 
-
-    function getPriorVotes(address account, uint blockNumber)
-        external
-        view
-        returns (uint256)
-    {
-        account; blockNumber;
-        delegateToViewAndReturn();
-    }
-
-    function delegateBySig(
-        address delegatee,
-        uint nonce,
-        uint expiry,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    )
-        external
-    {
-        delegatee; nonce; expiry; v; r; s;
-        delegateAndReturn();
-    }
-
-    function delegate(address delegatee)
-        external
-    {
-        delegatee;
-        delegateAndReturn();
-    }
-
-    function getCurrentVotes(address account)
-        external
-        view
-        returns (uint256)
-    {
-        account;
-        delegateToViewAndReturn();
-    }
 
     /**
      * @notice Internal method to delegate execution to another contract

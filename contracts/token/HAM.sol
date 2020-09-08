@@ -1,9 +1,8 @@
 pragma solidity 0.5.17;
 
-/* import "./HAMTokenInterface.sol"; */
-import "./HAMGovernance.sol";
+import "./HAMTokenInterface.sol";
 
-contract HAMToken is HAMGovernanceToken {
+contract HAMToken is HAMTokenInterface {
     // Modifiers
     modifier onlyGov() {
         require(msg.sender == gov);
@@ -141,8 +140,6 @@ contract HAMToken is HAMGovernanceToken {
         // add balance
         _hamBalances[to] = _hamBalances[to].add(hamValue);
 
-        // add delegates to the minter
-        _moveDelegates(address(0), _delegates[to], hamValue);
         emit Mint(to, amount);
     }
 
@@ -174,7 +171,6 @@ contract HAMToken is HAMGovernanceToken {
         _hamBalances[to] = _hamBalances[to].add(hamValue);
         emit Transfer(msg.sender, to, value);
 
-        _moveDelegates(_delegates[msg.sender], _delegates[to], hamValue);
         return true;
     }
 
@@ -199,8 +195,6 @@ contract HAMToken is HAMGovernanceToken {
         _hamBalances[from] = _hamBalances[from].sub(hamValue);
         _hamBalances[to] = _hamBalances[to].add(hamValue);
         emit Transfer(from, to, value);
-
-        _moveDelegates(_delegates[from], _delegates[to], hamValue);
         return true;
     }
 
@@ -316,14 +310,14 @@ contract HAMToken is HAMGovernanceToken {
         returns (uint256)
     {
         if (indexDelta == 0) {
-          emit Rebase(epoch, scalingFactor, scalingFactor);
-          return totalSupply;
+            emit Rebase(epoch, scalingFactor, scalingFactor);
+            return totalSupply;
         }
 
         uint256 prevScalingFactor = scalingFactor;
 
         if (!positive) {
-           scalingFactor = scalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
+            scalingFactor = scalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
         } else {
             uint256 newScalingFactor = scalingFactor.mul(BASE.add(indexDelta)).div(BASE);
             if (newScalingFactor < _maxScalingFactor()) {
@@ -333,8 +327,7 @@ contract HAMToken is HAMGovernanceToken {
             }
         }
 
-        // The rebase bug is this line right here, don't solve until properly understood.
-        totalSupply = initSupply.mul(scalingFactor);
+        totalSupply = initSupply.mul(scalingFactor).div(BASE);
         emit Rebase(epoch, prevScalingFactor, scalingFactor);
         return totalSupply;
     }

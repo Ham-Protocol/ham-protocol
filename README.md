@@ -81,8 +81,6 @@ $ cd jsLib
 $ jest deployment
 $ jest token
 $ jest rebase
-$ jest governance
-$ jest governorAlpha
 $ jest distribution
 ```
 The need to run one-by-one seems to be a limitation of jest + ganache.

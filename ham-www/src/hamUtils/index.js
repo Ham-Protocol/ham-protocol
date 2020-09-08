@@ -183,27 +183,6 @@ export const getStats = async (ham) => {
   }
 }
 
-export const vote = async (ham, account) => {
-  return ham.contracts.gov.methods.castVote(0, true).send({ from: account })
-}
-
-export const delegate = async (ham, account) => {
-  return ham.contracts.ham.methods.delegate("0x683A78bA1f6b25E29fbBC9Cd1BFA29A51520De84").send({from: account, gas: 320000 })
-}
-
-export const didDelegate = async (ham, account) => {
-  return await ham.contracts.ham.methods.delegates(account).call() === '0x683A78bA1f6b25E29fbBC9Cd1BFA29A51520De84'
-}
-
-export const getVotes = async (ham) => {
-  const votesRaw = new BigNumber(await ham.contracts.ham.methods.getCurrentVotes("0x683A78bA1f6b25E29fbBC9Cd1BFA29A51520De84").call()).div(10**24)
-  return votesRaw
-}
-
 export const getScalingFactor = async (ham) => {
   return new BigNumber(await ham.contracts.ham.methods.scalingFactor().call()).dividedBy(new BigNumber(10).pow(18))
-}
-
-export const getDelegatedBalance = async (ham, account) => {
-  return new BigNumber(await ham.contracts.ham.methods.balanceOfUnderlying(account).call()).div(10**24)
 }
