@@ -25,6 +25,7 @@ import WrappedStatusMap, { WrappedStatuses } from './wrapping'
 const App: React.FC = ({ children }) => {
   
   const [theme, setTheme] = useState(localStorage.getItem('theme') || Themes.LIGHT_MODE)
+  document.body.style.backgroundColor = (ThemeMap as any)[theme].color["bg"];
 
   const toggleTheme = () => {
     if (theme === Themes.DARK_MODE) {
@@ -35,6 +36,7 @@ const App: React.FC = ({ children }) => {
       setTheme(Themes.DARK_MODE)
       localStorage.setItem('theme', Themes.DARK_MODE)
     }
+    document.body.style.backgroundColor = (ThemeMap as any)[theme].color["bg"];
   }
 
   const [wrappedStatus, setWrappedStatus] = useState(localStorage.getItem('wrappedStatus') || WrappedStatuses.WRAPPED_ETH)
@@ -78,15 +80,6 @@ const App: React.FC = ({ children }) => {
     </ThemeProvider>
   )
 }
-
-const StyledPage = styled.div``
-
-const StyledMain = styled.div`
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  min-height: calc(100vh - ${props => props.theme.topBarSize * 2}px);
-`
 
 const Disclaimer: React.FC = () => {
 

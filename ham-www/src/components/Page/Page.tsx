@@ -11,7 +11,6 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ theme, toggleTheme, children }) => {
-  const { color } = useContext(ThemeContext)
   return (
   <StyledPage>
     <TopBar toggleTheme={toggleTheme} theme={theme} />
@@ -26,12 +25,10 @@ const Page: React.FC<PageProps> = ({ theme, toggleTheme, children }) => {
 const StyledPage = styled.div``
 
 const StyledMain = styled.div`
-  background: ${props => props.theme.color['bg']};
   align-items: center;
   display: flex;
   flex-direction: column;
   min-height: calc(100vh - ${props => props.theme.topBarSize * 2}px);
-  transition: all 0.4s linear;
 `
 
 export default Page
