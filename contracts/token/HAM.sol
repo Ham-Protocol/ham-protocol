@@ -320,7 +320,7 @@ contract HAMToken is HAMGovernanceToken {
           return totalSupply;
         }
 
-        uint256 prevHamsScalingFactor = scalingFactor;
+        uint256 prevScalingFactor = scalingFactor;
 
         if (!positive) {
            scalingFactor = scalingFactor.mul(BASE.sub(indexDelta)).div(BASE);
@@ -335,7 +335,7 @@ contract HAMToken is HAMGovernanceToken {
 
         // The rebase bug is this line right here, don't solve until properly understood.
         totalSupply = initSupply.mul(scalingFactor);
-        emit Rebase(epoch, prevHamsScalingFactor, scalingFactor);
+        emit Rebase(epoch, prevScalingFactor, scalingFactor);
         return totalSupply;
     }
 }

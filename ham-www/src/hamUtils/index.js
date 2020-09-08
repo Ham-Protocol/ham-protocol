@@ -97,7 +97,7 @@ export const getPoolContracts = async (ham) => {
 }
 
 export const getEarned = async (ham, pool, account) => {
-  const scalingFactor = new BigNumber(await ham.contracts.ham.methods.hamsScalingFactor().call())
+  const scalingFactor = new BigNumber(await ham.contracts.ham.methods.scalingFactor().call())
   const earned = new BigNumber(await pool.methods.earned(account).call())
   return earned.multipliedBy(scalingFactor.dividedBy(new BigNumber(10).pow(18)))
 }
@@ -117,7 +117,7 @@ export const getTargetPrice = async (ham) => {
 
 export const getCirculatingSupply = async (ham) => {
   let now = await ham.web3.eth.getBlock('latest');
-  let scalingFactor = ham.toBigN(await ham.contracts.ham.methods.hamsScalingFactor().call());
+  let scalingFactor = ham.toBigN(await ham.contracts.ham.methods.scalingFactor().call());
   let starttime = ham.toBigN(await ham.contracts.eth_pool.methods.starttime().call()).toNumber();
   let timePassed = now["timestamp"] - starttime;
   if (timePassed < 0) {
@@ -201,7 +201,7 @@ export const getVotes = async (ham) => {
 }
 
 export const getScalingFactor = async (ham) => {
-  return new BigNumber(await ham.contracts.ham.methods.hamsScalingFactor().call()).dividedBy(new BigNumber(10).pow(18))
+  return new BigNumber(await ham.contracts.ham.methods.scalingFactor().call()).dividedBy(new BigNumber(10).pow(18))
 }
 
 export const getDelegatedBalance = async (ham, account) => {
