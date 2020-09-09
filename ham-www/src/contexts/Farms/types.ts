@@ -8,6 +8,7 @@ export interface Farm {
   earnToken: string,
   earnTokenAddress: string,
   icon: React.ReactNode,
+  contractAddress: string, 
   id: string,
   sort: number
 }
