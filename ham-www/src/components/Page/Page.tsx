@@ -21,7 +21,6 @@ const Page: React.FC<PageProps> = ({ theme, toggleTheme, children }) => {
   const handleScroll = () => {
     const position = document.body.scrollHeight - window.pageYOffset - window.innerHeight
     setScrollPosition(position);
-    console.log(document.body.scrollHeight - window.innerHeight, document.body.scrollHeight - window.pageYOffset - window.innerHeight, window.innerHeight)
   };
 
   useEffect(() => {
