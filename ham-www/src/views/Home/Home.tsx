@@ -78,9 +78,13 @@ const StyledSpacer = styled.div`
 `
 
 const StyledLink = styled.a`
-  font-weight: 700l
+  color: ${props => props.theme.color["textRegular"]};
+  padding-left: ${props => props.theme.spacing[3]}px;
+  padding-right: ${props => props.theme.spacing[3]}px;
   text-decoration: none;
-  color: ${props => props.theme.color["textHighlight"]};
+  &:hover {
+    color: ${props => props.theme.color["textHighlight"]};
+  }
 `
 
 export default Home

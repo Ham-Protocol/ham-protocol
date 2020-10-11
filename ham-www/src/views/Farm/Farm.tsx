@@ -35,12 +35,15 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
     earnToken,
     name,
     icon,
+    contractAddress,
+
   } = useFarm(farmId) || {
     depositToken: '',
     depositTokenAddress: '',
     earnToken: '',
     name: '',
-    icon: ''
+    icon: '',
+    contractAddress:''
   }
 
   useEffect(() => {
@@ -86,7 +89,7 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
         subtitle={`Deposit ${depositTokenName} and earn ${earnTokenName}`}
         title={name}
       />  : null }
-
+      
       <StyledFarm>
         { depositTokenName === 'WETH' || depositTokenName === 'ETH'  ?
           <WrappedStatusToggle toggleWrappedStatus={toggleWrappedStatus} wrappedStatus={wrappedStatus} /> : null }
@@ -119,6 +122,7 @@ const Farm: React.FC<FarmProps> = ({wrappedStatus, toggleWrappedStatus}) => {
         </div>
         <Spacer size="lg" />
       </StyledFarm>
+      <StyledLink href={contractAddress} >View contract on etherscan </StyledLink>
     </>
   )
 }
@@ -150,5 +154,14 @@ const StyledCardWrapper = styled.div`
     width: 80%;
   }
 `
-
+const StyledLink = styled.a`
+  font-size: 20px;
+  color: ${props => props.theme.color["textRegular"]};
+  padding-left: ${props => props.theme.spacing[3]}px;
+  padding-right: ${props => props.theme.spacing[3]}px;
+  text-decoration: none;
+  &:hover {
+    color: ${props => props.theme.color["textHighlight"]};
+  }
+`
 export default Farm

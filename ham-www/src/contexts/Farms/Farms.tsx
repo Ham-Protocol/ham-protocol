@@ -43,6 +43,19 @@ const ICON_FOR_POOL: { [key: string]: JSX.Element} = {
 
 }
 
+const ADDRESS_FOR_POOL: { [key: string]: string} = {
+  yfi_pool: 'https://etherscan.io/token/0x0bc529c00C6401aEF6D220BE8C6Ea1667F6Ad93e',
+  eth_pool: 'https://etherscan.io/token/0x49488350b4b2ed2fd164dd0d50b00e7e3f531651',
+  link_pool: 'https://etherscan.io/token/0x514910771af9ca656af840dff83e8264ecf986ca',
+  lend_pool: 'https://etherscan.io/token/0x80fB784B7eD66730e8b1DBd9820aFD29931aab03',
+  snx_pool: 'https://etherscan.io/token/0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f',
+  bzrx_pool: 'https://etherscan.io/token/0x49488350b4b2ed2fd164dd0d50b00e7e3f531651',
+  yycrv_pool: 'https://etherscan.io/token/0x49488350b4b2ed2fd164dd0d50b00e7e3f531651',
+  ham_yycrv_bpt_pool: 'https://etherscan.io/token/0x49488350b4b2ed2fd164dd0d50b00e7e3f531651',
+  eth_ham_bpt_pool: 'https://etherscan.io/token/0x49488350b4b2ed2fd164dd0d50b00e7e3f531651',
+
+}
+
 const SORT_FOR_POOL: { [key: string]: number } = {
   yfi_pool: 0,
   eth_pool: 1,
@@ -87,6 +100,7 @@ const Farms: React.FC = ({ children }) => {
           earnToken: 'ham',
           earnTokenAddress: hamAddress,
           icon: ICON_FOR_POOL[poolKey],
+          contractAddress: ADDRESS_FOR_POOL[poolKey],
           id: tokenKey,
           sort: SORT_FOR_POOL[poolKey]
         })
