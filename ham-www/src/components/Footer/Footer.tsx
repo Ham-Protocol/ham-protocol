@@ -1,10 +1,9 @@
-import React, { useContext } from 'react'
-import styled, { ThemeContext } from 'styled-components'
+import React from 'react'
+import styled from 'styled-components'
 
 import Nav from './components/Nav'
 
 const Footer: React.FC = () => {
-  const { color } = useContext(ThemeContext)
   return (
     <StyledFooter>
       <StyledFooterInner>
@@ -18,15 +17,14 @@ const StyledFooter = styled.footer`
   align-items: center;
   display: flex;
   justify-content: center;
+  position: relative;
 `
 const StyledFooterInner = styled.div`
-  background: ${props => props.theme.color['bg']};
   align-items: center;
   display: flex;
   justify-content: center;
   height: ${props => props.theme.topBarSize}px;
   width: 100%;
-  transition: all 0.4s linear;
 `
 
 export default Footer
