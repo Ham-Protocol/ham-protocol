@@ -15,7 +15,6 @@ interface TopBarProps {
 }
 
 const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
-  const { color } = useContext(ThemeContext)
   return (
     <StyledTopBar>
       <Container size="lg">
@@ -39,8 +38,6 @@ const TopBar: React.FC<TopBarProps> = ({ theme, toggleTheme }) => {
 }
 
 const StyledTopBar = styled.div`
-  background: ${props => props.theme.color['bg']};
-  transition: all 0.4s linear;
 `
 
 const StyledTopBarInner = styled.div`
